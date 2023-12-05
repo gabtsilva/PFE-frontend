@@ -5,28 +5,27 @@ import {useEffect, useState} from "react";
 
 const Home: React.FC = () => {
     const [data, setData] = useState(null);
+    useEffect(() => {
+        fetchData().then(setData);
+    }, []);
     const fetchData = async () => {
         try {
             const response = await fetch('http://localhost:8080/hello');
             if (!response.ok) {
                 throw new Error('Network response was not ok');
-                console.log("not ok");
             }
-            console.log(response);
             const result = await response.json();
-            setData(result);
+            return result;
         } catch (error) {
-            console.log("error " + error);
             console.error('Error fetching data:', error);
         }
     };
-    fetchData();
 
     return (
     <IonPage>
         <Header />
       <IonContent fullscreen>
-          <div>
+          <div className="ion-margin">
               {JSON.stringify(data)}
           </div>
       </IonContent>
