@@ -1,11 +1,8 @@
 import "./LoginForm.css";
 import { IonButton, IonImg, IonInput, IonItem } from "@ionic/react";
-import "./LoginForm.css";
-import { IonButton, IonImg, IonInput, IonItem } from "@ionic/react";
 import logo from "../../assets/img/logo_snappies.png";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useEffect, useState } from "react";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -52,26 +49,6 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div id="container">
-      <IonImg alt="Snappies' logo" src={logo}></IonImg>
-      <IonItem lines="none">
-        <IonInput
-          type="email"
-          placeholder="Email"
-          onIonChange={(e) => setEmail(e.detail.value!)}
-        ></IonInput>
-      </IonItem>
-      <IonItem lines="none">
-        <IonInput
-          type="password"
-          placeholder="Mot de passe"
-          onIonChange={(e) => setPassword(e.detail.value!)}
-        ></IonInput>
-      </IonItem>
-      <IonButton color="light" fill="outline" onClick={handleSubmit}>
-        Se connecter
-      </IonButton>
-    </div>
     <div id="container">
       <IonImg alt="Snappies' logo" src={logo}></IonImg>
       <IonItem lines="none">
