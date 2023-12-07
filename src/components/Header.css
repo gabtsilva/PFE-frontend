@@ -8,4 +8,8 @@ ion-content {
 }
 ion-icon {
   margin-right: 20px;
+  color: black;
+}
+ion-toolbar {
+  --opacity: 0.8;
 }

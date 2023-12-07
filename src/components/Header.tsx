@@ -25,11 +25,14 @@ import {
   busOutline,
   walkOutline,
   footstepsOutline,
+  logOutOutline,
 } from "ionicons/icons";
+import { useHistory } from "react-router-dom";
 
 interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = () => {
+  const history = useHistory();
   return (
     <>
       <IonMenu contentId="main-content">
@@ -40,48 +43,45 @@ const Header: React.FC<HeaderProps> = () => {
         </IonHeader>
         <IonContent className="ion-padding">
           <IonList>
-            <IonRouterLink routerLink="/">
-              <IonItem>
-                <IonIcon icon={homeOutline}></IonIcon>
-                <IonLabel>Home</IonLabel>
-              </IonItem>
-            </IonRouterLink>
-            <IonRouterLink routerLink="/clients">
-              <IonItem>
-                <IonIcon icon={accessibilityOutline}></IonIcon>
-                <IonLabel>Clients</IonLabel>
-              </IonItem>
-            </IonRouterLink>
-            <IonRouterLink routerLink="/articles">
-              <IonItem>
-                <IonIcon icon={clipboardOutline}></IonIcon>
-                <IonLabel>Articles</IonLabel>
-              </IonItem>
-            </IonRouterLink>
-            <IonRouterLink routerLink="/commandes">
-              <IonItem>
-                <IonIcon icon={cubeOutline}></IonIcon>
-                <IonLabel>Commandes</IonLabel>
-              </IonItem>
-            </IonRouterLink>
-            <IonRouterLink routerLink="/vehicules">
-              <IonItem>
-                <IonIcon icon={busOutline}></IonIcon>
-                <IonLabel>Véhicules</IonLabel>
-              </IonItem>
-            </IonRouterLink>
-            <IonRouterLink routerLink="/tournees">
-              <IonItem>
-                <IonIcon icon={walkOutline}></IonIcon>
-                <IonLabel>Tournées</IonLabel>
-              </IonItem>
-            </IonRouterLink>
-            <IonRouterLink routerLink="/livreurs">
-              <IonItem>
-                <IonIcon icon={footstepsOutline}></IonIcon>
-                <IonLabel>Livreurs</IonLabel>
-              </IonItem>
-            </IonRouterLink>
+            <IonItem onClick={() => history.replace(`/`)}>
+              <IonIcon icon={homeOutline}></IonIcon>
+              <IonLabel>Home</IonLabel>
+            </IonItem>
+
+            <IonItem onClick={() => history.replace(`/clients`)}>
+              <IonIcon icon={accessibilityOutline}></IonIcon>
+              <IonLabel>Clients</IonLabel>
+            </IonItem>
+
+            <IonItem onClick={() => history.replace(`/articles`)}>
+              <IonIcon icon={clipboardOutline}></IonIcon>
+              <IonLabel>Articles</IonLabel>
+            </IonItem>
+
+            <IonItem onClick={() => history.replace(`/commandes`)}>
+              <IonIcon icon={cubeOutline}></IonIcon>
+              <IonLabel>Commandes</IonLabel>
+            </IonItem>
+
+            <IonItem onClick={() => history.replace(`/vehicules`)}>
+              <IonIcon icon={busOutline}></IonIcon>
+              <IonLabel>Véhicules</IonLabel>
+            </IonItem>
+
+            <IonItem onClick={() => history.replace(`/tournees`)}>
+              <IonIcon icon={walkOutline}></IonIcon>
+              <IonLabel>Tournées</IonLabel>
+            </IonItem>
+
+            <IonItem onClick={() => history.replace(`/livreurs`)}>
+              <IonIcon icon={footstepsOutline}></IonIcon>
+              <IonLabel>Livreurs</IonLabel>
+            </IonItem>
+
+            <IonItem onClick={() => history.replace(`/logout`)}>
+              <IonIcon icon={logOutOutline}></IonIcon>
+              <IonLabel>Se déconnecter</IonLabel>
+            </IonItem>
           </IonList>
         </IonContent>
       </IonMenu>

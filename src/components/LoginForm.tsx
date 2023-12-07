@@ -1,13 +1,20 @@
 import "./LoginForm.css";
 import { IonButton, IonImg, IonInput, IonItem } from "@ionic/react";
 import logo from "../../assets/img/logo_snappies.png";
-import { useEffect, useState } from "react";
+import {
+  JSXElementConstructor,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+  useEffect,
+  useState,
+} from "react";
 import { useHistory } from "react-router-dom";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async () => {
     // Construire le corps de la requête
@@ -38,13 +45,17 @@ const LoginForm: React.FC = () => {
         localStorage.setItem("token", data.token);
 
         // Rediriger vers la page d'accueil
-        history.push("/");
+        window.location.href = "/";
       } else {
         // La requête a échoué, vous pouvez gérer les erreurs ici
         console.error("Échec de la connexion");
+        setErrorMessage(
+          "Votre identifiant ou votre mot de passe n'est pas bon."
+        );
       }
     } catch (error) {
       console.error("Erreur lors de la connexion", error);
+      setErrorMessage("Une erreur interne est survenue");
     }
   };
 
@@ -68,6 +79,8 @@ const LoginForm: React.FC = () => {
       <IonButton color="light" fill="outline" onClick={handleSubmit}>
         Se connecter
       </IonButton>
+      <br></br>
+      <div className="info-conn">{errorMessage}</div>
     </div>
   );
 };
