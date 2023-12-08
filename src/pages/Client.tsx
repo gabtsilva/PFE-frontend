@@ -7,21 +7,21 @@ import {
 } from "@ionic/react";
 import "./Home.css";
 import Header from "../components/Header";
-import TourneeHome from "../components/TourneeHome";
 import { useEffect, useState } from "react";
 
-const Home: React.FC = () => {
+const Client: React.FC = () => {
   const [data, setData] = useState(null);
   useEffect(() => {
     fetchData().then(setData);
   }, []);
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8080/hello");
+      const response = await fetch("http://localhost:8080/client");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const result = await response.json();
+      console.log(result);
       return result;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -37,8 +37,7 @@ const Home: React.FC = () => {
         style={{ marginTop: "100px" }}
       >
         <div className="ion-margin">
-          <h1>Home</h1>
-          <TourneeHome />
+          <h1>Clients</h1>
           {JSON.stringify(data)}
         </div>
       </IonContent>
@@ -46,4 +45,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Client;

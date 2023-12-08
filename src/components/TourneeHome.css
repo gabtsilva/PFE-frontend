@@ -1,0 +1,8 @@
+ion-grid {
+  margin-top: 100px;
+}
+ion-grid ion-icon {
+  height: 55px;
+  width: 40px;
+  margin: 0;
+}

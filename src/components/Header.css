@@ -1,4 +1,15 @@
-ion-img{
-    width:60px;
-    height:60px;
+ion-img {
+  width: 60px;
+  height: 60px;
+}
+ion-title,
+ion-content {
+  text-align: center;
+}
+ion-icon {
+  margin-right: 20px;
+  color: black;
+}
+ion-toolbar {
+  --opacity: 0.8;
 }
