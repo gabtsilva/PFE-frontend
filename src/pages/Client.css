@@ -1,0 +1,15 @@
+.edit {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: fit-content;
+  max-width: 50px;
+}
+.edit ion-icon {
+  height: 25px;
+  width: 40px;
+  color: white;
+}
+.edit:hover {
+  cursor: pointer;
+}
