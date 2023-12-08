@@ -41,8 +41,8 @@ const App: React.FC = () => (
       <IonHeader>
         <Header />
       </IonHeader>
-      <Menu />
       <IonReactRouter>
+      <Menu />
         <IonRouterOutlet>
           <Route exact path="/">
             <Home />

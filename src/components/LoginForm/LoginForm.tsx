@@ -1,6 +1,6 @@
 import "./LoginForm.css";
 import { IonButton, IonImg, IonInput, IonItem } from "@ionic/react";
-import logo from "../../assets/img/logo_snappies.png";
+import logo from "../../../assets/img/logo_snappies.png";
 import {
   JSXElementConstructor,
   ReactElement,
