@@ -17,10 +17,10 @@ import {
 } from "@ionic/react";
 import { accessibilityOutline, pencilOutline } from "ionicons/icons";
 import "./Client.css";
-import Header from "../components/Header";
+import Header from "../../components/Header/Header";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import Menu from "../components/Menu";
+import Menu from "../../components/Menu/Menu";
 
 interface Client {
   id: number;
