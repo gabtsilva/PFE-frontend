@@ -6,10 +6,7 @@ import Menu from "../components/Menu";
 
 const Home: React.FC = () => {
   return (
-    <IonPage>
-      <IonHeader>
-        <Header />
-      </IonHeader>
+    <>
       <Menu />
       <IonContent
         fullscreen
@@ -20,7 +17,7 @@ const Home: React.FC = () => {
           <TourneeHome />
         </div>
       </IonContent>
-    </IonPage>
+    </>
   );
 };
 

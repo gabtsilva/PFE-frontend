@@ -48,11 +48,7 @@ const Client: React.FC = () => {
   }, []);
 
   return (
-    <IonPage>
-      <IonHeader>
-        <Header />
-      </IonHeader>
-      <Menu />
+    <>
       <IonContent>
         <IonGrid>
           <IonRow>
@@ -80,7 +76,7 @@ const Client: React.FC = () => {
           </IonRow>
         </IonGrid>
       </IonContent>
-    </IonPage>
+    </>
   );
 };
 
