@@ -17,9 +17,7 @@ import {
 } from "@ionic/react";
 import { accessibilityOutline, pencilOutline } from "ionicons/icons";
 import "./Client.css";
-import Header from "../../components/Header/Header";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import AddElement from "../../components/AddElement/AddElement";
 
 interface Client {
@@ -27,6 +25,7 @@ interface Client {
   name: string;
   address: string;
   phoneNumber: string;
+  childrenQuantity: number;
   tour: number;
 }
 
@@ -40,14 +39,11 @@ const Client: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [tournes, setTournes] = useState<Tournee[]>([]); // Assuming tournes is an array of strings
 
-  const history = useHistory();
-
   useEffect(() => {
     // Effect hook to retrieve client data from the API
     fetch("http://localhost:8080/client")
       .then((response) => response.json())
       .then((data) => {
-        console.log("Données récupérées:", data);
         setClients(data);
         // Extracting tour IDs from client data and fetching tour data
         const tourIds = data.map((client: Client) => client.tour);
@@ -64,7 +60,6 @@ const Client: React.FC = () => {
       return fetch(`http://localhost:8080/tour/${id}`)
         .then((response) => response.json())
         .then((data) => {
-          console.log("Tour data récupérée:", data);
           return data; // Assuming data is a string, modify this based on your API response
         });
     });
@@ -91,7 +86,7 @@ const Client: React.FC = () => {
                   <IonIcon icon={accessibilityOutline}></IonIcon>
                   <IonButton
                     className="edit"
-                    routerLink={`/client?id=${client.id}`}
+                    routerLink={`/client/${client.id}`}
                     routerDirection="none"
                   >
                     <IonIcon icon={pencilOutline}></IonIcon>
@@ -102,6 +97,7 @@ const Client: React.FC = () => {
                   </IonCardHeader>
                   <IonCardContent>
                     <p>Téléphone : {client.phoneNumber}</p>
+                    <p>Nombre d'enfants : {client.childrenQuantity}</p>
                     <p>
                       Tournée :{" "}
                       {tournes.find((tour) => tour.id === client.tour)?.name}

@@ -32,6 +32,8 @@ import Logout from "./pages/Logout/Logout";
 import Client from "./pages/Client/Client";
 import Menu from "./components/Menu/Menu";
 import Header from "./components/Header/Header";
+import AddClient from "./pages/AddClient/AddClient";
+import UpdateClient from "./pages/UpdateClient/UpdateClient";
 
 setupIonicReact();
 
@@ -42,13 +44,20 @@ const App: React.FC = () => (
         <Header />
       </IonHeader>
       <IonReactRouter>
-      <Menu />
+        <Menu />
         <IonRouterOutlet>
           <Route exact path="/" render={(props) => localStorage.getItem("token") != null ? <Home /> : <Redirect to="/login"/>} />
           <Route exact path="/login" render={(props) => localStorage.getItem("token") == null ? <Login /> : <Redirect to="/"/>} />
           <Route exact path="/logout" render={(props) => localStorage.getItem("token") != null ? <Logout /> : <Redirect to="/"/>} />
           <Route exact path="/clients" render={(props) => localStorage.getItem("token") != null ? <Client /> : <Redirect to="/login"/>} />
 
+          <Route exact path="/client/add">
+            <AddClient />
+          </Route>
+          {/* Dynamic route for clients with an "id" parameter */}
+          <Route exact path="/client/:id">
+            <UpdateClient />
+          </Route>
         </IonRouterOutlet>
       </IonReactRouter>
     </IonPage>
