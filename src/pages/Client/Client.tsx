@@ -35,7 +35,7 @@ interface Tournee {
 }
 
 const Client: React.FC = () => {
-  document.title = 'SnappiesLog - Clients'
+  document.title = "SnappiesLog - Clients";
   const [clients, setClients] = useState<Client[]>([]);
   const [tournes, setTournes] = useState<Tournee[]>([]); // Assuming tournes is an array of strings
 
@@ -86,7 +86,7 @@ const Client: React.FC = () => {
                   <IonIcon icon={accessibilityOutline}></IonIcon>
                   <IonButton
                     className="edit"
-                    routerLink={`/client/${client.id}`}
+                    routerLink={`/client/update/${client.id}`}
                     routerDirection="none"
                   >
                     <IonIcon icon={pencilOutline}></IonIcon>

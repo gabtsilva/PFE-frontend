@@ -161,7 +161,6 @@ const UpdateClient: React.FC = () => {
             <IonItem className="tournee-input">
               <IonLabel>Tournées</IonLabel>
               <IonSelect
-                value={tours[trouneeChoisie]}
                 onIonChange={(e) =>
                   setTourneeChoisie(parseFloat(e.detail.value!))
                 }
@@ -170,7 +169,7 @@ const UpdateClient: React.FC = () => {
                   <IonSelectOption
                     key={index}
                     value={tour.id}
-                    aria-required={trouneeChoisie === tour.id}
+                    aria-required={trouneeChoisie === tour.id ? true : false}
                   >
                     {tour.name}
                   </IonSelectOption>

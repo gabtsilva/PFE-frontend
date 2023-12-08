@@ -99,7 +99,7 @@ const AddClient: React.FC = () => {
   return (
     <IonContent>
       <IonGrid>
-        <h1 className="titre-ajout">Ajouter un client</h1>
+        <h1 className="titre-ajout">AJOUTER un client</h1>
         <IonRow>
           <IonCol size="12" size-md="6">
             <IonItem>
@@ -143,15 +143,18 @@ const AddClient: React.FC = () => {
               />
             </IonItem>
             <IonItem className="tournee-input">
-              <IonLabel>Tournée</IonLabel>
+              <IonLabel>Tournées</IonLabel>
               <IonSelect
-                value={tours[0]}
                 onIonChange={(e) =>
                   setTourneeChoisie(parseFloat(e.detail.value!))
                 }
               >
                 {tours.map((tour, index) => (
-                  <IonSelectOption key={index} value={tour.id}>
+                  <IonSelectOption
+                    key={index}
+                    value={tour.id}
+                    aria-required={trouneeChoisie === tour.id}
+                  >
                     {tour.name}
                   </IonSelectOption>
                 ))}

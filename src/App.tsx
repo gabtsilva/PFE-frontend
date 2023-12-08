@@ -46,16 +46,56 @@ const App: React.FC = () => (
       <IonReactRouter>
         <Menu />
         <IonRouterOutlet>
-          <Route exact path="/" render={(props) => localStorage.getItem("token") != null ? <Home /> : <Redirect to="/login"/>} />
-          <Route exact path="/login" render={(props) => localStorage.getItem("token") == null ? <Login /> : <Redirect to="/"/>} />
-          <Route exact path="/logout" render={(props) => localStorage.getItem("token") != null ? <Logout /> : <Redirect to="/"/>} />
-          <Route exact path="/clients" render={(props) => localStorage.getItem("token") != null ? <Client /> : <Redirect to="/login"/>} />
+          <Route
+            exact
+            path="/"
+            render={(props) =>
+              localStorage.getItem("token") != null ? (
+                <Home />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/login"
+            render={(props) =>
+              localStorage.getItem("token") == null ? (
+                <Login />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/logout"
+            render={(props) =>
+              localStorage.getItem("token") != null ? (
+                <Logout />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/clients"
+            render={(props) =>
+              localStorage.getItem("token") != null ? (
+                <Client />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
 
           <Route exact path="/client/add">
             <AddClient />
           </Route>
-          {/* Dynamic route for clients with an "id" parameter */}
-          <Route exact path="/client/:id">
+
+          <Route exact path="/client/update/:id">
             <UpdateClient />
           </Route>
         </IonRouterOutlet>
