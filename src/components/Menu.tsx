@@ -19,49 +19,48 @@ import {
 import { useHistory } from "react-router-dom";
 
 const Menu: React.FC = () => {
-  const history = useHistory();
 
   return (
     <>
       <IonMenu contentId="main-content">
         <IonContent className="ion-padding">
           <IonList>
-            <IonItem onClick={() => history.replace(`/`)}>
+            <IonItem routerLink="/">
               <IonIcon icon={homeOutline}></IonIcon>
               <IonLabel>Home</IonLabel>
             </IonItem>
 
-            <IonItem onClick={() => history.replace(`/clients`)}>
+            <IonItem routerLink="/clients">
               <IonIcon icon={accessibilityOutline}></IonIcon>
               <IonLabel>Clients</IonLabel>
             </IonItem>
 
-            <IonItem onClick={() => history.replace(`/articles`)}>
+            <IonItem routerLink="/articles">
               <IonIcon icon={clipboardOutline}></IonIcon>
               <IonLabel>Articles</IonLabel>
             </IonItem>
 
-            <IonItem onClick={() => history.replace(`/commandes`)}>
+            <IonItem routerLink="/commandes">
               <IonIcon icon={cubeOutline}></IonIcon>
               <IonLabel>Commandes</IonLabel>
             </IonItem>
 
-            <IonItem onClick={() => history.replace(`/vehicules`)}>
+            <IonItem routerLink="/vehicules">
               <IonIcon icon={busOutline}></IonIcon>
               <IonLabel>Véhicules</IonLabel>
             </IonItem>
 
-            <IonItem onClick={() => history.replace(`/tournees`)}>
+            <IonItem routerLink="/tournees">
               <IonIcon icon={walkOutline}></IonIcon>
               <IonLabel>Tournées</IonLabel>
             </IonItem>
 
-            <IonItem onClick={() => history.replace(`/livreurs`)}>
+            <IonItem routerLink="/livreurs">
               <IonIcon icon={footstepsOutline}></IonIcon>
               <IonLabel>Livreurs</IonLabel>
             </IonItem>
 
-            <IonItem onClick={() => history.replace(`/logout`)}>
+            <IonItem routerLink="/logout">
               <IonIcon icon={logOutOutline}></IonIcon>
               <IonLabel>Se déconnecter</IonLabel>
             </IonItem>
