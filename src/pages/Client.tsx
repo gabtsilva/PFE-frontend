@@ -19,9 +19,20 @@ import { accessibilityOutline, pencilOutline } from "ionicons/icons";
 import "./Client.css";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import Menu from "../components/Menu";
+
+interface Client {
+  id: number;
+  name: string;
+  address: string;
+  phoneNumber: string;
+  tour: number;
+}
 
 const Client: React.FC = () => {
-  const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState<Client[]>([]);
+  const history = useHistory();
 
   useEffect(() => {
     // Effect hook pour récupérer les données de l'API
@@ -38,12 +49,10 @@ const Client: React.FC = () => {
 
   return (
     <IonPage>
-      <Header />
       <IonHeader>
-        <IonToolbar>
-          <IonTitle>Liste des clients</IonTitle>
-        </IonToolbar>
+        <Header />
       </IonHeader>
+      <Menu />
       <IonContent>
         <IonGrid>
           <IonRow>
@@ -51,7 +60,10 @@ const Client: React.FC = () => {
               <IonCol size="12" size-md="6" key={client.id}>
                 <IonCard>
                   <IonIcon icon={accessibilityOutline}></IonIcon>
-                  <IonButton className="edit">
+                  <IonButton
+                    className="edit"
+                    onClick={() => history.replace(`/client?id=` + client.id)}
+                  >
                     <IonIcon icon={pencilOutline}></IonIcon>
                   </IonButton>
                   <IonCardHeader>
