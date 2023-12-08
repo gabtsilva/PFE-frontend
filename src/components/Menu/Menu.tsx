@@ -16,7 +16,6 @@ import {
   footstepsOutline,
   logOutOutline,
 } from "ionicons/icons";
-import { useHistory } from "react-router-dom";
 
 const Menu: React.FC = () => {
 
@@ -30,7 +29,7 @@ const Menu: React.FC = () => {
               <IonLabel>Home</IonLabel>
             </IonItem>
 
-            <IonItem routerLink="/clients" routerDirection="none">
+            <IonItem routerLink="/clients" routerDirection="forward">
               <IonIcon icon={accessibilityOutline}></IonIcon>
               <IonLabel>Clients</IonLabel>
             </IonItem>

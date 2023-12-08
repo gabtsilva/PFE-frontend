@@ -7,7 +7,7 @@ import {
   IonToolbar,
   IonImg,
 } from "@ionic/react";
-import logo from "../../assets/img/logo_snappies.png";
+import logo from "../../../assets/img/logo_snappies.png";
 import "./Header.css";
 import {
   accessibilityOutline,
