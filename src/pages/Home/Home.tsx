@@ -5,6 +5,7 @@ import TourneeHome from "../../components/TourneeHome/TourneeHome";
 import Menu from "../../components/Menu/Menu";
 
 const Home: React.FC = () => {
+    document.title = 'SnappiesLog - Home'
   return (
     <>
       <Menu />

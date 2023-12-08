@@ -1,6 +1,6 @@
 import "./LoginForm.css";
 import { IonButton, IonImg, IonInput, IonItem } from "@ionic/react";
-import logo from "../../../assets/img/logo_snappies.png";
+import logo from "../../assets/img/logo_snappies.png";
 import {
   JSXElementConstructor,
   ReactElement,
@@ -75,7 +75,7 @@ const LoginForm: React.FC = () => {
           onIonChange={(e) => setPassword(e.detail.value!)}
         ></IonInput>
       </IonItem>
-      <IonButton color="light" fill="outline" onClick={handleSubmit}>
+      <IonButton color="dark" shape="round" onClick={handleSubmit}>
         Se connecter
       </IonButton>
       <br></br>

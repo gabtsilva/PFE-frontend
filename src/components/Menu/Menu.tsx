@@ -7,19 +7,10 @@ import {
   IonLabel,
   IonMenuToggle,
 } from "@ionic/react";
-import {
-  accessibilityOutline,
-  homeOutline,
-  clipboardOutline,
-  cubeOutline,
-  busOutline,
-  walkOutline,
-  footstepsOutline,
-  logOutOutline,
-} from "ionicons/icons";
+import {barChart, accessibility, clipboard, cube, bus, walk, footsteps, logOut} from "ionicons/icons";
+import {Redirect} from "react-router-dom";
 
 const Menu: React.FC = () => {
-  if (localStorage.getItem("token") !== null) {
     return (
       <>
         <IonMenu contentId="main-content">
@@ -27,56 +18,56 @@ const Menu: React.FC = () => {
             <IonList>
               <IonMenuToggle>
                 <IonItem routerLink="/" routerDirection="none">
-                  <IonIcon icon={homeOutline}></IonIcon>
+                  <IonIcon icon={barChart}></IonIcon>
                   <IonLabel>Home</IonLabel>
                 </IonItem>
               </IonMenuToggle>
 
               <IonMenuToggle>
                 <IonItem routerLink="/clients" routerDirection="none">
-                  <IonIcon icon={accessibilityOutline}></IonIcon>
+                  <IonIcon icon={accessibility}></IonIcon>
                   <IonLabel>Clients</IonLabel>
                 </IonItem>
               </IonMenuToggle>
 
               <IonMenuToggle>
                 <IonItem routerLink="/articles" routerDirection="none">
-                  <IonIcon icon={clipboardOutline}></IonIcon>
+                  <IonIcon icon={cube}></IonIcon>
                   <IonLabel>Articles</IonLabel>
                 </IonItem>
               </IonMenuToggle>
 
               <IonMenuToggle>
                 <IonItem routerLink="/commandes" routerDirection="none">
-                  <IonIcon icon={cubeOutline}></IonIcon>
+                  <IonIcon icon={clipboard}></IonIcon>
                   <IonLabel>Commandes</IonLabel>
                 </IonItem>
               </IonMenuToggle>
 
               <IonMenuToggle>
                 <IonItem routerLink="/vehicules" routerDirection="none">
-                  <IonIcon icon={busOutline}></IonIcon>
+                  <IonIcon icon={bus}></IonIcon>
                   <IonLabel>Véhicules</IonLabel>
                 </IonItem>
               </IonMenuToggle>
 
               <IonMenuToggle>
                 <IonItem routerLink="/tournees" routerDirection="none">
-                  <IonIcon icon={walkOutline}></IonIcon>
+                  <IonIcon icon={walk}></IonIcon>
                   <IonLabel>Tournées</IonLabel>
                 </IonItem>
               </IonMenuToggle>
 
               <IonMenuToggle>
                 <IonItem routerLink="/livreurs" routerDirection="none">
-                  <IonIcon icon={footstepsOutline}></IonIcon>
+                  <IonIcon icon={footsteps}></IonIcon>
                   <IonLabel>Livreurs</IonLabel>
                 </IonItem>
               </IonMenuToggle>
 
               <IonMenuToggle>
                 <IonItem routerLink="/logout" routerDirection="none">
-                  <IonIcon icon={logOutOutline}></IonIcon>
+                  <IonIcon icon={logOut}></IonIcon>
                   <IonLabel>Se déconnecter</IonLabel>
                 </IonItem>
               </IonMenuToggle>
@@ -85,24 +76,6 @@ const Menu: React.FC = () => {
         </IonMenu>
       </>
     );
-  } else {
-    return (
-      <>
-        <IonMenu contentId="main-content">
-          <IonContent className="ion-padding">
-            <IonList>
-              <IonMenuToggle>
-                <IonItem routerLink="/login" routerDirection="none">
-                  <IonIcon icon={homeOutline}></IonIcon>
-                  <IonLabel>Se connecter</IonLabel>
-                </IonItem>
-              </IonMenuToggle>
-            </IonList>
-          </IonContent>
-        </IonMenu>
-      </>
-    );
-  }
 };
 
 export default Menu;

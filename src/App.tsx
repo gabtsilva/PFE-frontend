@@ -44,18 +44,11 @@ const App: React.FC = () => (
       <IonReactRouter>
       <Menu />
         <IonRouterOutlet>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/logout">
-            <Logout />
-          </Route>
-          <Route exact path="/clients">
-            <Client />
-          </Route>
+          <Route exact path="/" render={(props) => localStorage.getItem("token") != null ? <Home /> : <Redirect to="/login"/>} />
+          <Route exact path="/login" render={(props) => localStorage.getItem("token") == null ? <Login /> : <Redirect to="/"/>} />
+          <Route exact path="/logout" render={(props) => localStorage.getItem("token") != null ? <Logout /> : <Redirect to="/"/>} />
+          <Route exact path="/clients" render={(props) => localStorage.getItem("token") != null ? <Client /> : <Redirect to="/login"/>} />
+
         </IonRouterOutlet>
       </IonReactRouter>
     </IonPage>

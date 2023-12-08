@@ -1,14 +1,16 @@
 import { IonContent, IonPage } from "@ionic/react";
 import LoginForm from "../../components/LoginForm/LoginForm";
+import { Redirect } from "react-router-dom";
 
 const Login: React.FC = () => {
-  return (
-    <IonPage>
-      <IonContent fullscreen>
-        <LoginForm />
-      </IonContent>
-    </IonPage>
-  );
+    document.title = 'SnappiesLog - Login'
+    return (
+        <IonPage>
+            <IonContent fullscreen>
+                <LoginForm />
+            </IonContent>
+        </IonPage>
+    );
 };
 
 export default Login;

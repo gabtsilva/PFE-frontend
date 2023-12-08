@@ -36,6 +36,7 @@ interface Tournee {
 }
 
 const Client: React.FC = () => {
+  document.title = 'SnappiesLog - Clients'
   const [clients, setClients] = useState<Client[]>([]);
   const [tournes, setTournes] = useState<Tournee[]>([]); // Assuming tournes is an array of strings
 
