@@ -12,14 +12,14 @@ import {
 import { useHistory } from "react-router-dom";
 
 const LoginForm: React.FC = () => {
-  const [email, setEmail] = useState("");
+  const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async () => {
     // Construire le corps de la requête
     const requestBody = {
-      email: email,
+      mail: mail,
       password: password,
     };
 
@@ -66,7 +66,7 @@ const LoginForm: React.FC = () => {
         <IonInput
           type="email"
           placeholder="Email"
-          onIonChange={(e) => setEmail(e.detail.value!)}
+          onIonChange={(e) => setMail(e.detail.value!)}
         ></IonInput>
       </IonItem>
       <IonItem lines="none">

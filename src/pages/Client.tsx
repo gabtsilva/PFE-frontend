@@ -4,42 +4,69 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  IonCard,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonCardContent,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonIcon,
+  IonButton,
 } from "@ionic/react";
-import "./Home.css";
+import { accessibilityOutline, pencilOutline } from "ionicons/icons";
+import "./Client.css";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
 
 const Client: React.FC = () => {
-  const [data, setData] = useState(null);
+  const [clients, setClients] = useState([]);
+
   useEffect(() => {
-    fetchData().then(setData);
+    // Effect hook pour récupérer les données de l'API
+    fetch("http://localhost:8080/client")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Données récupérées:", data);
+        setClients(data);
+      })
+      .catch((error) =>
+        console.error("Erreur de chargement des données", error)
+      );
   }, []);
-  const fetchData = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/client");
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const result = await response.json();
-      console.log(result);
-      return result;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
 
   return (
     <IonPage>
       <Header />
-      <IonContent
-        fullscreen
-        className="home-content"
-        style={{ marginTop: "100px" }}
-      >
-        <div className="ion-margin">
-          <h1>Clients</h1>
-          {JSON.stringify(data)}
-        </div>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Liste des clients</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        <IonGrid>
+          <IonRow>
+            {clients.map((client) => (
+              <IonCol size="12" size-md="6" key={client.id}>
+                <IonCard>
+                  <IonIcon icon={accessibilityOutline}></IonIcon>
+                  <IonButton className="edit">
+                    <IonIcon icon={pencilOutline}></IonIcon>
+                  </IonButton>
+                  <IonCardHeader>
+                    <IonCardSubtitle>{client.address}</IonCardSubtitle>
+                    <IonCardTitle>{client.name}</IonCardTitle>
+                  </IonCardHeader>
+                  <IonCardContent>
+                    <p>Téléphone : {client.phoneNumber}</p>
+                    <p>Tour : {client.tour}</p>
+                  </IonCardContent>
+                </IonCard>
+              </IonCol>
+            ))}
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );
