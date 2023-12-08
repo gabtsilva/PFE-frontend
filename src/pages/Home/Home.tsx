@@ -1,8 +1,8 @@
 import { IonContent, IonHeader, IonPage } from "@ionic/react";
 import "./Home.css";
-import Header from "../components/Header";
-import TourneeHome from "../components/TourneeHome";
-import Menu from "../components/Menu";
+import Header from "../../components/Header/Header";
+import TourneeHome from "../../components/TourneeHome/TourneeHome";
+import Menu from "../../components/Menu/Menu";
 
 const Home: React.FC = () => {
   return (

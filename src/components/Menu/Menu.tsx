@@ -25,42 +25,42 @@ const Menu: React.FC = () => {
       <IonMenu contentId="main-content">
         <IonContent className="ion-padding">
           <IonList>
-            <IonItem routerLink="/">
+            <IonItem routerLink="/" routerDirection="none">
               <IonIcon icon={homeOutline}></IonIcon>
               <IonLabel>Home</IonLabel>
             </IonItem>
 
-            <IonItem routerLink="/clients">
+            <IonItem routerLink="/clients" routerDirection="none">
               <IonIcon icon={accessibilityOutline}></IonIcon>
               <IonLabel>Clients</IonLabel>
             </IonItem>
 
-            <IonItem routerLink="/articles">
+            <IonItem routerLink="/articles" routerDirection="none">
               <IonIcon icon={clipboardOutline}></IonIcon>
               <IonLabel>Articles</IonLabel>
             </IonItem>
 
-            <IonItem routerLink="/commandes">
+            <IonItem routerLink="/commandes" routerDirection="none">
               <IonIcon icon={cubeOutline}></IonIcon>
               <IonLabel>Commandes</IonLabel>
             </IonItem>
 
-            <IonItem routerLink="/vehicules">
+            <IonItem routerLink="/vehicules" routerDirection="none">
               <IonIcon icon={busOutline}></IonIcon>
               <IonLabel>Véhicules</IonLabel>
             </IonItem>
 
-            <IonItem routerLink="/tournees">
+            <IonItem routerLink="/tournees" routerDirection="none">
               <IonIcon icon={walkOutline}></IonIcon>
               <IonLabel>Tournées</IonLabel>
             </IonItem>
 
-            <IonItem routerLink="/livreurs">
+            <IonItem routerLink="/livreurs" routerDirection="none">
               <IonIcon icon={footstepsOutline}></IonIcon>
               <IonLabel>Livreurs</IonLabel>
             </IonItem>
 
-            <IonItem routerLink="/logout">
+            <IonItem routerLink="/logout" routerDirection="none">
               <IonIcon icon={logOutOutline}></IonIcon>
               <IonLabel>Se déconnecter</IonLabel>
             </IonItem>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { IonContent, IonPage } from "@ionic/react";
-import Header from "../components/Header";
+import Header from "../../components/Header/Header";
 
 export default class Logout extends Component {
   componentDidMount() {
