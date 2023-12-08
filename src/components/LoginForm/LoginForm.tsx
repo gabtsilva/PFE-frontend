@@ -9,7 +9,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useHistory } from "react-router-dom";
 
 const LoginForm: React.FC = () => {
   const [mail, setMail] = useState("");

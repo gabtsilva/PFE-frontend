@@ -9,16 +9,6 @@ import {
 } from "@ionic/react";
 import logo from "../../../assets/img/logo_snappies.png";
 import "./Header.css";
-import {
-  accessibilityOutline,
-  homeOutline,
-  clipboardOutline,
-  cubeOutline,
-  busOutline,
-  walkOutline,
-  footstepsOutline,
-  logOutOutline,
-} from "ionicons/icons";
 import { useHistory } from "react-router-dom";
 
 interface HeaderProps {}

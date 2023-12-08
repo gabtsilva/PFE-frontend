@@ -18,7 +18,6 @@ import {
 } from "ionicons/icons";
 
 const Menu: React.FC = () => {
-
   return (
     <>
       <IonMenu contentId="main-content">
@@ -29,7 +28,7 @@ const Menu: React.FC = () => {
               <IonLabel>Home</IonLabel>
             </IonItem>
 
-            <IonItem routerLink="/clients" routerDirection="forward">
+            <IonItem routerLink="/clients" routerDirection="none">
               <IonIcon icon={accessibilityOutline}></IonIcon>
               <IonLabel>Clients</IonLabel>
             </IonItem>

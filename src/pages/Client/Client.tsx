@@ -20,7 +20,7 @@ import "./Client.css";
 import Header from "../../components/Header/Header";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import Menu from "../../components/Menu/Menu";
+import AddElement from "../../components/AddElement/AddElement";
 
 interface Client {
   id: number;
@@ -30,27 +30,59 @@ interface Client {
   tour: number;
 }
 
+interface Tournee {
+  id: number;
+  name: string;
+}
+
 const Client: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);
+  const [tournes, setTournes] = useState<Tournee[]>([]); // Assuming tournes is an array of strings
+
   const history = useHistory();
 
   useEffect(() => {
-    // Effect hook pour récupérer les données de l'API
+    // Effect hook to retrieve client data from the API
     fetch("http://localhost:8080/client")
       .then((response) => response.json())
       .then((data) => {
         console.log("Données récupérées:", data);
         setClients(data);
+        // Extracting tour IDs from client data and fetching tour data
+        const tourIds = data.map((client: Client) => client.tour);
+        fetchTournes(tourIds);
       })
       .catch((error) =>
         console.error("Erreur de chargement des données", error)
       );
   }, []);
 
+  const fetchTournes = (tourIds: number[]) => {
+    // Fetch tour data for each tour ID
+    const promises = tourIds.map((id) => {
+      return fetch(`http://localhost:8080/tour/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Tour data récupérée:", data);
+          return data; // Assuming data is a string, modify this based on your API response
+        });
+    });
+
+    // Wait for all promises to resolve
+    Promise.all(promises)
+      .then((tournesData) => {
+        setTournes(tournesData);
+      })
+      .catch((error) =>
+        console.error("Erreur de chargement des tournées", error)
+      );
+  };
+
   return (
     <>
       <IonContent>
         <IonGrid>
+          <AddElement nom="client" />
           <IonRow>
             {clients.map((client) => (
               <IonCol size="12" size-md="6" key={client.id}>
@@ -58,7 +90,8 @@ const Client: React.FC = () => {
                   <IonIcon icon={accessibilityOutline}></IonIcon>
                   <IonButton
                     className="edit"
-                    onClick={() => history.replace(`/client?id=` + client.id)}
+                    routerLink={`/client?id=${client.id}`}
+                    routerDirection="none"
                   >
                     <IonIcon icon={pencilOutline}></IonIcon>
                   </IonButton>
@@ -68,7 +101,10 @@ const Client: React.FC = () => {
                   </IonCardHeader>
                   <IonCardContent>
                     <p>Téléphone : {client.phoneNumber}</p>
-                    <p>Tour : {client.tour}</p>
+                    <p>
+                      Tournée :{" "}
+                      {tournes.find((tour) => tour.id === client.tour)?.name}
+                    </p>
                   </IonCardContent>
                 </IonCard>
               </IonCol>
