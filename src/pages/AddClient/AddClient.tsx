@@ -99,7 +99,7 @@ const AddClient: React.FC = () => {
   return (
     <IonContent>
       <IonGrid>
-        <h1 className="titre-ajout">AJOUTER un client</h1>
+        <h1 className="titre-ajout">Ajouter un client</h1>
         <IonRow>
           <IonCol size="12" size-md="6">
             <IonItem>

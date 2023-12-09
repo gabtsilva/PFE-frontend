@@ -161,6 +161,7 @@ const UpdateClient: React.FC = () => {
             <IonItem className="tournee-input">
               <IonLabel>Tournées</IonLabel>
               <IonSelect
+                value={trouneeChoisie}
                 onIonChange={(e) =>
                   setTourneeChoisie(parseFloat(e.detail.value!))
                 }
@@ -169,7 +170,9 @@ const UpdateClient: React.FC = () => {
                   <IonSelectOption
                     key={index}
                     value={tour.id}
-                    aria-required={trouneeChoisie === tour.id ? true : false}
+                    aria-selected={
+                      trouneeChoisie === tour.id ? true : undefined
+                    }
                   >
                     {tour.name}
                   </IonSelectOption>
@@ -181,7 +184,7 @@ const UpdateClient: React.FC = () => {
         <IonRow className="ion-justify-content-center button-send">
           <IonCol size="12">
             <IonButton onClick={handleAjouterClick}>
-              Ajouter le client
+              Modifier le client
             </IonButton>
             <p>{formError}</p>
           </IonCol>

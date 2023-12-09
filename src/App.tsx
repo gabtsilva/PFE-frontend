@@ -34,6 +34,12 @@ import Menu from "./components/Menu/Menu";
 import Header from "./components/Header/Header";
 import AddClient from "./pages/AddClient/AddClient";
 import UpdateClient from "./pages/UpdateClient/UpdateClient";
+import Article from "./pages/Article/Article";
+import AddArticle from "./pages/AddArticle/AddArticle";
+import UpdateArticle from "./pages/UpdateArticle/UpdateArticle";
+import Vehicule from "./pages/Vehicule/Vehicule";
+import AddVehicule from "./pages/AddVehicule/AddVehicule";
+import UpdateVehicule from "./pages/UpdateVehicule/UpdateVehicule";
 
 setupIonicReact();
 
@@ -98,6 +104,46 @@ const App: React.FC = () => (
           <Route exact path="/client/update/:id">
             <UpdateClient />
           </Route>
+
+          <Route exact path="/article/add">
+            <AddArticle />
+          </Route>
+
+          <Route exact path="/article/update/:id">
+            <UpdateArticle />
+          </Route>
+
+          <Route
+            exact
+            path="/articles"
+            render={(props) =>
+              localStorage.getItem("token") != null ? (
+                <Article />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
+
+          <Route exact path="/vehicule/add">
+            <AddVehicule />
+          </Route>
+
+          <Route exact path="/vehicule/update/:id">
+            <UpdateVehicule />
+          </Route>
+
+          <Route
+            exact
+            path="/vehicules"
+            render={(props) =>
+              localStorage.getItem("token") != null ? (
+                <Vehicule />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonPage>
