@@ -11,14 +11,14 @@ import {
 } from "react";
 
 const LoginForm: React.FC = () => {
-  const [mail, setMail] = useState("");
+  const [email, setMail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async () => {
     // Construire le corps de la requête
     const requestBody = {
-      mail: mail,
+      email: email,
       password: password,
     };
 
