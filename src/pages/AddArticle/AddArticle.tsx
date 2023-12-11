@@ -1,15 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  IonContent,
-  IonPage,
-  IonLabel,
-  IonInput,
-  IonButton,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonItem,
-} from "@ionic/react";
+import React, { useState } from "react";
+import {IonContent, IonLabel, IonInput, IonButton, IonGrid, IonRow, IonCol, IonItem} from "@ionic/react";
 
 import "./AddArticle.css";
 

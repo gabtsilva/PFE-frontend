@@ -54,114 +54,18 @@ const App: React.FC = () => (
       <IonReactRouter>
         <Menu />
         <IonRouterOutlet>
-          <Route
-            exact
-            path="/"
-            render={(props) =>
-              localStorage.getItem("token") != null ? (
-                <Home />
-              ) : (
-                <Redirect to="/login" />
-              )
-            }
-          />
-          <Route
-            exact
-            path="/login"
-            render={(props) =>
-              localStorage.getItem("token") == null ? (
-                <Login />
-              ) : (
-                <Redirect to="/" />
-              )
-            }
-          />
-          <Route
-            exact
-            path="/logout"
-            render={(props) =>
-              localStorage.getItem("token") != null ? (
-                <Logout />
-              ) : (
-                <Redirect to="/" />
-              )
-            }
-          />
-          <Route
-            exact
-            path="/clients"
-            render={(props) =>
-              localStorage.getItem("token") != null ? (
-                <Client />
-              ) : (
-                <Redirect to="/login" />
-              )
-            }
-          />
-
-          <Route exact path="/client/add">
-            <AddClient />
-          </Route>
-
-          <Route exact path="/client/update/:id">
-            <UpdateClient />
-          </Route>
-
-          <Route exact path="/article/add">
-            <AddArticle />
-          </Route>
-
-          <Route exact path="/article/update/:id">
-            <UpdateArticle />
-          </Route>
-
-          <Route
-            exact
-            path="/articles"
-            render={(props) =>
-              localStorage.getItem("token") != null ? (
-                <Article />
-              ) : (
-                <Redirect to="/login" />
-              )
-            }
-          />
-
-          <Route exact path="/vehicule/add">
-            <AddVehicule />
-          </Route>
-
-          <Route exact path="/vehicule/update/:id">
-            <UpdateVehicule />
-          </Route>
-
-          <Route
-            exact
-            path="/vehicules"
-            render={(props) =>
-              localStorage.getItem("token") != null ? (
-                <Vehicule />
-              ) : (
-                <Redirect to="/login" />
-              )
-            }
-          />
-
-          <Route exact path="/tournee/add">
-            <AddTournee />
-          </Route>
-
-          <Route
-            exact
-            path="/tournees"
-            render={(props) =>
-              localStorage.getItem("token") != null ? (
-                <Tournee />
-              ) : (
-                <Redirect to="/login" />
-              )
-            }
-          />
+          <Route exact path="/" render={() => <Home/>}/>
+          <Route exact path="/login" render={() => <Login />}/>
+          <Route exact path="/logout" render={() => <Logout />}/>
+          <Route exact path="/clients" render={() => <Client />}/>
+          <Route exact path="/client/add"render={() => <AddClient />}/>
+          <Route exact path="/client/update/:id" render={() => <UpdateClient />}/>
+          <Route exact path="/article/add" render={() => <AddArticle />}/>
+          <Route exact path="/article/update/:id" render={() => <UpdateArticle />}/>
+          <Route exact path="/articles" render={() => <Article />}/>
+          <Route exact path="/vehicule/add" render={() => <AddVehicule />}/>
+          <Route exact path="/vehicule/update/:id" render={() => <UpdateVehicule />} />
+          <Route exact path="/vehicules" render={() => <Vehicule />}/>
         </IonRouterOutlet>
       </IonReactRouter>
     </IonPage>
