@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import {IonContent, IonLabel, IonInput, IonButton, IonGrid, IonRow, IonCol, IonItem} from "@ionic/react";
 
 import "./AddArticle.css";
+import checkUserState from "../../utils/checkUserState";
+import {Redirect} from "react-router-dom";
 
 const AddArticle: React.FC = () => {
   const [nom, setNom] = useState<string>("");
@@ -48,34 +50,41 @@ const AddArticle: React.FC = () => {
         });
     }
   };
+  let state = checkUserState();
 
-  return (
-    <IonContent>
-      <IonGrid>
-        <h1 className="titre-ajout">Ajouter un article</h1>
-        <IonRow>
-          <IonCol size="12" size-md="6">
-            <IonItem>
-              <IonLabel position="floating">Nom de l'article</IonLabel>
-              <IonInput
-                type="text"
-                value={nom}
-                required
-                onIonChange={(e) => setNom(e.detail.value!)}
-              />
-            </IonItem>
-          </IonCol>
-          <IonCol size="12" size-md="6">
-            <IonButton onClick={handleAjouterClick}>
-              Ajouter un article
-            </IonButton>
-            <p>{formError}</p>
-          </IonCol>
-        </IonRow>
-        <IonRow className="ion-justify-content-center button-send"></IonRow>
-      </IonGrid>
-    </IonContent>
-  );
+  if(state == "user"){
+    return <Redirect to="/tournees" />
+  }else if(state == "admin"){
+    return (
+        <IonContent>
+          <IonGrid>
+            <h1 className="titre-ajout">Ajouter un article</h1>
+            <IonRow>
+              <IonCol size="12" size-md="6">
+                <IonItem>
+                  <IonLabel position="floating">Nom de l'article</IonLabel>
+                  <IonInput
+                      type="text"
+                      value={nom}
+                      required
+                      onIonChange={(e) => setNom(e.detail.value!)}
+                  />
+                </IonItem>
+              </IonCol>
+              <IonCol size="12" size-md="6">
+                <IonButton onClick={handleAjouterClick}>
+                  Ajouter un article
+                </IonButton>
+                <p>{formError}</p>
+              </IonCol>
+            </IonRow>
+            <IonRow className="ion-justify-content-center button-send"></IonRow>
+          </IonGrid>
+        </IonContent>
+    );
+  }else{
+    return <Redirect to="/login" />
+  }
 };
 
 export default AddArticle;

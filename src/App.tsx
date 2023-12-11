@@ -66,6 +66,7 @@ const App: React.FC = () => (
           <Route exact path="/vehicule/add" render={() => <AddVehicule />}/>
           <Route exact path="/vehicule/update/:id" render={() => <UpdateVehicule />} />
           <Route exact path="/vehicules" render={() => <Vehicule />}/>
+          <Route exact path="/tournees" render={() => <Tournee />}/>
         </IonRouterOutlet>
       </IonReactRouter>
     </IonPage>
