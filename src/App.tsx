@@ -54,18 +54,47 @@ const App: React.FC = () => (
       <IonReactRouter>
         <Menu />
         <IonRouterOutlet>
-          <Route exact path="/" render={() => <Home/>}/>
-          <Route exact path="/login" render={() => <Login />}/>
-          <Route exact path="/logout" render={() => <Logout />}/>
-          <Route exact path="/clients" render={() => <Client />}/>
-          <Route exact path="/client/add"render={() => <AddClient />}/>
-          <Route exact path="/client/update/:id" render={() => <UpdateClient />}/>
-          <Route exact path="/article/add" render={() => <AddArticle />}/>
-          <Route exact path="/article/update/:id" render={() => <UpdateArticle />}/>
-          <Route exact path="/articles" render={() => <Article />}/>
-          <Route exact path="/vehicule/add" render={() => <AddVehicule />}/>
-          <Route exact path="/vehicule/update/:id" render={() => <UpdateVehicule />} />
-          <Route exact path="/vehicules" render={() => <Vehicule />}/>
+          <Route exact path="/" render={() => <Home />} />
+          <Route exact path="/login" render={() => <Login />} />
+          <Route exact path="/logout" render={() => <Logout />} />
+          <Route exact path="/clients" render={() => <Client />} />
+          <Route exact path="/client/add" render={() => <AddClient />} />
+          <Route
+            exact
+            path="/client/update/:id"
+            render={() => <UpdateClient />}
+          />
+          <Route exact path="/article/add" render={() => <AddArticle />} />
+          <Route
+            exact
+            path="/article/update/:id"
+            render={() => <UpdateArticle />}
+          />
+          <Route exact path="/articles" render={() => <Article />} />
+          <Route exact path="/vehicule/add" render={() => <AddVehicule />} />
+          <Route
+            exact
+            path="/vehicule/update/:id"
+            render={() => <UpdateVehicule />}
+          />
+          <Route exact path="/vehicules" render={() => <Vehicule />} />
+
+          <Route exact path="/tournees" render={() => <Tournee />} />
+          <Route exact path="/tournee/add">
+            <AddTournee />
+          </Route>
+
+          <Route
+            exact
+            path="/tournees"
+            render={(props) =>
+              localStorage.getItem("token") != null ? (
+                <Tournee />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonPage>

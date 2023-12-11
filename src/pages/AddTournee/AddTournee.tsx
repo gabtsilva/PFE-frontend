@@ -11,6 +11,7 @@ import {
   IonItem,
   IonSelect,
   IonSelectOption,
+  IonList,
 } from "@ionic/react";
 
 import "./AddTournee.css";
@@ -20,10 +21,32 @@ interface Tournee {
   name: string;
 }
 
+interface Client {
+  id: number;
+  name: string;
+  address: string;
+  phoneNumber: string;
+  childrenQuantity: number;
+  tour: number;
+}
+
 const AddTournee: React.FC = () => {
   const [nom, setNom] = useState<string>("");
-
+  const [clients, setClients] = useState<Client[]>([]);
+  const [idTournee, setIdTournee] = useState<number>();
   const [formError, setFormError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Effect hook to retrieve client data from the API
+    fetch("http://localhost:8080/client")
+      .then((response) => response.json())
+      .then((data) => {
+        setClients(data);
+      })
+      .catch((error) =>
+        console.error("Erreur de chargement des données", error)
+      );
+  }, []);
 
   const handleAjouterClick = () => {
     if (!nom) {
@@ -50,13 +73,14 @@ const AddTournee: React.FC = () => {
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
-          return response.text();
+          console.log("respons." + response);
         })
         .then((data) => {
           console.log("Tournée ajouté avec succès:", data);
           // Reset form error state
+          data.id
           setFormError(null);
-          window.location.href = "/tournees";
+          //window.location.href = "/tournees";
         })
         .catch((error) => {
           console.error("Erreur lors de l'ajout de la tournée:", error);
@@ -82,6 +106,29 @@ const AddTournee: React.FC = () => {
                 onIonChange={(e) => setNom(e.detail.value!)}
               />
             </IonItem>
+          </IonCol>
+          <IonCol size="12" size-md="6">
+            <IonList>
+              <IonItem>
+                <IonSelect
+                  aria-label="Food"
+                  placeholder="Selectionner un/des client(s)"
+                  onIonChange={(ev) =>
+                    console.log(
+                      "Current value:",
+                      JSON.stringify(ev.detail.value)
+                    )
+                  }
+                  multiple={true}
+                >
+                  {clients.map((client) => (
+                    <IonSelectOption key={client.id} value={client.name}>
+                      {client.name}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
+            </IonList>
           </IonCol>
         </IonRow>
         <IonRow className="ion-justify-content-center button-send">
