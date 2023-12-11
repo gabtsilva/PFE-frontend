@@ -173,8 +173,8 @@ const AddClient: React.FC = () => {
           </IonGrid>
         </IonContent>
     );
-  }else{
-    return <Redirect to="/login" />
+  }else {
+    return <Redirect to="/tournees"/>
   }
 };
 
