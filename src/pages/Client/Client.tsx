@@ -17,8 +17,10 @@ import {
 } from "@ionic/react";
 import { accessibilityOutline, pencilOutline } from "ionicons/icons";
 import "./Client.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddElement from "../../components/AddElement/AddElement";
+import checkUserState from "../../utils/checkUserState";
+import {Redirect} from "react-router-dom";
 
 interface Client {
   id: number;
@@ -73,44 +75,50 @@ const Client: React.FC = () => {
         console.error("Erreur de chargement des tournées", error)
       );
   };
-
-  return (
-    <>
-      <IonContent>
-        <IonGrid>
-          <AddElement nom="client" />
-          <IonRow>
-            {clients.map((client) => (
-              <IonCol size="12" size-md="6" key={client.id}>
-                <IonCard>
-                  <IonIcon icon={accessibilityOutline}></IonIcon>
-                  <IonButton
-                    className="edit"
-                    routerLink={`/client/update/${client.id}`}
-                    routerDirection="none"
-                  >
-                    <IonIcon icon={pencilOutline}></IonIcon>
-                  </IonButton>
-                  <IonCardHeader>
-                    <IonCardSubtitle>{client.address}</IonCardSubtitle>
-                    <IonCardTitle>{client.name}</IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <p>Téléphone : {client.phoneNumber}</p>
-                    <p>Nombre d'enfants : {client.childrenQuantity}</p>
-                    <p>
-                      Tournée :{" "}
-                      {tournes.find((tour) => tour.id === client.tour)?.name}
-                    </p>
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            ))}
-          </IonRow>
-        </IonGrid>
-      </IonContent>
-    </>
-  );
+  let state = checkUserState();
+  if(state == "user"){
+    return <Redirect to="/tournees" />
+  }else if(state == "admin"){
+    return (
+        <>
+          <IonContent>
+            <IonGrid>
+              <AddElement nom="client"/>
+              <IonRow>
+                {clients.map((client) => (
+                    <IonCol size="12" size-md="6" key={client.id}>
+                      <IonCard>
+                        <IonIcon icon={accessibilityOutline}></IonIcon>
+                        <IonButton
+                            className="edit"
+                            routerLink={`/client/update/${client.id}`}
+                            routerDirection="none"
+                        >
+                          <IonIcon icon={pencilOutline}></IonIcon>
+                        </IonButton>
+                        <IonCardHeader>
+                          <IonCardSubtitle>{client.address}</IonCardSubtitle>
+                          <IonCardTitle>{client.name}</IonCardTitle>
+                        </IonCardHeader>
+                        <IonCardContent>
+                          <p>Téléphone : {client.phoneNumber}</p>
+                          <p>Nombre d'enfants : {client.childrenQuantity}</p>
+                          <p>
+                            Tournée :{" "}
+                            {tournes.find((tour) => tour.id === client.tour)?.name}
+                          </p>
+                        </IonCardContent>
+                      </IonCard>
+                    </IonCol>
+                ))}
+              </IonRow>
+            </IonGrid>
+          </IonContent>
+        </>
+    );
+  }else{
+    return <Redirect to="/login" />
+  }
 };
 
 export default Client;

@@ -15,6 +15,8 @@ import {
 } from "@ionic/react";
 
 import "./AddTournee.css";
+import checkUserState from "../../utils/checkUserState";
+import {Redirect} from "react-router-dom";
 
 interface Tournee {
   id: number;
@@ -90,24 +92,27 @@ const AddTournee: React.FC = () => {
         });
     }
   };
-
-  return (
-    <IonContent>
-      <IonGrid>
-        <h1 className="titre-ajout">Ajouter une tournée</h1>
-        <IonRow>
-          <IonCol size="12" size-md="6">
-            <IonItem>
-              <IonLabel position="floating">Nom de la tournée</IonLabel>
-              <IonInput
-                type="text"
-                value={nom}
-                required
-                onIonChange={(e) => setNom(e.detail.value!)}
-              />
-            </IonItem>
-          </IonCol>
-          <IonCol size="12" size-md="6">
+  let state = checkUserState();
+  if(state == "user"){
+    return <Redirect to="/tournees" />
+  }else if(state == "admin") {
+    return (
+        <IonContent>
+          <IonGrid>
+            <h1 className="titre-ajout">Ajouter une tournée</h1>
+            <IonRow>
+              <IonCol size="12" size-md="6">
+                <IonItem>
+                  <IonLabel position="floating">Nom de la tournée</IonLabel>
+                  <IonInput
+                      type="text"
+                      value={nom}
+                      required
+                      onIonChange={(e) => setNom(e.detail.value!)}
+                  />
+                </IonItem>
+              </IonCol>
+              <IonCol size="12" size-md="6">
             <IonList>
               <IonItem>
                 <IonSelect
@@ -131,17 +136,20 @@ const AddTournee: React.FC = () => {
             </IonList>
           </IonCol>
         </IonRow>
-        <IonRow className="ion-justify-content-center button-send">
-          <IonCol size="12">
-            <IonButton onClick={handleAjouterClick}>
-              Ajouter une tournée
-            </IonButton>
-            <p>{formError}</p>
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-    </IonContent>
-  );
+            <IonRow className="ion-justify-content-center button-send">
+              <IonCol size="12">
+                <IonButton onClick={handleAjouterClick}>
+                  Ajouter une tournée
+                </IonButton>
+                <p>{formError}</p>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonContent>
+    );
+  }else{
+    return <Redirect to="/login" />
+  }
 };
 
 export default AddTournee;

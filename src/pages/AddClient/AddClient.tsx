@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   IonContent,
-  IonPage,
   IonLabel,
   IonInput,
   IonButton,
@@ -9,16 +8,13 @@ import {
   IonRow,
   IonCol,
   IonItem,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonButtons,
-  IonBackButton,
   IonSelect,
   IonSelectOption,
 } from "@ionic/react";
 
 import "./AddClient.css";
+import checkUserState from "../../utils/checkUserState";
+import {Redirect} from "react-router-dom";
 
 interface Tournee {
   id: number;
@@ -95,84 +91,91 @@ const AddClient: React.FC = () => {
         });
     }
   };
+  let state = checkUserState();
 
-  return (
-    <IonContent>
-      <IonGrid>
-        <h1 className="titre-ajout">Ajouter un client</h1>
-        <IonRow>
-          <IonCol size="12" size-md="6">
-            <IonItem>
-              <IonLabel position="floating">Nom de la crèche</IonLabel>
-              <IonInput
-                type="text"
-                value={nom}
-                required
-                onIonChange={(e) => setNom(e.detail.value!)}
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="floating">Adresse</IonLabel>
-              <IonInput
-                type="text"
-                required
-                value={adress}
-                onIonChange={(e) => setAdress(e.detail.value!)}
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="floating">Numéro de téléphone</IonLabel>
-              <IonInput
-                type="text"
-                required
-                value={phone}
-                onIonChange={(e) => setPhone(e.detail.value!)}
-              />
-            </IonItem>
-          </IonCol>
-          <IonCol size="12" size-md="6">
-            <IonItem>
-              <IonLabel position="floating">Nombre d'enfants</IonLabel>
-              <IonInput
-                type="number"
-                value={nombreEnfants}
-                required
-                onIonChange={(e) =>
-                  setNombreEnfants(parseFloat(e.detail.value!))
-                }
-              />
-            </IonItem>
-            <IonItem className="tournee-input">
-              <IonLabel>Tournées</IonLabel>
-              <IonSelect
-                onIonChange={(e) =>
-                  setTourneeChoisie(parseFloat(e.detail.value!))
-                }
-              >
-                {tours.map((tour, index) => (
-                  <IonSelectOption
-                    key={index}
-                    value={tour.id}
-                    aria-required={trouneeChoisie === tour.id}
+  if(state == "user"){
+    return <Redirect to="/tournees" />
+  }else if(state == "admin"){
+    return (
+        <IonContent>
+          <IonGrid>
+            <h1 className="titre-ajout">Ajouter un client</h1>
+            <IonRow>
+              <IonCol size="12" size-md="6">
+                <IonItem>
+                  <IonLabel position="floating">Nom de la crèche</IonLabel>
+                  <IonInput
+                      type="text"
+                      value={nom}
+                      required
+                      onIonChange={(e) => setNom(e.detail.value!)}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="floating">Adresse</IonLabel>
+                  <IonInput
+                      type="text"
+                      required
+                      value={adress}
+                      onIonChange={(e) => setAdress(e.detail.value!)}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="floating">Numéro de téléphone</IonLabel>
+                  <IonInput
+                      type="text"
+                      required
+                      value={phone}
+                      onIonChange={(e) => setPhone(e.detail.value!)}
+                  />
+                </IonItem>
+              </IonCol>
+              <IonCol size="12" size-md="6">
+                <IonItem>
+                  <IonLabel position="floating">Nombre d'enfants</IonLabel>
+                  <IonInput
+                      type="number"
+                      value={nombreEnfants}
+                      required
+                      onIonChange={(e) =>
+                          setNombreEnfants(parseFloat(e.detail.value!))
+                      }
+                  />
+                </IonItem>
+                <IonItem className="tournee-input">
+                  <IonLabel>Tournées</IonLabel>
+                  <IonSelect
+                      onIonChange={(e) =>
+                          setTourneeChoisie(parseFloat(e.detail.value!))
+                      }
                   >
-                    {tour.name}
-                  </IonSelectOption>
-                ))}
-              </IonSelect>
-            </IonItem>
-          </IonCol>
-        </IonRow>
-        <IonRow className="ion-justify-content-center button-send">
-          <IonCol size="12">
-            <IonButton onClick={handleAjouterClick}>
-              Ajouter le client
-            </IonButton>
-            <p>{formError}</p>
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-    </IonContent>
-  );
+                    {tours.map((tour, index) => (
+                        <IonSelectOption
+                            key={index}
+                            value={tour.id}
+                            aria-required={trouneeChoisie === tour.id}
+                        >
+                          {tour.name}
+                        </IonSelectOption>
+                    ))}
+                  </IonSelect>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow className="ion-justify-content-center button-send">
+              <IonCol size="12">
+                <IonButton onClick={handleAjouterClick}>
+                  Ajouter le client
+                </IonButton>
+                <p>{formError}</p>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonContent>
+    );
+  }else{
+    return <Redirect to="/login" />
+  }
 };
 
 export default AddClient;

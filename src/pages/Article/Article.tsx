@@ -13,8 +13,10 @@ import {
 } from "@ionic/react";
 import { cube, pencilOutline } from "ionicons/icons";
 import "./Article.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddElement from "../../components/AddElement/AddElement";
+import checkUserState from "../../utils/checkUserState";
+import {Redirect} from "react-router-dom";
 
 interface Article {
   id: number;
@@ -36,35 +38,41 @@ const Article: React.FC = () => {
         console.error("Erreur de chargement des données", error)
       );
   }, []);
-
-  return (
-    <>
-      <IonContent>
-        <IonGrid>
-          <AddElement nom="article" />
-          <IonRow>
-            {articles.map((article) => (
-              <IonCol size="12" size-md="6" key={article.id}>
-                <IonCard>
-                  <IonIcon icon={cube}></IonIcon>
-                  <IonButton
-                    className="edit"
-                    routerLink={`/article/update/${article.id}`}
-                    routerDirection="none"
-                  >
-                    <IonIcon icon={pencilOutline}></IonIcon>
-                  </IonButton>
-                  <IonCardHeader>
-                    <IonCardTitle>{article.name}</IonCardTitle>
-                  </IonCardHeader>
-                </IonCard>
-              </IonCol>
-            ))}
-          </IonRow>
-        </IonGrid>
-      </IonContent>
-    </>
-  );
+  let state = checkUserState();
+  if(state == "user"){
+    return <Redirect to="/tournees" />
+  }else if(state == "admin") {
+    return (
+        <>
+          <IonContent>
+            <IonGrid>
+              <AddElement nom="article"/>
+              <IonRow>
+                {articles.map((article) => (
+                    <IonCol size="12" size-md="6" key={article.id}>
+                      <IonCard>
+                        <IonIcon icon={cube}></IonIcon>
+                        <IonButton
+                            className="edit"
+                            routerLink={`/article/update/${article.id}`}
+                            routerDirection="none"
+                        >
+                          <IonIcon icon={pencilOutline}></IonIcon>
+                        </IonButton>
+                        <IonCardHeader>
+                          <IonCardTitle>{article.name}</IonCardTitle>
+                        </IonCardHeader>
+                      </IonCard>
+                    </IonCol>
+                ))}
+              </IonRow>
+            </IonGrid>
+          </IonContent>
+        </>
+    );
+  }else{
+    return <Redirect to="/login" />
+  }
 };
 
 export default Article;

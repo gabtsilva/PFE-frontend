@@ -95,6 +95,7 @@ const App: React.FC = () => (
               )
             }
           />
+
         </IonRouterOutlet>
       </IonReactRouter>
     </IonPage>
