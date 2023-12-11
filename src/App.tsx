@@ -43,7 +43,9 @@ import UpdateVehicule from "./pages/UpdateVehicule/UpdateVehicule";
 import Tournee from "./pages/Tournee/Tournee";
 import AddTournee from "./pages/AddTournee/AddTournee";
 
-setupIonicReact();
+setupIonicReact({
+  mode:"ios"
+});
 
 const App: React.FC = () => (
   <IonApp>
