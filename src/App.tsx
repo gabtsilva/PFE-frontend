@@ -40,6 +40,8 @@ import UpdateArticle from "./pages/UpdateArticle/UpdateArticle";
 import Vehicule from "./pages/Vehicule/Vehicule";
 import AddVehicule from "./pages/AddVehicule/AddVehicule";
 import UpdateVehicule from "./pages/UpdateVehicule/UpdateVehicule";
+import Tournee from "./pages/Tournee/Tournee";
+import AddTournee from "./pages/AddTournee/AddTournee";
 
 setupIonicReact();
 
@@ -139,6 +141,22 @@ const App: React.FC = () => (
             render={(props) =>
               localStorage.getItem("token") != null ? (
                 <Vehicule />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
+
+          <Route exact path="/tournee/add">
+            <AddTournee />
+          </Route>
+
+          <Route
+            exact
+            path="/tournees"
+            render={(props) =>
+              localStorage.getItem("token") != null ? (
+                <Tournee />
               ) : (
                 <Redirect to="/login" />
               )
