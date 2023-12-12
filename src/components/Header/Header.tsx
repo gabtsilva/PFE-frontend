@@ -5,10 +5,11 @@ import {
   IonMenuButton,
   IonPage,
   IonToolbar,
-  IonImg
+  IonImg, IonMenuToggle, IonItem, IonIcon, IonLabel, IonButton
 } from "@ionic/react";
 import logo from "../../assets/img/logo_snappies.png";
 import "./Header.css";
+import {logOut} from "ionicons/icons";
 
 interface HeaderProps {}
 
@@ -22,12 +23,10 @@ const Header: React.FC<HeaderProps> = () => {
                 <IonButtons slot="start">
                   <IonMenuButton />
                 </IonButtons>
-                <IonImg
-                    class="ion-margin"
-                    alt="Snappies' logo"
-                    src={logo}
-                    slot="end"
-                ></IonImg>
+                <IonButtons slot="end">
+                  <IonButton routerLink="/logout" routerDirection="none"><IonIcon icon={logOut}></IonIcon>
+                  </IonButton>
+                </IonButtons>
               </IonToolbar>
             </IonHeader>
           </IonPage>
