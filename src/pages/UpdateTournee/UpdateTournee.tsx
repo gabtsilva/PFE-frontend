@@ -17,9 +17,9 @@ import {
   ItemReorderEventDetail,
 } from "@ionic/react";
 
-import "./AddTournee.css";
+import "./UpdateTournee.css";
 import checkUserState from "../../utils/checkUserState";
-import { Redirect } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 
 interface Tournee {
   id: number;
@@ -35,18 +35,13 @@ interface Client {
   tour: number;
 }
 
-interface OrdrePassage {
-  clientId: number;
-  tourId: number;
-  order: number;
-}
-
-const AddTournee: React.FC = () => {
+const UpdateTournee: React.FC = () => {
   const [nom, setNom] = useState<string>("");
   const [clients, setClients] = useState<Client[]>([]);
   const [formError, setFormError] = useState<string | null>(null);
   const [clientsSelected, setClientsSelected] = useState<number[]>([]);
   const [clientOrder, setClientOrder] = useState<number[]>([]);
+  const { id } = useParams<{ id: string }>();
 
   function handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
     const newClientsOrder = event.detail.complete(clientsSelected);
@@ -59,6 +54,13 @@ const AddTournee: React.FC = () => {
 
   useEffect(() => {
     // Effect hook to retrieve client data from the API
+    fetch(`http://localhost:8080/tour/${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        // Update the state with the retrieved data
+        setNom(data.name || "");
+      });
+
     fetch("http://localhost:8080/client")
       .then((response) => response.json())
       .then((data) => {
@@ -69,7 +71,6 @@ const AddTournee: React.FC = () => {
       );
   }, []);
 
-  function secondRequest() {}
   const handleAjouterClick = async () => {
     if (!nom) {
       setFormError("Veuillez remplir tous les champs.");
@@ -133,56 +134,25 @@ const AddTournee: React.FC = () => {
       // Attendre que toutes les mises à jour des clients soient terminées
       await Promise.all(updateClientsPromises);
 
-      const updateOrderClientsPromises = async () => {
-        // Créez un tableau pour stocker les promesses
-        console.log("Tournee  => " + newTournee.id);
-        const promises: Promise<void>[] = [];
-        let arrayPassage: OrdrePassage[] = [];
-        for (const [index, element] of clientOrder.entries()) {
-          let i = index - 1;
-          let passage: OrdrePassage = {
-            clientId: element,
-            tourId: newTournee.id,
-            order: i,
-          };
-          arrayPassage.push(passage);
-        }
-        console.log("à l'API " + JSON.stringify(arrayPassage));
-
-        // Ajoutez la promesse à votre tableau
-        const response = await fetch(
-          `http://localhost:8080/tour/${newTournee.id}/createTourOrder`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(arrayPassage), // Notez que le body doit être un tableau
-          }
+      // Mettre à jour ordre de la tournée
+      let indexOrder = 0;
+      const updateOrderClientsPromises = clientOrder.map(async (IDclient) => {
+        console.log(
+          "Ordre du client id : " + IDclient + " à l'index : " + indexOrder
         );
 
-        // Vérifiez la réponse et lancez une erreur si nécessaire
-        if (!response.ok) {
-          throw new Error(`Erreur lors de la requête: ${response.statusText}`);
-        }
+        console.log("update ordre des clients fini");
+        indexOrder++;
+      });
 
-        // Ajoutez la promesse à votre tableau
-        promises.push(Promise.resolve());
-
-        // Retournez le tableau de promesses
-        return promises;
-      };
-      // Utilisez directement la fonction pour obtenir le tableau de promesses
-      const promisesArray: Promise<void>[] = await updateOrderClientsPromises();
-
-      // Passez le tableau de promesses à Promise.all
-      await Promise.all(promisesArray);
+      // Attendre que toutes les mises à jour des clients soient terminées
+      await Promise.all(updateOrderClientsPromises);
     } catch (error) {
       console.error("Erreur lors de l'ajout de la tournée:", error);
       setFormError("Une erreur s'est produite lors de l'ajout de la tournée.");
     }
 
-    //window.location.href = "/tournees";
+    window.location.href = "/tournees";
   };
 
   let state = checkUserState();
@@ -209,7 +179,7 @@ const AddTournee: React.FC = () => {
               <IonList>
                 <IonItem>
                   <IonSelect
-                    aria-label="Client"
+                    aria-label="Food"
                     placeholder="Selectionner un/des client(s)"
                     onIonChange={(ev) =>
                       console.log(
@@ -273,4 +243,4 @@ const AddTournee: React.FC = () => {
   }
 };
 
-export default AddTournee;
+export default UpdateTournee;
