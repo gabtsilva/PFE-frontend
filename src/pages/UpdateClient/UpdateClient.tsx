@@ -12,11 +12,11 @@ import {
   IonSelectOption, IonIcon, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle,
 } from "@ionic/react";
 
-import {Redirect, useParams} from "react-router-dom";
+import {Redirect, useHistory, useParams} from "react-router-dom";
 
 import "./UpdateClient.css";
 import checkUserState from "../../utils/checkUserState";
-import {createOutline, removeOutline, trashOutline} from "ionicons/icons";
+import {createOutline, documentSharp, removeOutline, trashOutline} from "ionicons/icons";
 import {OverlayEventDetail} from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 
 interface Tournee {
@@ -48,6 +48,9 @@ const UpdateClient: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [order, setOrder] = useState<OrderLine[]>([]);
   const [articles, setArticles] = useState<Articles[]>([]);
+  const history = useHistory();
+
+  // Function to toggle the disabled state
 
   useEffect(() => {
     fetch(`http://localhost:8080/article`)
@@ -119,20 +122,42 @@ const UpdateClient: React.FC = () => {
         });
   }
   const updateQuantity = (type: string) => {
+    console.log("clicked");
+    let arrCons =[];
     const inputs = document.querySelectorAll('input[name^="modify-"]');
-    let arrayOfOrderLines = [];
-    inputs.forEach((input) => {
-      arrayOfOrderLines.push({id:input.name.split("-")[1], value:input.value})
-    })
-    if(type == "consistent"){
-      arrayOfOrderLines.forEach((elem) =>{
-        fetch(`http://localhost:8080/order/${id}/addArticle/${elem.id}/${elem.value}`,{method:"POST"});
-      })
-    }else{
-      arrayOfOrderLines.forEach((elem) =>{
-        fetch(`http://localhost:8080/order/${id}/modify/${elem.id}/${elem.value}`,{method:"POST"});
-      })
+    if(type == "c"){
+      inputs.forEach((input) => {
+        let object = {id: input.name.split("-")[1], value:input.value};
+        arrCons.push(object);
+      });
+    }else if(type == "e"){
+      inputs.forEach((input) => {
+        console.log(input);
+        console.log(input.name.split("-")[1]);
+        console.log(input.value);
+        console.log(input.placeholder);
+        let object = {id: input.name.split("-")[1], value:input.value - parseInt(input.placeholder)};
+        arrCons.push(object);
+      });
     }
+    if(type == "c"){
+      arrCons.forEach((elem) =>{
+        fetch(`http://localhost:8080/order/${id}/addArticle/${elem.id}/${elem.value}`,{method:"POST"})
+            .then((response) => response.json())
+            .then((data) => {
+              window.location.reload();
+            });
+      });
+    }else if (type == "e"){
+      arrCons.forEach((elem) =>{
+        fetch(`http://localhost:8080/order/${id}/modify/${elem.id}/${elem.value}`,{method:"POST"})
+            .then((response) => response.json())
+            .then((data) => {
+              window.location.reload();
+            });
+      });
+    }
+
   }
   const handleAjouterClick = () => {
     if (!nom || !nombreEnfants || !trouneeChoisie || !adress || !phone) {
@@ -265,9 +290,8 @@ const UpdateClient: React.FC = () => {
                   <thead>
                   <tr>
                     <th>Nom</th>
-                    <th>Quantité générale</th>
-                    <th>Quantité prévue pour la prochaine livraison</th>
-                    <th>Quantité à ajouter</th>
+                    <th>Quantité totale à livrer</th>
+                    <th>Dont ajout pour la prochaine livraison</th>
                     <th></th>
                   </tr>
                   </thead>
@@ -275,15 +299,17 @@ const UpdateClient: React.FC = () => {
                   {order.map((order) => (
                       <tr>
                         <td>{articles.find((article) => article.id === order.articleId)?.name}</td>
-                        <td>{order.plannedQuantity}</td>
-                        <td>{order.plannedQuantity + order.changedQuantity}</td>
                         <td>
                           <IonInput
+                              placeholder={order.plannedQuantity}
                               name={"modify-" + articles.find((article) => article.id === order.articleId)?.id}
                               type="number"
-                              value={0}
+                              value={order.plannedQuantity}
                               required
                           />
+                        </td>
+                        <td>
+                          <IonLabel color="primary">({order.changedQuantity})</IonLabel>
                         </td>
                         <td><IonButton size="small" color="light" onClick={() => removeArticle(order.orderId, order.articleId)}><IonIcon color="danger" icon={trashOutline}></IonIcon></IonButton></td>
                       </tr>
@@ -292,14 +318,14 @@ const UpdateClient: React.FC = () => {
                 </table>
                 <IonRow>
                   <IonCol size="auto">
-                    <IonButton className="ion-margin-end" size="small" shape="round" color="secondary" onClick={() => updateQuantity("ephemeral")}>
+                    <IonButton size="small" shape="round" color="success">
+                      Ajouter un article
+                    </IonButton>
+                    <IonButton size="small" shape="round" color="primary" onClick={() => updateQuantity("e")}>
                       Modification ponctuelle
                     </IonButton>
-                    <IonButton className="ion-margin-end" size="small" shape="round" color="warning" onClick={() => updateQuantity("consistent")}>
-                      Modification long terme
-                    </IonButton>
-                    <IonButton size="small" shape="round" color="success" onClick={() => updateQuantity("consistent")}>
-                      Ajouter un article
+                    <IonButton size="small" shape="round" color="danger" onClick={() => updateQuantity("c")}>
+                      Modification définitive
                     </IonButton>
                   </IonCol>
                 </IonRow>
