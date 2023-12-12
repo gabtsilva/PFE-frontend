@@ -9,9 +9,10 @@ import {
   IonCol,
   IonIcon,
   IonButton,
+  IonCardSubtitle,
 } from "@ionic/react";
 import { walk, pencilOutline } from "ionicons/icons";
-import "./Tournee.css";
+import "./TourneeLivreur.css";
 import React, { useEffect, useState } from "react";
 import AddElement from "../../components/AddElement/AddElement";
 import checkUserState from "../../utils/checkUserState";
@@ -42,7 +43,7 @@ interface Client {
 
 let state = checkUserState();
 
-const Tournee: React.FC = () => {
+const TourneeLivreur: React.FC = () => {
   document.title = "SnappiesLog - Tournées";
   const [tournees, setTournees] = useState<Tournee[]>([]);
   const [clientsByTournee, setClientsByTournee] = useState<
@@ -51,10 +52,24 @@ const Tournee: React.FC = () => {
   const [tourneesExecUser, setTourneesExecUser] = useState<TourneeExec[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/tour")
+    fetch("http://localhost:8080/tour/tourExecution")
       .then((response) => response.json())
       .then((data) => {
-        setTournees(data);
+        console.log(data);
+        setTourneesExecUser(data);
+
+        let tourneeActuel: Tournee[] = [];
+        data.map((tourneeExec: TourneeExec) => {
+          fetch(`http://localhost:8080/tour/${tourneeExec.tourId}`)
+            .then((response) => response.json())
+            .then((data) => {
+              tourneeActuel.push(data);
+            });
+        });
+
+        setTournees(tourneeActuel);
+
+        console.log("tournée toruvés : " + JSON.stringify(tournees));
 
         // Fetch clients for each tournee
         const fetchClients = data.map((tournee: Tournee) =>
@@ -73,36 +88,42 @@ const Tournee: React.FC = () => {
           console.error("Erreur de chargement des données clients", error)
         );
       })
+      //})
       .catch((error) =>
         console.error("Erreur de chargement des données tournées", error)
       );
   }, []);
 
-  if (state == "admin") {
+  if (state == "user") {
     return (
       <>
         <IonContent>
           <IonGrid>
-            <AddElement nom="tournee" icone={walk} />
             <IonRow>
-              {tournees.map((tournee) => (
-                <IonCol size="12" size-md="6" key={tournee.id}>
+              {tourneesExecUser.map((tourneeExecUser) => (
+                <IonCol size="12" size-md="6" key={tourneeExecUser.id}>
                   <IonCard>
                     <IonIcon icon={walk}></IonIcon>
-                    <IonButton
-                      className="edit"
-                      routerLink={`/tournee/update/${tournee.id}`}
-                      routerDirection="none"
-                    >
-                      <IonIcon icon={pencilOutline}></IonIcon>
-                    </IonButton>
                     <IonCardHeader>
-                      <IonCardTitle>{tournee.name}</IonCardTitle>
+                      <IonCardTitle>
+                        {
+                          tournees.find(
+                            (tournee) => tournee.id === tourneeExecUser.id
+                          )?.name
+                        }
+                      </IonCardTitle>
+                      <IonCardSubtitle>
+                        {new Date(
+                          tourneeExecUser.executionDate[0],
+                          tourneeExecUser.executionDate[1] - 1, // Les mois dans JavaScript commencent à 0, donc on soustrait 1
+                          tourneeExecUser.executionDate[2]
+                        ).toLocaleDateString("fr-FR")}
+                      </IonCardSubtitle>
                     </IonCardHeader>
                     <IonCardContent className="clients-tour">
                       <p>Clients dans cette tournee : </p>
                       <ul>
-                        {clientsByTournee[tournee.id]?.map((client) => (
+                        {clientsByTournee[tourneeExecUser.id]?.map((client) => (
                           <IonButton
                             routerLink={`/client/update/${client.id}`}
                             routerDirection="none"
@@ -125,4 +146,4 @@ const Tournee: React.FC = () => {
   }
 };
 
-export default Tournee;
+export default TourneeLivreur;

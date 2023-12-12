@@ -43,9 +43,10 @@ import UpdateVehicule from "./pages/UpdateVehicule/UpdateVehicule";
 import Tournee from "./pages/Tournee/Tournee";
 import AddTournee from "./pages/AddTournee/AddTournee";
 import UpdateTournee from "./pages/UpdateTournee/UpdateTournee";
+import TourneeLivreur from "./pages/TourneeLivreur/TourneeLivreur";
 
 setupIonicReact({
-  mode:"ios"
+  mode: "ios",
 });
 
 const App: React.FC = () => (
@@ -99,6 +100,18 @@ const App: React.FC = () => (
             render={(props) =>
               localStorage.getItem("token") != null ? (
                 <Tournee />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
+
+          <Route
+            exact
+            path="/tourneesLivreur"
+            render={(props) =>
+              localStorage.getItem("token") != null ? (
+                <TourneeLivreur />
               ) : (
                 <Redirect to="/login" />
               )

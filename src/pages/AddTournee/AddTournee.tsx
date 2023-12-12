@@ -95,20 +95,31 @@ const AddTournee: React.FC = () => {
       const newTournee = await responseTournee.json();
       console.log("Tournée ajoutée avec succès:", newTournee);
 
+      let listIdClientSelected = clients;
+
+      listIdClientSelected.sort((a, b) => {
+        return a.id - b.id;
+      });
+
       // Mettre à jour la tournée pour chaque client sélectionné
-      const updateClientsPromises = clientsSelected.map(async (index) => {
+      const updateClientsPromises = clientOrder.map(async (index) => {
+        /*
         let indexGood = index - 1;
-        console.log("for client id : ", clients[indexGood].id);
+        //console.log(JSON.stringify(clients));
+        console.log("for client id : ", clientOrder[indexGood]);
+
+        console.log(JSON.stringify(listIdClientSelected[indexGood]));
+
         const clientData = {
-          id: clients[indexGood].id,
-          address: clients[indexGood].address,
-          name: clients[indexGood].name,
-          phoneNumber: clients[indexGood].phoneNumber,
-          childrenQuantity: clients[indexGood].childrenQuantity,
+          id: listIdClientSelected[indexGood].id,
+          address: listIdClientSelected[indexGood].address,
+          name: listIdClientSelected[indexGood].name,
+          phoneNumber: listIdClientSelected[indexGood].phoneNumber,
+          childrenQuantity: listIdClientSelected[indexGood].childrenQuantity,
           tour: newTournee.id,
         };
         const responseUpdateClient = await fetch(
-          `http://localhost:8080/client/${clients[indexGood].id}`,
+          `http://localhost:8080/client/${listIdClientSelected[indexGood].id}`,
           {
             method: "PUT",
             headers: {
@@ -120,18 +131,15 @@ const AddTournee: React.FC = () => {
 
         if (!responseUpdateClient.ok) {
           console.error(
-            `Erreur lors de la mise à jour du client ${clients[indexGood].id}`
+            `Erreur lors de la mise à jour du client ${listIdClientSelected[indexGood].id}`
           );
         } else {
           console.log(
-            `Client ${clients[indexGood].id} mis à jour avec succès.`
+            `Client ${listIdClientSelected[indexGood].id} mis à jour avec succès.`
           );
         }
-        console.log("update client fini");
+        console.log("update client fini"); */
       });
-
-      // Attendre que toutes les mises à jour des clients soient terminées
-      await Promise.all(updateClientsPromises);
 
       const updateOrderClientsPromises = async () => {
         // Créez un tableau pour stocker les promesses
@@ -139,7 +147,7 @@ const AddTournee: React.FC = () => {
         const promises: Promise<void>[] = [];
         let arrayPassage: OrdrePassage[] = [];
         for (const [index, element] of clientOrder.entries()) {
-          let i = index - 1;
+          let i = index + 1;
           let passage: OrdrePassage = {
             clientId: element,
             tourId: newTournee.id,
@@ -173,10 +181,13 @@ const AddTournee: React.FC = () => {
         return promises;
       };
       // Utilisez directement la fonction pour obtenir le tableau de promesses
-      const promisesArray: Promise<void>[] = await updateOrderClientsPromises();
-
-      // Passez le tableau de promesses à Promise.all
-      await Promise.all(promisesArray);
+      // Attendre que toutes les mises à jour des clients soient terminées
+      await Promise.all(updateClientsPromises).then(async () => {
+        const promisesArray: Promise<void>[] =
+          await updateOrderClientsPromises();
+        // Passez le tableau de promesses à Promise.all
+        await Promise.all(promisesArray);
+      });
     } catch (error) {
       console.error("Erreur lors de l'ajout de la tournée:", error);
       setFormError("Une erreur s'est produite lors de l'ajout de la tournée.");
@@ -215,7 +226,8 @@ const AddTournee: React.FC = () => {
                       console.log(
                         "Current value:",
                         JSON.stringify(ev.detail.value),
-                        setClientsSelected(ev.detail.value)
+                        setClientsSelected(ev.detail.value),
+                        setClientOrder(ev.detail.value)
                       )
                     }
                     multiple={true}

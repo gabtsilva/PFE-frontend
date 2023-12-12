@@ -35,6 +35,19 @@ interface Client {
   tour: number;
 }
 
+interface OrderClient {
+  id: number;
+  clientId: number;
+  tourId: number;
+  order: number;
+}
+
+interface OrdrePassage {
+  clientId: number;
+  tourId: number;
+  order: number;
+}
+
 const UpdateTournee: React.FC = () => {
   const [nom, setNom] = useState<string>("");
   const [clients, setClients] = useState<Client[]>([]);
@@ -42,6 +55,7 @@ const UpdateTournee: React.FC = () => {
   const [clientsSelected, setClientsSelected] = useState<number[]>([]);
   const [clientOrder, setClientOrder] = useState<number[]>([]);
   const { id } = useParams<{ id: string }>();
+  const [orderTournee, setOrderTournee] = useState<OrderClient[]>([]);
 
   function handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
     const newClientsOrder = event.detail.complete(clientsSelected);
@@ -68,7 +82,38 @@ const UpdateTournee: React.FC = () => {
       })
       .catch((error) =>
         console.error("Erreur de chargement des données", error)
-      );
+      )
+      .then(() => {});
+
+    fetch(`http://localhost:8080/tour/${id}/getTourOrder`)
+      .then((response) => response.json())
+      .then((data) => {
+        setOrderTournee(data || []);
+        let listIdClientSelected: number[] = [];
+        console.log("order de la AVANT DB = " + JSON.stringify(data));
+
+        data.forEach((element: OrderClient) => {
+          console.log(element.clientId);
+          listIdClientSelected.push(element.clientId);
+        });
+
+        // Sort listIdClientSelected based on the "order" property
+        listIdClientSelected.sort((a, b) => {
+          const orderA =
+            data.find((element: OrdrePassage) => element.clientId === a)
+              ?.order || 0;
+          const orderB =
+            data.find((element: OrdrePassage) => element.clientId === b)
+              ?.order || 0;
+          return orderA - orderB;
+        });
+
+        console.log(
+          "order de la APRES DB = " + JSON.stringify(listIdClientSelected)
+        );
+        setClientOrder(listIdClientSelected);
+        setClientsSelected(listIdClientSelected);
+      });
   }, []);
 
   const handleAjouterClick = async () => {
@@ -79,37 +124,51 @@ const UpdateTournee: React.FC = () => {
 
     try {
       setFormError(null);
+      let idInInteger = parseFloat(id);
+      const tourneeData = {
+        id: idInInteger,
+        name: nom,
+      };
 
+      console.log(JSON.stringify(tourneeData));
       // Ajouter la nouvelle tournée
-      const responseTournee = await fetch("http://localhost:8080/tour", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name: nom }),
-      });
+      const responseTournee = await fetch(
+        `http://localhost:8080/tour/${idInInteger}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(tourneeData),
+        }
+      );
 
       if (!responseTournee.ok) {
         throw new Error(`HTTP error! Status: ${responseTournee.status}`);
       }
 
-      const newTournee = await responseTournee.json();
-      console.log("Tournée ajoutée avec succès:", newTournee);
+      console.log("Tournée update avec succès");
+
+      let listIdClientSelected = clients;
+
+      listIdClientSelected.sort((a, b) => {
+        return a.id - b.id;
+      });
 
       // Mettre à jour la tournée pour chaque client sélectionné
-      const updateClientsPromises = clientsSelected.map(async (index) => {
-        let indexGood = index - 1;
-        console.log("for client id : ", clients[indexGood].id);
+      const updateClientsPromises = clientOrder.map(async (index) => {
+        /*let indexGood = index - 1;
+        console.log("for client id : ", listIdClientSelected[indexGood].id);
         const clientData = {
-          id: clients[indexGood].id,
-          address: clients[indexGood].address,
-          name: clients[indexGood].name,
-          phoneNumber: clients[indexGood].phoneNumber,
-          childrenQuantity: clients[indexGood].childrenQuantity,
-          tour: newTournee.id,
+          id: listIdClientSelected[indexGood].id,
+          address: listIdClientSelected[indexGood].address,
+          name: listIdClientSelected[indexGood].name,
+          phoneNumber: listIdClientSelected[indexGood].phoneNumber,
+          childrenQuantity: listIdClientSelected[indexGood].childrenQuantity,
+          tour: idInInteger,
         };
         const responseUpdateClient = await fetch(
-          `http://localhost:8080/client/${clients[indexGood].id}`,
+          `http://localhost:8080/client/${listIdClientSelected[indexGood].id}`,
           {
             method: "PUT",
             headers: {
@@ -121,38 +180,67 @@ const UpdateTournee: React.FC = () => {
 
         if (!responseUpdateClient.ok) {
           console.error(
-            `Erreur lors de la mise à jour du client ${clients[indexGood].id}`
+            `Erreur lors de la mise à jour du client ${listIdClientSelected[indexGood].id}`
           );
         } else {
           console.log(
-            `Client ${clients[indexGood].id} mis à jour avec succès.`
+            `Client ${listIdClientSelected[indexGood].id} mis à jour avec succès.`
           );
         }
-        console.log("update client fini");
+        console.log("update client fini");*/
       });
 
-      // Attendre que toutes les mises à jour des clients soient terminées
       await Promise.all(updateClientsPromises);
 
       // Mettre à jour ordre de la tournée
-      let indexOrder = 0;
-      const updateOrderClientsPromises = clientOrder.map(async (IDclient) => {
-        console.log(
-          "Ordre du client id : " + IDclient + " à l'index : " + indexOrder
+      const updateOrderClientsPromises = async () => {
+        // Créez un tableau pour stocker les promesses
+        console.log("Tournee  => " + idInInteger);
+        const promises: Promise<void>[] = [];
+        let arrayPassage: OrdrePassage[] = [];
+        for (const [index, element] of clientOrder.entries()) {
+          let i = index + 1;
+          let passage: OrdrePassage = {
+            clientId: element,
+            tourId: idInInteger,
+            order: i,
+          };
+          arrayPassage.push(passage);
+        }
+        console.log("à l'API " + JSON.stringify(arrayPassage));
+
+        // Ajoutez la promesse à votre tableau
+        const response = await fetch(
+          `http://localhost:8080/tour/${idInInteger}/modifyTourOrder`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(arrayPassage), // Notez que le body doit être un tableau
+          }
         );
 
-        console.log("update ordre des clients fini");
-        indexOrder++;
-      });
+        // Vérifiez la réponse et lancez une erreur si nécessaire
+        if (!response.ok) {
+          throw new Error(`Erreur lors de la requête: ${response.statusText}`);
+        }
 
-      // Attendre que toutes les mises à jour des clients soient terminées
-      await Promise.all(updateOrderClientsPromises);
+        // Ajoutez la promesse à votre tableau
+        promises.push(Promise.resolve());
+
+        // Retournez le tableau de promesses
+        return promises;
+      };
+      const promisesArray: Promise<void>[] = await updateOrderClientsPromises();
+      // Passez le tableau de promesses à Promise.all
+      await Promise.all(promisesArray);
     } catch (error) {
       console.error("Erreur lors de l'ajout de la tournée:", error);
       setFormError("Une erreur s'est produite lors de l'ajout de la tournée.");
     }
 
-    window.location.href = "/tournees";
+    //window.location.href = "/tournees";
   };
 
   let state = checkUserState();
@@ -185,13 +273,19 @@ const UpdateTournee: React.FC = () => {
                       console.log(
                         "Current value:",
                         JSON.stringify(ev.detail.value),
-                        setClientsSelected(ev.detail.value)
+                        setClientsSelected(ev.detail.value),
+                        setClientOrder(ev.detail.value)
                       )
                     }
                     multiple={true}
+                    value={clientsSelected}
                   >
                     {clients.map((client) => (
-                      <IonSelectOption key={client.id} value={client.id}>
+                      <IonSelectOption
+                        key={client.id}
+                        value={client.id}
+                        aria-selected={clientsSelected.includes(client.id)}
+                      >
                         {client.name}
                       </IonSelectOption>
                     ))}
@@ -206,23 +300,23 @@ const UpdateTournee: React.FC = () => {
                   disabled={false}
                   onIonItemReorder={handleReorder}
                 >
-                  {clientsSelected.map((selectedClientId) => {
-                    const client = clients.find(
-                      (c) => c.id === selectedClientId
-                    );
-
-                    return (
-                      <IonItem key={client?.id}>
-                        <IonButton
-                          routerLink={`/client/update/${client?.id}`}
-                          routerDirection="none"
-                        >
-                          <IonLabel>{client?.name}</IonLabel>
-                        </IonButton>
-                        <IonReorder slot="end"></IonReorder>
-                      </IonItem>
-                    );
-                  })}
+                  {clientsSelected.map((number) =>
+                    clients.map((client) =>
+                      client.id === number ? (
+                        <IonItem key={client?.id}>
+                          <IonButton
+                            routerLink={`/client/update/${client?.id}`}
+                            routerDirection="none"
+                          >
+                            <IonLabel>{client?.name}</IonLabel>
+                          </IonButton>
+                          <IonReorder slot="end"></IonReorder>
+                        </IonItem>
+                      ) : (
+                        ""
+                      )
+                    )
+                  )}
                 </IonReorderGroup>
               </IonList>
             </IonCol>

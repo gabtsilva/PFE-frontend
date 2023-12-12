@@ -59,7 +59,7 @@ const Menu: React.FC = () => {
                 </IonMenuToggle>
               </>: null}
               <IonMenuToggle>
-                <IonItem routerLink="/tournees" routerDirection="none">
+                <IonItem routerLink="/tourneesLivreur" routerDirection="none">
                   <IonIcon icon={walk}></IonIcon>
                   <IonLabel>Tournées</IonLabel>
                 </IonItem>
