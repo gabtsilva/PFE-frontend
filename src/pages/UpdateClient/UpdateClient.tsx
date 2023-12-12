@@ -114,7 +114,7 @@ const UpdateClient: React.FC = () => {
     fetch(`http://localhost:8080/order/remove/${order_id}/${article_id}`,{method:"DELETE"})
         .then((response) => response.json())
         .then((data) => {
-          let output = order.filter(order => order.orderId != order_id);
+          let output = order.filter(order => order.articleId != article_id);
           setOrder(output)
         });
   }
@@ -265,8 +265,9 @@ const UpdateClient: React.FC = () => {
                   <thead>
                   <tr>
                     <th>Nom</th>
-                    <th>Quantité prévue</th>
-                    <th>Nouvelle quantité</th>
+                    <th>Quantité générale</th>
+                    <th>Quantité prévue pour la prochaine livraison</th>
+                    <th>Quantité à ajouter</th>
                     <th></th>
                   </tr>
                   </thead>
@@ -275,6 +276,7 @@ const UpdateClient: React.FC = () => {
                       <tr>
                         <td>{articles.find((article) => article.id === order.articleId)?.name}</td>
                         <td>{order.plannedQuantity}</td>
+                        <td>{order.plannedQuantity + order.changedQuantity}</td>
                         <td>
                           <IonInput
                               name={"modify-" + articles.find((article) => article.id === order.articleId)?.id}
