@@ -132,10 +132,6 @@ const UpdateClient: React.FC = () => {
       });
     }else if(type == "e"){
       inputs.forEach((input) => {
-        console.log(input);
-        console.log(input.name.split("-")[1]);
-        console.log(input.value);
-        console.log(input.placeholder);
         let object = {id: input.name.split("-")[1], value:input.value - parseInt(input.placeholder)};
         arrCons.push(object);
       });
