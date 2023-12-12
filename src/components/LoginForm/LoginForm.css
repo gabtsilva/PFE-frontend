@@ -18,17 +18,14 @@
   margin:16px auto;
 }
 #container ion-item ion-input{
-  border-bottom:2px solid black;
-  background-color:white;
   --padding-bottom: 10px;
   --padding-end: 10px;
   --padding-start: 10px;
   --padding-top: 10px;
   padding:16px;
+  border: 1px solid black;
 }
-#container ion-button{
-  --border-radius: 0;
-  --border-width:2px;
-  text-transform: none;
-
+ion-button{
+  --box-shadow:none;
+  text-transform:none;
 }

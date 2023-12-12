@@ -5,69 +5,76 @@ import {
   IonItem,
   IonIcon,
   IonLabel,
+  IonMenuToggle,
 } from "@ionic/react";
-import {
-  accessibilityOutline,
-  homeOutline,
-  clipboardOutline,
-  cubeOutline,
-  busOutline,
-  walkOutline,
-  footstepsOutline,
-  logOutOutline,
-} from "ionicons/icons";
+import {barChart, accessibility, clipboard, cube, bus, walk, footsteps, logOut} from "ionicons/icons";
+import {Redirect} from "react-router-dom";
+import checkUserState from "../../utils/checkUserState";
 
 const Menu: React.FC = () => {
+  let state = checkUserState();
+    return (
+      <>
+        <IonMenu contentId="main-content">
+          <IonContent className="ion-padding">
+            <IonList>
+              {state == "admin" ? <>
+                <IonMenuToggle>
+                  <IonItem routerLink="/" routerDirection="none">
+                    <IonIcon icon={barChart}></IonIcon>
+                    <IonLabel>Home</IonLabel>
+                  </IonItem>
+                </IonMenuToggle>
+                <IonMenuToggle>
+                  <IonItem routerLink="/clients" routerDirection="none">
+                    <IonIcon icon={accessibility}></IonIcon>
+                    <IonLabel>Clients</IonLabel>
+                  </IonItem>
+                </IonMenuToggle>
+                <IonMenuToggle>
+                  <IonItem routerLink="/articles" routerDirection="none">
+                    <IonIcon icon={cube}></IonIcon>
+                    <IonLabel>Articles</IonLabel>
+                  </IonItem>
+                </IonMenuToggle>
 
-  return (
-    <>
-      <IonMenu contentId="main-content">
-        <IonContent className="ion-padding">
-          <IonList>
-            <IonItem routerLink="/" routerDirection="none">
-              <IonIcon icon={homeOutline}></IonIcon>
-              <IonLabel>Home</IonLabel>
-            </IonItem>
+                <IonMenuToggle>
+                  <IonItem routerLink="/commandes" routerDirection="none">
+                    <IonIcon icon={clipboard}></IonIcon>
+                    <IonLabel>Commandes</IonLabel>
+                  </IonItem>
+                </IonMenuToggle>
 
-            <IonItem routerLink="/clients" routerDirection="forward">
-              <IonIcon icon={accessibilityOutline}></IonIcon>
-              <IonLabel>Clients</IonLabel>
-            </IonItem>
-
-            <IonItem routerLink="/articles" routerDirection="none">
-              <IonIcon icon={clipboardOutline}></IonIcon>
-              <IonLabel>Articles</IonLabel>
-            </IonItem>
-
-            <IonItem routerLink="/commandes" routerDirection="none">
-              <IonIcon icon={cubeOutline}></IonIcon>
-              <IonLabel>Commandes</IonLabel>
-            </IonItem>
-
-            <IonItem routerLink="/vehicules" routerDirection="none">
-              <IonIcon icon={busOutline}></IonIcon>
-              <IonLabel>Véhicules</IonLabel>
-            </IonItem>
-
-            <IonItem routerLink="/tournees" routerDirection="none">
-              <IonIcon icon={walkOutline}></IonIcon>
-              <IonLabel>Tournées</IonLabel>
-            </IonItem>
-
-            <IonItem routerLink="/livreurs" routerDirection="none">
-              <IonIcon icon={footstepsOutline}></IonIcon>
-              <IonLabel>Livreurs</IonLabel>
-            </IonItem>
-
-            <IonItem routerLink="/logout" routerDirection="none">
-              <IonIcon icon={logOutOutline}></IonIcon>
-              <IonLabel>Se déconnecter</IonLabel>
-            </IonItem>
-          </IonList>
-        </IonContent>
-      </IonMenu>
-    </>
-  );
+                <IonMenuToggle>
+                  <IonItem routerLink="/vehicules" routerDirection="none">
+                    <IonIcon icon={bus}></IonIcon>
+                    <IonLabel>Véhicules</IonLabel>
+                  </IonItem>
+                </IonMenuToggle>
+                <IonMenuToggle>
+                  <IonItem routerLink="/livreurs" routerDirection="none">
+                    <IonIcon icon={footsteps}></IonIcon>
+                    <IonLabel>Livreurs</IonLabel>
+                  </IonItem>
+                </IonMenuToggle>
+              </>: null}
+              <IonMenuToggle>
+                <IonItem routerLink="/tournees" routerDirection="none">
+                  <IonIcon icon={walk}></IonIcon>
+                  <IonLabel>Tournées</IonLabel>
+                </IonItem>
+              </IonMenuToggle>
+              <IonMenuToggle>
+                <IonItem routerLink="/logout" routerDirection="none">
+                  <IonIcon icon={logOut}></IonIcon>
+                  <IonLabel>Se déconnecter</IonLabel>
+                </IonItem>
+              </IonMenuToggle>
+            </IonList>
+          </IonContent>
+        </IonMenu>
+      </>
+    );
 };
 
 export default Menu;

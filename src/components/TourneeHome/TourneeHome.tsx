@@ -20,7 +20,7 @@ const TourneeHome: React.FC = () => {
     <>
       <IonGrid>
         <IonRow>
-          <IonCol size="4">
+          <IonCol size="4" size-md="6">
             <IonCard>
               <IonIcon icon={walkOutline}></IonIcon>
               <IonCardHeader>
@@ -34,7 +34,7 @@ const TourneeHome: React.FC = () => {
               </IonCardContent>
             </IonCard>
           </IonCol>
-          <IonCol size="4">
+          <IonCol size="4" size-md="6">
             <IonCard>
               <IonIcon icon={walkOutline}></IonIcon>
               <IonCardHeader>
@@ -48,7 +48,7 @@ const TourneeHome: React.FC = () => {
               </IonCardContent>
             </IonCard>
           </IonCol>
-          <IonCol size="4">
+          <IonCol size="4" size-md="6">
             <IonCard>
               <IonIcon icon={walkOutline}></IonIcon>
               <IonCardHeader>

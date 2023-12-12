@@ -1,6 +1,6 @@
 import "./LoginForm.css";
 import { IonButton, IonImg, IonInput, IonItem } from "@ionic/react";
-import logo from "../../../assets/img/logo_snappies.png";
+import logo from "../../assets/img/logo_snappies.png";
 import {
   JSXElementConstructor,
   ReactElement,
@@ -9,17 +9,16 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useHistory } from "react-router-dom";
 
 const LoginForm: React.FC = () => {
-  const [mail, setMail] = useState("");
+  const [email, setMail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async () => {
     // Construire le corps de la requête
     const requestBody = {
-      mail: mail,
+      email: email,
       password: password,
     };
 
@@ -76,7 +75,7 @@ const LoginForm: React.FC = () => {
           onIonChange={(e) => setPassword(e.detail.value!)}
         ></IonInput>
       </IonItem>
-      <IonButton color="light" fill="outline" onClick={handleSubmit}>
+      <IonButton color="dark" shape="round" onClick={handleSubmit}>
         Se connecter
       </IonButton>
       <br></br>
