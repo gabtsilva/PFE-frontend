@@ -15,7 +15,7 @@ import React from "react";
 
 const Menu: React.FC = () => {
   let state = checkUserState();
-    return (
+  return (
       <>
         <IonMenu contentId="main-content">
           <IonContent className="ion-padding">
@@ -27,7 +27,7 @@ const Menu: React.FC = () => {
                   slot="end"
               />
               {state == "admin" ? <>
-                <IonMenuToggle}>
+                <IonMenuToggle>
                   <IonItem routerLink="/" routerDirection="none">
                     <IonIcon icon={barChart}></IonIcon>
                     <IonLabel>Home</IonLabel>
