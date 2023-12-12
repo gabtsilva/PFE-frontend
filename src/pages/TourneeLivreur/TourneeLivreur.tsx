@@ -14,7 +14,6 @@ import {
 import { walk, pencilOutline } from "ionicons/icons";
 import "./TourneeLivreur.css";
 import React, { useEffect, useState } from "react";
-import AddElement from "../../components/AddElement/AddElement";
 import checkUserState from "../../utils/checkUserState";
 import { Redirect } from "react-router-dom";
 
@@ -29,7 +28,7 @@ interface TourneeExec {
   deliveryPerson: string;
   vehicleId: number;
   tourId: number;
-  executionDate: [];
+  executionDate: number[];
 }
 
 interface Client {
@@ -41,15 +40,39 @@ interface Client {
   tour: number;
 }
 
+interface Commande {
+  id: number;
+  name: string;
+  planned_quantity: number;
+  total_with_surplus: number;
+}
+
+interface OrdrePassage {
+  clientId: number;
+  tourId: number;
+  order: number;
+}
+
 let state = checkUserState();
 
 const TourneeLivreur: React.FC = () => {
   document.title = "SnappiesLog - Tournées";
   const [tournees, setTournees] = useState<Tournee[]>([]);
   const [clientsByTournee, setClientsByTournee] = useState<
-    Record<number, Client[]>
+    Record<number, number[]>
   >({});
   const [tourneesExecUser, setTourneesExecUser] = useState<TourneeExec[]>([]);
+  const [commandesByTourneeExec, setCommandesByTourneeExec] = useState<
+    Record<number, Commande[]>
+  >({});
+
+  const [ordrePassageTournee, setOrdrePassageTournee] = useState<
+    Record<number, OrdrePassage[]>
+  >({});
+
+  const [clientsDetails, setClientsDetails] = useState<Record<number, Client>>(
+    {}
+  );
 
   useEffect(() => {
     fetch("http://localhost:8080/tour/tourExecution")
@@ -57,48 +80,98 @@ const TourneeLivreur: React.FC = () => {
       .then((data) => {
         console.log(data);
         setTourneesExecUser(data);
-
-        let tourneeActuel: Tournee[] = [];
-        data.map((tourneeExec: TourneeExec) => {
-          fetch(`http://localhost:8080/tour/${tourneeExec.tourId}`)
-            .then((response) => response.json())
-            .then((data) => {
-              tourneeActuel.push(data);
-            });
-        });
-
-        setTournees(tourneeActuel);
-
-        console.log("tournée toruvés : " + JSON.stringify(tournees));
-
-        // Fetch clients for each tournee
-        const fetchClients = data.map((tournee: Tournee) =>
-          fetch(`http://localhost:8080/client/tour/${tournee.id}`)
-            .then((response) => response.json())
-            .then((clients) => {
-              setClientsByTournee((prevClients) => ({
-                ...prevClients,
-                [tournee.id]: clients,
-              }));
-            })
-        );
-
-        // Wait for all client fetches to complete
-        Promise.all(fetchClients).catch((error) =>
-          console.error("Erreur de chargement des données clients", error)
-        );
       })
-      //})
       .catch((error) =>
         console.error("Erreur de chargement des données tournées", error)
       );
   }, []);
+
+  useEffect(() => {
+    if (tourneesExecUser.length > 0) {
+      // Fetch other data only if tourneesExecUser has data
+      const fetchTournees = tourneesExecUser.map((tourneeExecUser) =>
+        fetch(`http://localhost:8080/tour/${tourneeExecUser.tourId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            setTournees((prevTournees) => [...prevTournees, data]);
+          })
+      );
+
+      // Dans votre useEffect pour récupérer l'ordre de passage pour chaque tournée
+      const fetchOrdrePassage = tourneesExecUser.map((tourneeExecUser) =>
+        fetch(
+          `http://localhost:8080/tour/${tourneeExecUser.tourId}/getTourOrder`
+        )
+          .then((response) => response.json())
+          .then((ordrePassage) => {
+            setOrdrePassageTournee((prevOrdrePassage) => ({
+              ...prevOrdrePassage,
+              [tourneeExecUser.tourId]: ordrePassage,
+            }));
+          })
+      );
+
+      // Dans votre useEffect pour récupérer l'ordre de passage pour chaque tournée
+      const fetchOrdrePassageByName = tourneesExecUser.map((tourneeExecUser) =>
+        fetch(
+          `http://localhost:8080/tour/${tourneeExecUser.tourId}/getTourOrder`
+        )
+          .then((response) => response.json())
+          .then((ordrePassage) => {
+            setOrdrePassageTournee((prevOrdrePassage) => ({
+              ...prevOrdrePassage,
+              [tourneeExecUser.tourId]: ordrePassage,
+            }));
+            ordrePassage.map((item) =>
+              fetch(`http://localhost:8080/client/${item.clientId}`)
+                .then((response) => response.json())
+                .then((clientDetails) => {
+                  setClientsDetails((prevClientsDetails) => ({
+                    ...prevClientsDetails,
+                    [item.clientId]: clientDetails,
+                  }));
+                })
+            );
+          })
+      );
+
+      const fetchCommandes = tourneesExecUser.map((tourneeExecUser) =>
+        fetch(
+          `http://localhost:8080/tour/${tourneeExecUser.tourId}/tourExecution/allArticles`
+        )
+          .then((response) => response.json())
+          .then((commandes) => {
+            setCommandesByTourneeExec((prevCommandes) => ({
+              ...prevCommandes,
+              [tourneeExecUser.tourId]: commandes,
+            }));
+          })
+      );
+
+      // Wait for all fetches to complete
+      Promise.all([
+        ...fetchTournees,
+        ...fetchOrdrePassage,
+        ...fetchCommandes,
+        ...fetchOrdrePassageByName,
+      ]).catch((error) =>
+        console.error("Erreur de chargement des données", error)
+      );
+    }
+  }, [tourneesExecUser]);
+
+  const handleClick = (id: number) => {
+    // Mettez le code que vous voulez exécuter ici
+    console.log("Bouton cliqué ! " + id);
+    console.log(JSON.stringify(ordrePassageTournee));
+  };
 
   if (state == "user") {
     return (
       <>
         <IonContent>
           <IonGrid>
+            <h2>Tournées disponibles</h2>
             <IonRow>
               {tourneesExecUser.map((tourneeExecUser) => (
                 <IonCol size="12" size-md="6" key={tourneeExecUser.id}>
@@ -121,17 +194,60 @@ const TourneeLivreur: React.FC = () => {
                       </IonCardSubtitle>
                     </IonCardHeader>
                     <IonCardContent className="clients-tour">
-                      <p>Clients dans cette tournee : </p>
-                      <ul>
-                        {clientsByTournee[tourneeExecUser.id]?.map((client) => (
-                          <IonButton
-                            routerLink={`/client/update/${client.id}`}
-                            routerDirection="none"
-                          >
-                            <li key={client.id}>{client.name}</li>
-                          </IonButton>
-                        ))}
-                      </ul>
+                      <p>Ordre des clients dans cette tournée : </p>
+                      <table className="ion-margin-bottom">
+                        <thead>
+                          <tr>
+                            <th>Nom</th>
+                            <th>Adresse</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {ordrePassageTournee[tourneeExecUser.id]?.map(
+                            (ordrePassage) => (
+                              <tr key={ordrePassage.clientId}>
+                                <td>
+                                  {clientsDetails[ordrePassage.clientId]?.name}
+                                </td>
+                                <td>
+                                  {
+                                    clientsDetails[ordrePassage.clientId]
+                                      ?.address
+                                  }
+                                </td>
+                              </tr>
+                            )
+                          )}
+                        </tbody>
+                      </table>
+                      <p>Commandes dans cette tournée :</p>
+
+                      <table className="ion-margin-bottom">
+                        <thead>
+                          <tr>
+                            <th>Nom</th>
+                            <th>Quantité prévue</th>
+                            <th>Quantité avec surplus</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {commandesByTourneeExec[tourneeExecUser.id]?.map(
+                            (commande) => (
+                              <tr key={commande.id}>
+                                <td>{commande.name}</td>
+                                <td>{commande.planned_quantity} </td>
+                                <td>{commande.total_with_surplus}</td>
+                              </tr>
+                            )
+                          )}
+                        </tbody>
+                      </table>
+
+                      <IonButton
+                        onClick={() => handleClick(tourneeExecUser.id)}
+                      >
+                        Je prends la tournée
+                      </IonButton>
                     </IonCardContent>
                   </IonCard>
                 </IonCol>
