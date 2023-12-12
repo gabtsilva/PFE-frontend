@@ -13,14 +13,16 @@ import {
   IonRow,
   IonCol,
   IonIcon,
-  IonButton,
+  IonButton, IonSearchbar,
 } from "@ionic/react";
-import { accessibilityOutline, pencilOutline } from "ionicons/icons";
+import {accessibilityOutline, createOutline, pencilOutline, personAddOutline} from "ionicons/icons";
 import "./Client.css";
 import React, { useEffect, useState } from "react";
 import AddElement from "../../components/AddElement/AddElement";
 import checkUserState from "../../utils/checkUserState";
 import {Redirect} from "react-router-dom";
+import {addOutline} from "ionicons/icons";
+import {toLower} from "ionicons/dist/types/components/icon/utils";
 
 interface Client {
   id: number;
@@ -40,7 +42,7 @@ const Client: React.FC = () => {
   document.title = "SnappiesLog - Clients";
   const [clients, setClients] = useState<Client[]>([]);
   const [tournes, setTournes] = useState<Tournee[]>([]); // Assuming tournes is an array of strings
-
+  const [search, setSearch] = useState("");
   useEffect(() => {
     // Effect hook to retrieve client data from the API
     fetch("http://localhost:8080/client")
@@ -75,6 +77,11 @@ const Client: React.FC = () => {
         console.error("Erreur de chargement des tournées", error)
       );
   };
+  // @ts-ignore
+  const handleSearchChange = (event) => {
+    setSearch(event.detail.value.toLowerCase());
+  };
+
   let state = checkUserState();
   if(state == "user"){
     return <Redirect to="/tournees" />
@@ -83,34 +90,40 @@ const Client: React.FC = () => {
         <>
           <IonContent>
             <IonGrid>
-              <AddElement nom="client"/>
               <IonRow>
-                {clients.map((client) => (
-                    <IonCol size="12" size-md="6" key={client.id}>
-                      <IonCard>
-                        <IonIcon icon={accessibilityOutline}></IonIcon>
-                        <IonButton
-                            className="edit"
-                            routerLink={`/client/update/${client.id}`}
-                            routerDirection="none"
-                        >
-                          <IonIcon icon={pencilOutline}></IonIcon>
-                        </IonButton>
-                        <IonCardHeader>
-                          <IonCardSubtitle>{client.address}</IonCardSubtitle>
-                          <IonCardTitle>{client.name}</IonCardTitle>
-                        </IonCardHeader>
-                        <IonCardContent>
-                          <p>Téléphone : {client.phoneNumber}</p>
-                          <p>Nombre d'enfants : {client.childrenQuantity}</p>
-                          <p>
-                            Tournée :{" "}
-                            {tournes.find((tour) => tour.id === client.tour)?.name}
-                          </p>
-                        </IonCardContent>
-                      </IonCard>
-                    </IonCol>
-                ))}
+                <IonCol size="10" size-md="7">
+                  <IonSearchbar placeholder="Chercher un client" value={search} onIonInput={handleSearchChange}></IonSearchbar>
+                </IonCol>
+                <IonCol size="auto" size-md="auto">
+                  <AddElement nom="client" icone={personAddOutline}/>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol size="12">
+                  <table>
+                    <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Adresse</th>
+                      <th>Téléphone</th>
+                      <th>Nbr d'enfants</th>
+                      <th>Tournée</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {clients.filter(client => client.name.toLowerCase().includes(search)).map((client) => (
+                        <tr>
+                          <td>{client.name}</td>
+                          <td>{client.address}</td>
+                          <td>{client.phoneNumber}</td>
+                          <td>{client.childrenQuantity}</td>
+                          <td>{tournes.find((tour) => tour.id === client.tour)?.name}</td>
+                          <td><IonButton size="small" color="success" routerLink={`/client/update/${client.id}`} routerDirection="none"><IonIcon icon={createOutline}></IonIcon></IonButton></td>
+                        </tr>
+                    ))}
+                    </tbody>
+                  </table>
+                </IonCol>
               </IonRow>
             </IonGrid>
           </IonContent>

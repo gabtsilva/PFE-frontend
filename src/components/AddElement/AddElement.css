@@ -1,3 +1,7 @@
 .row-button {
   justify-content: flex-end;
 }
+ion-button ion-icon{
+  height:20px!important;
+  width:20px!important;
+}

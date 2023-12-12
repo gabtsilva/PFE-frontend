@@ -13,3 +13,16 @@
 .edit:hover {
   cursor: pointer;
 }
+table{
+  width:100%;
+  border-collapse: collapse;
+}
+tbody tr:nth-child(odd){
+  background-color: #EDEDED;
+}
+thead tr th{
+  padding:1rem;
+}
+table, th, tr, td{
+  border:1px solid #EFEFEF;
+}

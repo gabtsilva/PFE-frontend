@@ -1,6 +1,12 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
 
+@font-face {
+  font-family: 'Montserrat';
+  src: url("../assets/fonts/Montserrat.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
@@ -74,6 +80,8 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  --ion-font-family: 'Montserrat';
 }
 
 /* Ionic Variables and Theming. For more info, please see:
