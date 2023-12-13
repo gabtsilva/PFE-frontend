@@ -131,10 +131,14 @@ const TourneeLivreur: React.FC = () => {
       .then((data) => {
         setTourneeDeUser(data);
         if (data.length > 0) {
-          console.log(
-            "LA TOURNEES DE L'USER : " + JSON.stringify(data[data.length - 1])
-          );
-          setMaTournee(data[data.length - 1]);
+          if (data[data.length - 1].state != "finie") {
+            setMaTournee(data[data.length - 1]);
+            console.log(
+              "LA TOURNEES DE L'USER : " + JSON.stringify(data[data.length - 1])
+            );
+          } else {
+            setTourneeDeUser([]);
+          }
         }
       })
       .catch((error) =>
@@ -153,7 +157,7 @@ const TourneeLivreur: React.FC = () => {
     fetch("http://localhost:8080/tourExecution/today/state/prevue")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log("MA DATA HEHEHEH " + JSON.stringify(data));
         setTourneesExecUser(data);
       })
       .catch((error) =>
@@ -368,106 +372,112 @@ const TourneeLivreur: React.FC = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: undefined,
     }).then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       return response.text();
     });
+
+    setMaTournee(undefined);
+    window.location.href = "/tourneesLivreur";
   };
 
   if (state == "user") {
-    if (tourneeDeUser.length === 0 && !maTournee) {
+    if (tourneeDeUser.length === 0 && maTournee == undefined) {
       return (
         <>
           <IonContent>
             <IonGrid>
               <h2>Tournées disponibles</h2>
               <IonRow>
-                {tourneesExecUser.map((tourneeExecUser) => (
-                  <IonCol size="12" size-md="6" key={tourneeExecUser.id}>
-                    <IonCard>
-                      <IonIcon icon={walk}></IonIcon>
-                      <IonCardHeader>
-                        <IonCardTitle>
-                          {
-                            tournees.find(
-                              (tournee) => tournee.id === tourneeExecUser.id
-                            )?.name
-                          }
-                        </IonCardTitle>
-                        <IonCardSubtitle>
-                          {new Date(
-                            tourneeExecUser.executionDate[0],
-                            tourneeExecUser.executionDate[1] - 1, // Les mois dans JavaScript commencent à 0, donc on soustrait 1
-                            tourneeExecUser.executionDate[2]
-                          ).toLocaleDateString("fr-FR")}
-                        </IonCardSubtitle>
-                      </IonCardHeader>
-                      <IonCardContent className="clients-tour">
-                        <p>Ordre des clients dans cette tournée : </p>
-                        <table className="ion-margin-bottom">
-                          <thead>
-                            <tr>
-                              <th>Nom</th>
-                              <th>Adresse</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {ordrePassageTournee[tourneeExecUser.id]
-                              ?.sort((a, b) => a.order - b.order)
-                              .map((ordrePassage) => (
-                                <tr key={ordrePassage.clientId}>
-                                  <td>
-                                    {
-                                      clientsDetails[ordrePassage.clientId]
-                                        ?.name
-                                    }
-                                  </td>
-                                  <td>
-                                    {
-                                      clientsDetails[ordrePassage.clientId]
-                                        ?.address
-                                    }
-                                  </td>
-                                </tr>
-                              ))}
-                          </tbody>
-                        </table>
-                        <p>Commandes dans cette tournée :</p>
-
-                        <table className="ion-margin-bottom">
-                          <thead>
-                            <tr>
-                              <th>Nom</th>
-                              <th>Quantité prévue</th>
-                              <th>Quantité avec surplus</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {commandesByTourneeExec[tourneeExecUser.id]?.map(
-                              (commande) =>
-                                commande ? (
-                                  <tr key={commande.id}>
-                                    <td>{commande.name}</td>
-                                    <td>{commande.planned_quantity} </td>
-                                    <td>{commande.total_with_surplus}</td>
+                {tourneesExecUser
+                  .filter(
+                    (tourneeExecUser) => tourneeExecUser.deliveryPerson === null
+                  )
+                  .map((tourneeExecUser) => (
+                    <IonCol size="12" size-md="6" key={tourneeExecUser.id}>
+                      <IonCard>
+                        <IonIcon icon={walk}></IonIcon>
+                        <IonCardHeader>
+                          <IonCardTitle>
+                            {
+                              tournees.find(
+                                (tournee) => tournee.id === tourneeExecUser.id
+                              )?.name
+                            }
+                          </IonCardTitle>
+                          <IonCardSubtitle>
+                            {new Date(
+                              tourneeExecUser.executionDate[0],
+                              tourneeExecUser.executionDate[1] - 1, // Les mois dans JavaScript commencent à 0, donc on soustrait 1
+                              tourneeExecUser.executionDate[2]
+                            ).toLocaleDateString("fr-FR")}
+                          </IonCardSubtitle>
+                        </IonCardHeader>
+                        <IonCardContent className="clients-tour">
+                          <p>Ordre des clients dans cette tournée : </p>
+                          <table className="ion-margin-bottom">
+                            <thead>
+                              <tr>
+                                <th>Nom</th>
+                                <th>Adresse</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {ordrePassageTournee[tourneeExecUser.id]
+                                ?.sort((a, b) => a.order - b.order)
+                                .map((ordrePassage) => (
+                                  <tr key={ordrePassage.clientId}>
+                                    <td>
+                                      {
+                                        clientsDetails[ordrePassage.clientId]
+                                          ?.name
+                                      }
+                                    </td>
+                                    <td>
+                                      {
+                                        clientsDetails[ordrePassage.clientId]
+                                          ?.address
+                                      }
+                                    </td>
                                   </tr>
-                                ) : null
-                            )}
-                          </tbody>
-                        </table>
+                                ))}
+                            </tbody>
+                          </table>
+                          <p>Commandes dans cette tournée :</p>
 
-                        <IonButton
-                          onClick={() => handleClick(tourneeExecUser.id)}
-                        >
-                          Je prends la tournée
-                        </IonButton>
-                      </IonCardContent>
-                    </IonCard>
-                  </IonCol>
-                ))}
+                          <table className="ion-margin-bottom">
+                            <thead>
+                              <tr>
+                                <th>Nom</th>
+                                <th>Quantité prévue</th>
+                                <th>Quantité avec surplus</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {commandesByTourneeExec[tourneeExecUser.id]?.map(
+                                (commande) =>
+                                  commande ? (
+                                    <tr key={commande.id}>
+                                      <td>{commande.name}</td>
+                                      <td>{commande.planned_quantity} </td>
+                                      <td>{commande.total_with_surplus}</td>
+                                    </tr>
+                                  ) : null
+                              )}
+                            </tbody>
+                          </table>
+
+                          <IonButton
+                            onClick={() => handleClick(tourneeExecUser.id)}
+                          >
+                            Je prends la tournée
+                          </IonButton>
+                        </IonCardContent>
+                      </IonCard>
+                    </IonCol>
+                  ))}
               </IonRow>
             </IonGrid>
           </IonContent>
