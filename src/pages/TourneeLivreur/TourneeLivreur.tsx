@@ -313,6 +313,7 @@ const TourneeLivreur: React.FC = () => {
 
   const marquerPasser = (id: number) => {
     setClickedClientId(id);
+    console.log(JSON.stringify(commandesByClientAfterLiv[id]));
   };
 
   const clientSoumission = (clientId: number, index: number, value: number) => {
@@ -328,13 +329,52 @@ const TourneeLivreur: React.FC = () => {
     });
   };
 
-  const envoyerLivraisons = (clientId: number) => {
+  const envoyerLivraisons = (clientId: number, idTournee: number) => {
     const livraisons = inputValues[clientId] || [];
-    console.log("ceci : " + livraisons);
 
     console.log(
-      "ceci 2 : " + JSON.stringify(commandesByClientAfterLiv[clientId])
+      "ceci 1 before : " + JSON.stringify(commandesByClientAfterLiv[clientId])
     );
+
+    livraisons.forEach((livraison, index) => {
+      console.log("Article " + index + " : " + livraison);
+      commandesByClientAfterLiv[clientId][index].deliveredQuantity = livraison;
+    });
+
+    console.log(
+      "ceci 2 after : " + JSON.stringify(commandesByClientAfterLiv[clientId])
+    );
+
+    fetch(
+      `http://localhost:8080/tour/${idTournee}/tourExecution/distributeArticle/client/${clientId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(commandesByClientAfterLiv[clientId]),
+      }
+    ).then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.text();
+    });
+  };
+
+  const finirTournee = (id: number) => {
+    fetch(`http://localhost:8080/tour/${id}/tourExecution/end`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: undefined,
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.text();
+    });
   };
 
   if (state == "user") {
@@ -588,7 +628,10 @@ const TourneeLivreur: React.FC = () => {
                                 className="btn-passer"
                                 size="small"
                                 onClick={() =>
-                                  envoyerLivraisons(parseInt(clientId, 10))
+                                  envoyerLivraisons(
+                                    parseInt(clientId, 10),
+                                    maTournee.id
+                                  )
                                 }
                               >
                                 Envoyer
@@ -602,7 +645,7 @@ const TourneeLivreur: React.FC = () => {
 
                       <IonButton
                         color="danger"
-                        onClick={() => handleClick(maTournee.id)}
+                        onClick={() => finirTournee(maTournee.id)}
                       >
                         Je fini la tournée
                       </IonButton>
