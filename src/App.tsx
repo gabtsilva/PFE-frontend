@@ -44,6 +44,8 @@ import Tournee from "./pages/Tournee/Tournee";
 import AddTournee from "./pages/AddTournee/AddTournee";
 import UpdateTournee from "./pages/UpdateTournee/UpdateTournee";
 import TourneeLivreur from "./pages/TourneeLivreur/TourneeLivreur";
+import Livreur from "./pages/Livreur/Livreur";
+import UpdateLivreur from "./pages/UpdateLivreur/UpdateLivreur";
 
 setupIonicReact({
   mode: "ios",
@@ -116,6 +118,12 @@ const App: React.FC = () => (
                 <Redirect to="/login" />
               )
             }
+          />
+          <Route exact path="/livreurs" render={() => <Livreur />} />
+          <Route
+            exact
+            path="/livreur/update/:email"
+            render={() => <UpdateLivreur />}
           />
         </IonRouterOutlet>
       </IonReactRouter>
