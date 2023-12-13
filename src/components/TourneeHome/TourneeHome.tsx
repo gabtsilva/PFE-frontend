@@ -60,6 +60,11 @@ interface User {
   isAdmin: boolean;
 }
 
+interface Passage {
+  name: string;
+  delivred: boolean;
+}
+
 const TourneeHome: React.FC = () => {
   document.title = "SnappiesLog - Tournées";
   const [tournees, setTournees] = useState<Tournee[]>([]);
@@ -76,15 +81,33 @@ const TourneeHome: React.FC = () => {
   const [clientsDetails, setClientsDetails] = useState<Record<number, Client>>(
     {}
   );
+  const [listPassagesParTournee, setListPassageParTournee] = useState<
+    Record<number, Passage[]>
+  >({});
   // État pour stocker les détails de tous les utilisateurs
   const [usersDetails, setUsersDetails] = useState<Record<string, any>>({});
+
+  const [sontUniquementDesPrevues, setSontUniquementDesPrevues] =
+    useState<boolean>(false);
 
   useEffect(() => {
     fetch("http://localhost:8080/tour/tourExecution")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setTourneesExecUser(data);
+        if (data.length === 0) {
+          console.log("RIEN ");
+          fetch("http://localhost:8080/tourExecution/today/state/prevue")
+            .then((response) => response.json())
+            .then((data) => {
+              setTourneesExecUser(data);
+              setSontUniquementDesPrevues(true);
+            });
+        } else {
+          setTourneesExecUser(data);
+          setSontUniquementDesPrevues(false);
+        }
+
         console.log("tourneeExecUser : " + JSON.stringify(tourneesExecUser));
       })
       .catch((error) =>
@@ -96,6 +119,19 @@ const TourneeHome: React.FC = () => {
     if (tourneesExecUser.length > 0) {
       // Fetch other data only if tourneesExecUser has data
       const fetchTournees = tourneesExecUser.map((tourneeExecUser) =>
+        fetch(
+          `http://localhost:8080/tourExecution/${tourneeExecUser.tourId}/getClientDeliveredBool`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setListPassageParTournee((prevOrdrePassage) => ({
+              ...prevOrdrePassage,
+              [tourneeExecUser.tourId]: data,
+            }));
+          })
+      );
+      
+      const infoPassage = tourneesExecUser.map((tourneeExecUser) =>
         fetch(`http://localhost:8080/tour/${tourneeExecUser.tourId}`)
           .then((response) => response.json())
           .then((data) => {
@@ -131,6 +167,12 @@ const TourneeHome: React.FC = () => {
               ...prevOrdrePassage,
               [tourneeExecUser.tourId]: sortedOrdrePassage,
             }));
+            console.log(
+              "pour le tour : " +
+                tourneeExecUser.tourId +
+                " les données :" +
+                JSON.stringify(ordrePassageTournee)
+            );
             sortedOrdrePassage.map((item: { clientId: any }) =>
               fetch(`http://localhost:8080/client/${item.clientId}`)
                 .then((response) => response.json())
@@ -139,6 +181,12 @@ const TourneeHome: React.FC = () => {
                     ...prevClientsDetails,
                     [item.clientId]: clientDetails,
                   }));
+                  console.log(
+                    "pour le tour : " +
+                      tourneeExecUser.tourId +
+                      " les clients :" +
+                      JSON.stringify(clientsDetails)
+                  );
                 })
             );
           })
@@ -150,7 +198,12 @@ const TourneeHome: React.FC = () => {
         )
           .then((response) => response.json())
           .then((commandes) => {
-            console.log("TOUTES LES COMMANDES : " + JSON.stringify(commandes));
+            console.log(
+              "TOUTES LES COMMANDES : " +
+                JSON.stringify(commandes) +
+                " pour = " +
+                tourneeExecUser.id
+            );
             setCommandesByTourneeExec((prevCommandes) => ({
               ...prevCommandes,
               [tourneeExecUser.tourId]: commandes,
@@ -161,6 +214,7 @@ const TourneeHome: React.FC = () => {
       // Wait for all fetches to complete
       Promise.all([
         ...fetchTournees,
+        ...infoPassage,
         ...fetchOrdrePassage,
         ...fetchCommandes,
         ...fetchOrdrePassageByName,
@@ -243,7 +297,10 @@ const TourneeHome: React.FC = () => {
                     </IonCardTitle>
                     <IonCardSubtitle>
                       <h6 className="title-state">
-                        - {tourneeExecUser.state} -{" "}
+                        {!sontUniquementDesPrevues &&
+                        tourneeExecUser.state === "prévue"
+                          ? "- EN COURS -"
+                          : ` - ${tourneeExecUser.state} - `}
                       </h6>
                       <br></br>
                       {new Date(
@@ -298,6 +355,30 @@ const TourneeHome: React.FC = () => {
                               <td>{commande.name}</td>
                               <td>{commande.planned_quantity} </td>
                               <td>{commande.total_with_surplus}</td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </table>
+
+                    <table className="ion-margin-bottom">
+                      <thead>
+                        <tr>
+                          <th>Nom</th>
+                          <th>Passage</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {" "}
+                        {listPassagesParTournee[tourneeExecUser.id]?.map(
+                          (passage) => (
+                            <tr className={passage.delivred ? "active-tr" : ""}>
+                              <td>{passage.name}</td>
+                              <td>
+                                {passage.delivred
+                                  ? "a été livré"
+                                  : "n'a pas encore été livré"}{" "}
+                              </td>
                             </tr>
                           )
                         )}

@@ -14,3 +14,6 @@ ion-grid ion-icon {
   margin: auto;
   margin-top: 50px;
 }
+.clients-tour tbody .active-tr {
+  background-color: greenyellow;
+}

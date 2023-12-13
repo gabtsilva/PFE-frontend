@@ -376,11 +376,9 @@ const TourneeLivreur: React.FC = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      return response.text();
+      setMaTournee(undefined);
+      window.location.href = "/tourneesLivreur";
     });
-
-    setMaTournee(undefined);
-    window.location.href = "/tourneesLivreur";
   };
 
   if (state == "user") {
