@@ -6,3 +6,11 @@ ion-grid ion-icon {
   width: 40px;
   margin: 0;
 }
+.title-state {
+  margin-top: 0;
+}
+.no-tournee {
+  align-items: center;
+  margin: auto;
+  margin-top: 50px;
+}
