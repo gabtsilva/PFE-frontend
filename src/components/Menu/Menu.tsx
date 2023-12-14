@@ -6,19 +6,38 @@ import {
   IonIcon,
   IonLabel,
   IonMenuToggle,
+  IonImg,
 } from "@ionic/react";
-import {barChart, accessibility, clipboard, cube, bus, walk, footsteps, logOut} from "ionicons/icons";
-import {Redirect} from "react-router-dom";
+import {
+  barChart,
+  accessibility,
+  clipboard,
+  cube,
+  bus,
+  walk,
+  footsteps,
+  logOut,
+} from "ionicons/icons";
+import { Redirect } from "react-router-dom";
 import checkUserState from "../../utils/checkUserState";
+import logo from "../../assets/img/logo_snappies.png";
+import React from "react";
 
 const Menu: React.FC = () => {
   let state = checkUserState();
-    return (
-      <>
-        <IonMenu contentId="main-content">
-          <IonContent className="ion-padding">
-            <IonList>
-              {state == "admin" ? <>
+  return (
+    <>
+      <IonMenu contentId="main-content">
+        <IonContent className="ion-padding">
+          <IonList>
+            <IonImg
+              class="ion-margin"
+              alt="Snappies' logo"
+              src={logo}
+              slot="end"
+            />
+            {state == "admin" ? (
+              <>
                 <IonMenuToggle>
                   <IonItem routerLink="/" routerDirection="none">
                     <IonIcon icon={barChart}></IonIcon>
@@ -39,13 +58,6 @@ const Menu: React.FC = () => {
                 </IonMenuToggle>
 
                 <IonMenuToggle>
-                  <IonItem routerLink="/commandes" routerDirection="none">
-                    <IonIcon icon={clipboard}></IonIcon>
-                    <IonLabel>Commandes</IonLabel>
-                  </IonItem>
-                </IonMenuToggle>
-
-                <IonMenuToggle>
                   <IonItem routerLink="/vehicules" routerDirection="none">
                     <IonIcon icon={bus}></IonIcon>
                     <IonLabel>Véhicules</IonLabel>
@@ -57,24 +69,29 @@ const Menu: React.FC = () => {
                     <IonLabel>Livreurs</IonLabel>
                   </IonItem>
                 </IonMenuToggle>
-              </>: null}
-              <IonMenuToggle>
-                <IonItem routerLink="/tournees" routerDirection="none">
-                  <IonIcon icon={walk}></IonIcon>
-                  <IonLabel>Tournées</IonLabel>
-                </IonItem>
-              </IonMenuToggle>
-              <IonMenuToggle>
-                <IonItem routerLink="/logout" routerDirection="none">
-                  <IonIcon icon={logOut}></IonIcon>
-                  <IonLabel>Se déconnecter</IonLabel>
-                </IonItem>
-              </IonMenuToggle>
-            </IonList>
-          </IonContent>
-        </IonMenu>
-      </>
-    );
+                <IonMenuToggle>
+                  <IonItem routerLink="/tournees" routerDirection="none">
+                    <IonIcon icon={walk}></IonIcon>
+                    <IonLabel>Tournées</IonLabel>
+                  </IonItem>
+                </IonMenuToggle>
+              </>
+            ) : null}
+            {state == "user" ? (
+              <>
+                <IonMenuToggle>
+                  <IonItem routerLink="/tourneesLivreur" routerDirection="none">
+                    <IonIcon icon={walk}></IonIcon>
+                    <IonLabel>Tournées</IonLabel>
+                  </IonItem>
+                </IonMenuToggle>
+              </>
+            ) : null}
+          </IonList>
+        </IonContent>
+      </IonMenu>
+    </>
+  );
 };
 
 export default Menu;

@@ -1,0 +1,23 @@
+.info-commandes {
+  display: flex;
+  flex-wrap: wrap;
+}
+.info-client-commandes {
+  width: 49%;
+  margin-right: 10px;
+  margin-top: 25px;
+}
+.button-finir {
+  background-color: red;
+}
+.btn-passer {
+  margin-top: 20px;
+}
+
+@media screen and (max-width: 1100px) {
+  .info-client-commandes {
+    width: 100%;
+    margin-right: 0px;
+    margin-top: 25px;
+  }
+}

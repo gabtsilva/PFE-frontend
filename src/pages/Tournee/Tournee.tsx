@@ -2,7 +2,6 @@ import {
   IonContent,
   IonCard,
   IonCardHeader,
-  IonCardSubtitle,
   IonCardTitle,
   IonCardContent,
   IonGrid,
@@ -16,12 +15,22 @@ import "./Tournee.css";
 import React, { useEffect, useState } from "react";
 import AddElement from "../../components/AddElement/AddElement";
 import checkUserState from "../../utils/checkUserState";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 interface Tournee {
   id: number;
   name: string;
 }
+
+interface TourneeExec {
+  id: number;
+  state: string;
+  deliveryPerson: string;
+  vehicleId: number;
+  tourId: number;
+  executionDate: [];
+}
+
 interface Client {
   id: number;
   name: string;
@@ -31,12 +40,16 @@ interface Client {
   tour: number;
 }
 
+
+let state = checkUserState();
+
 const Tournee: React.FC = () => {
   document.title = "SnappiesLog - Tournées";
   const [tournees, setTournees] = useState<Tournee[]>([]);
   const [clientsByTournee, setClientsByTournee] = useState<
     Record<number, Client[]>
   >({});
+  const [tourneesExecUser, setTourneesExecUser] = useState<TourneeExec[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:8080/tour")
@@ -65,52 +78,52 @@ const Tournee: React.FC = () => {
         console.error("Erreur de chargement des données tournées", error)
       );
   }, []);
-  let state = checkUserState();
-    if(state != null) {
-        return (
-            <>
-                <IonContent>
-                    <IonGrid>
-                        <AddElement nom="tournee"/>
-                        <IonRow>
-                            {tournees.map((tournee) => (
-                                <IonCol size="12" size-md="6" key={tournee.id}>
-                                    <IonCard>
-                                        <IonIcon icon={walk}></IonIcon>
-                                        <IonButton
-                                            className="edit"
-                                            routerLink={`/tour/update/${tournee.id}`}
-                                            routerDirection="none"
-                                        >
-                                            <IonIcon icon={pencilOutline}></IonIcon>
-                                        </IonButton>
-                                        <IonCardHeader>
-                                            <IonCardTitle>{tournee.name}</IonCardTitle>
-                                        </IonCardHeader>
-                                        <IonCardContent className="clients-tour">
-                                            <p>Clients dans cette tournee : </p>
-                                            <ul>
-                                                {clientsByTournee[tournee.id]?.map((client) => (
-                                                    <IonButton
-                                                        routerLink={`/client/update/${client.id}`}
-                                                        routerDirection="none"
-                                                    >
-                                                        <li key={client.id}>{client.name}</li>
-                                                    </IonButton>
-                                                ))}
-                                            </ul>
-                                        </IonCardContent>
-                                    </IonCard>
-                                </IonCol>
-                            ))}
-                        </IonRow>
-                    </IonGrid>
-                </IonContent>
-            </>
-        );
-    }else{
-        return <Redirect to="/login" />
-    }
+
+  if (state == "admin") {
+    return (
+      <>
+        <IonContent>
+          <IonGrid>
+            <AddElement nom="tournee" icone={walk} />
+            <IonRow>
+              {tournees.map((tournee) => (
+                <IonCol size="12" size-md="6" key={tournee.id}>
+                  <IonCard>
+                    <IonIcon icon={walk}></IonIcon>
+                    <IonButton
+                      className="edit"
+                      routerLink={`/tournee/update/${tournee.id}`}
+                      routerDirection="none"
+                    >
+                      <IonIcon icon={pencilOutline}></IonIcon>
+                    </IonButton>
+                    <IonCardHeader>
+                      <IonCardTitle>{tournee.name}</IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent className="clients-tour">
+                      <p>Clients dans cette tournee : </p>
+                      <ul>
+                        {clientsByTournee[tournee.id]?.map((client) => (
+                          <IonButton
+                            routerLink={`/client/update/${client.id}`}
+                            routerDirection="none"
+                          >
+                            <li key={client.id}>{client.name}</li>
+                          </IonButton>
+                        ))}
+                      </ul>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              ))}
+            </IonRow>
+          </IonGrid>
+        </IonContent>
+      </>
+    );
+  } else {
+    return <Redirect to="/login" />;
+  }
 };
 
 export default Tournee;

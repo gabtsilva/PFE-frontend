@@ -1,25 +1,36 @@
 import React, { useState } from "react";
-import {IonContent, IonLabel, IonInput, IonButton, IonGrid, IonRow, IonCol, IonItem} from "@ionic/react";
+import {
+  IonContent,
+  IonLabel,
+  IonInput,
+  IonButton,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonItem,
+} from "@ionic/react";
 
 import "./AddArticle.css";
 import checkUserState from "../../utils/checkUserState";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 const AddArticle: React.FC = () => {
   const [nom, setNom] = useState<string>("");
+  const [pourcentage, setPourcentage] = useState<number>();
   const [formError, setFormError] = useState<string | null>(null);
 
   const handleAjouterClick = () => {
-    if (!nom) {
+    if (!nom || !pourcentage) {
       setFormError("Veuillez remplir tous les champs.");
       return;
     } else {
       setFormError(null);
       console.log("Nom:", nom);
-
+      console.log("Pourcentage:", pourcentage);
       // Prepare data in the required format
       const articleData = {
         name: nom,
+        pourcentage: pourcentage / 100,
       };
       console.log(JSON.stringify(articleData));
       // Send a POST request to the API
@@ -52,38 +63,49 @@ const AddArticle: React.FC = () => {
   };
   let state = checkUserState();
 
-  if(state == "user"){
-    return <Redirect to="/tournees" />
-  }else if(state == "admin"){
+  if (state == "user") {
+    return <Redirect to="/tournees" />;
+  } else if (state == "admin") {
     return (
-        <IonContent>
-          <IonGrid>
-            <h1 className="titre-ajout">Ajouter un article</h1>
-            <IonRow>
-              <IonCol size="12" size-md="6">
-                <IonItem>
-                  <IonLabel position="floating">Nom de l'article</IonLabel>
-                  <IonInput
-                      type="text"
-                      value={nom}
-                      required
-                      onIonChange={(e) => setNom(e.detail.value!)}
-                  />
-                </IonItem>
-              </IonCol>
-              <IonCol size="12" size-md="6">
-                <IonButton onClick={handleAjouterClick}>
-                  Ajouter un article
-                </IonButton>
-                <p>{formError}</p>
-              </IonCol>
-            </IonRow>
-            <IonRow className="ion-justify-content-center button-send"></IonRow>
-          </IonGrid>
-        </IonContent>
+      <IonContent>
+        <IonGrid>
+          <h1 className="titre-ajout">Ajouter un article</h1>
+          <IonRow>
+            <IonCol size="12" size-md="6">
+              <IonItem>
+                <IonLabel position="floating">Nom de l'article</IonLabel>
+                <IonInput
+                  type="text"
+                  value={nom}
+                  required
+                  onIonChange={(e) => setNom(e.detail.value!)}
+                />
+              </IonItem>
+            </IonCol>
+            <IonCol size="12" size-md="6">
+              <IonItem>
+                <IonLabel position="floating">Pourcentage en surplus</IonLabel>
+                <IonInput
+                  type="number"
+                  value={pourcentage}
+                  required
+                  onIonChange={(e) =>
+                    setPourcentage(parseInt(e.detail.value!, 10))
+                  }
+                />
+              </IonItem>
+              <IonButton onClick={handleAjouterClick}>
+                Ajouter un article
+              </IonButton>
+              <p>{formError}</p>
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-justify-content-center button-send"></IonRow>
+        </IonGrid>
+      </IonContent>
     );
-  }else{
-    return <Redirect to="/login" />
+  } else {
+    return <Redirect to="/login" />;
   }
 };
 

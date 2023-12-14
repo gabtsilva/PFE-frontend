@@ -42,9 +42,14 @@ import AddVehicule from "./pages/AddVehicule/AddVehicule";
 import UpdateVehicule from "./pages/UpdateVehicule/UpdateVehicule";
 import Tournee from "./pages/Tournee/Tournee";
 import AddTournee from "./pages/AddTournee/AddTournee";
+import UpdateTournee from "./pages/UpdateTournee/UpdateTournee";
+import TourneeLivreur from "./pages/TourneeLivreur/TourneeLivreur";
+import Livreur from "./pages/Livreur/Livreur";
+import UpdateLivreur from "./pages/UpdateLivreur/UpdateLivreur";
+import AddLivreur from "./pages/AddLivreur/AddLivreur";
 
 setupIonicReact({
-  mode:"ios"
+  mode: "ios",
 });
 
 const App: React.FC = () => (
@@ -88,6 +93,12 @@ const App: React.FC = () => (
 
           <Route
             exact
+            path="/tournee/update/:id"
+            render={() => <UpdateTournee />}
+          />
+
+          <Route
+            exact
             path="/tournees"
             render={(props) =>
               localStorage.getItem("token") != null ? (
@@ -98,6 +109,24 @@ const App: React.FC = () => (
             }
           />
 
+          <Route
+            exact
+            path="/tourneesLivreur"
+            render={(props) =>
+              localStorage.getItem("token") != null ? (
+                <TourneeLivreur />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
+          <Route exact path="/livreurs" render={() => <Livreur />} />
+          <Route
+            exact
+            path="/livreur/update/:email"
+            render={() => <UpdateLivreur />}
+          />
+          <Route exact path="/livreur/add" render={() => <AddLivreur />} />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonPage>

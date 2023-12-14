@@ -14,7 +14,7 @@ import {
 
 import "./AddClient.css";
 import checkUserState from "../../utils/checkUserState";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 interface Tournee {
   id: number;
@@ -25,7 +25,7 @@ const AddClient: React.FC = () => {
   const [nom, setNom] = useState<string>("");
   const [nombreEnfants, setNombreEnfants] = useState<number | undefined>();
   const [adress, setAdress] = useState<string>("");
-  const [trouneeChoisie, setTourneeChoisie] = useState<number | undefined>();
+  const [trouneeChoisie, setTourneeChoisie] = useState<number | null>();
   const [tours, setTours] = useState<Tournee[]>([]);
   const [formError, setFormError] = useState<string | null>(null);
   const [phone, setPhone] = useState<string>("");
@@ -45,7 +45,7 @@ const AddClient: React.FC = () => {
   }, []);
 
   const handleAjouterClick = () => {
-    if (!nom || !nombreEnfants || !trouneeChoisie || !adress || !phone) {
+    if (!nom || !nombreEnfants || !adress || !phone) {
       setFormError("Veuillez remplir tous les champs.");
       return;
     } else {
@@ -54,6 +54,10 @@ const AddClient: React.FC = () => {
       console.log("Adress:", adress);
       console.log("Phone:", phone);
       console.log("Nombre d'enfants:", nombreEnfants);
+      if (trouneeChoisie === undefined) {
+        setTourneeChoisie(null);
+      }
+
       console.log("numéro de tournée:", trouneeChoisie);
 
       // Prepare data in the required format
@@ -64,6 +68,7 @@ const AddClient: React.FC = () => {
         childrenQuantity: nombreEnfants,
         tour: trouneeChoisie,
       };
+      console.log("http://localhost:8080/client");
       console.log(JSON.stringify(clientData));
       // Send a POST request to the API
       fetch("http://localhost:8080/client", {
@@ -93,88 +98,88 @@ const AddClient: React.FC = () => {
   };
   let state = checkUserState();
 
-  if(state == "user"){
-    return <Redirect to="/tournees" />
-  }else if(state == "admin"){
+  if (state == "user") {
+    return <Redirect to="/tournees" />;
+  } else if (state == "admin") {
     return (
-        <IonContent>
-          <IonGrid>
-            <h1 className="titre-ajout">Ajouter un client</h1>
-            <IonRow>
-              <IonCol size="12" size-md="6">
-                <IonItem>
-                  <IonLabel position="floating">Nom de la crèche</IonLabel>
-                  <IonInput
-                      type="text"
-                      value={nom}
-                      required
-                      onIonChange={(e) => setNom(e.detail.value!)}
-                  />
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">Adresse</IonLabel>
-                  <IonInput
-                      type="text"
-                      required
-                      value={adress}
-                      onIonChange={(e) => setAdress(e.detail.value!)}
-                  />
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">Numéro de téléphone</IonLabel>
-                  <IonInput
-                      type="text"
-                      required
-                      value={phone}
-                      onIonChange={(e) => setPhone(e.detail.value!)}
-                  />
-                </IonItem>
-              </IonCol>
-              <IonCol size="12" size-md="6">
-                <IonItem>
-                  <IonLabel position="floating">Nombre d'enfants</IonLabel>
-                  <IonInput
-                      type="number"
-                      value={nombreEnfants}
-                      required
-                      onIonChange={(e) =>
-                          setNombreEnfants(parseFloat(e.detail.value!))
-                      }
-                  />
-                </IonItem>
-                <IonItem className="tournee-input">
-                  <IonLabel>Tournées</IonLabel>
-                  <IonSelect
-                      onIonChange={(e) =>
-                          setTourneeChoisie(parseFloat(e.detail.value!))
-                      }
-                  >
-                    {tours.map((tour, index) => (
-                        <IonSelectOption
-                            key={index}
-                            value={tour.id}
-                            aria-required={trouneeChoisie === tour.id}
-                        >
-                          {tour.name}
-                        </IonSelectOption>
-                    ))}
-                  </IonSelect>
-                </IonItem>
-              </IonCol>
-            </IonRow>
-            <IonRow className="ion-justify-content-center button-send">
-              <IonCol size="12">
-                <IonButton onClick={handleAjouterClick}>
-                  Ajouter le client
-                </IonButton>
-                <p>{formError}</p>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-        </IonContent>
+      <IonContent>
+        <IonGrid>
+          <h1 className="titre-ajout">Ajouter un client</h1>
+          <IonRow>
+            <IonCol size="12" size-md="6">
+              <IonItem>
+                <IonLabel position="floating">Nom de la crèche</IonLabel>
+                <IonInput
+                  type="text"
+                  value={nom}
+                  required
+                  onIonChange={(e) => setNom(e.detail.value!)}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="floating">Adresse</IonLabel>
+                <IonInput
+                  type="text"
+                  required
+                  value={adress}
+                  onIonChange={(e) => setAdress(e.detail.value!)}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="floating">Numéro de téléphone</IonLabel>
+                <IonInput
+                  type="text"
+                  required
+                  value={phone}
+                  onIonChange={(e) => setPhone(e.detail.value!)}
+                />
+              </IonItem>
+            </IonCol>
+            <IonCol size="12" size-md="6">
+              <IonItem>
+                <IonLabel position="floating">Nombre d'enfants</IonLabel>
+                <IonInput
+                  type="number"
+                  value={nombreEnfants}
+                  required
+                  onIonChange={(e) =>
+                    setNombreEnfants(parseFloat(e.detail.value!))
+                  }
+                />
+              </IonItem>
+              <IonItem className="tournee-input">
+                <IonLabel>Tournées</IonLabel>
+                <IonSelect
+                  onIonChange={(e) =>
+                    setTourneeChoisie(parseFloat(e.detail.value!))
+                  }
+                >
+                  {tours.map((tour, index) => (
+                    <IonSelectOption
+                      key={index}
+                      value={tour.id}
+                      aria-required={trouneeChoisie === tour.id}
+                    >
+                      {tour.name}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-justify-content-center button-send">
+            <IonCol size="12">
+              <IonButton onClick={handleAjouterClick}>
+                Ajouter le client
+              </IonButton>
+              <p>{formError}</p>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonContent>
     );
-  }else {
-    return <Redirect to="/tournees"/>
+  } else {
+    return <Redirect to="/tournees" />;
   }
 };
 

@@ -9,14 +9,14 @@ import {
   IonCol,
   IonItem,
   IonSelect,
-  IonSelectOption, IonIcon, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle,
+  IonSelectOption, IonIcon, IonModal, IonHeader, IonToolbar, IonButtons, IonTitle, useIonToast,
 } from "@ionic/react";
 
-import {Redirect, useParams} from "react-router-dom";
+import {Redirect, useHistory, useParams} from "react-router-dom";
 
 import "./UpdateClient.css";
 import checkUserState from "../../utils/checkUserState";
-import {createOutline, removeOutline, trashOutline} from "ionicons/icons";
+import {createOutline, documentSharp, removeOutline, trashOutline} from "ionicons/icons";
 import {OverlayEventDetail} from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 
 interface Tournee {
@@ -48,6 +48,29 @@ const UpdateClient: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [order, setOrder] = useState<OrderLine[]>([]);
   const [articles, setArticles] = useState<Articles[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [hasCommand, setHasCommand] = useState(false);
+  const [present] = useIonToast();
+
+  const [message, setMessage] = useState(
+      'This modal example uses triggers to automatically open a modal when the button is clicked.'
+  );
+
+  function openModal() {
+    if(!showModal && articles.filter((elem) => !order.some(o => o.articleId== elem.id)).length == 0){
+      present({
+        message: "Vous avez déjà ajouté tous les articles disponibles à cette commande !",
+        duration: 2500,
+        position: "bottom",
+        color:"danger"
+      });
+    }else{
+      setShowModal(!showModal);
+    }
+  }
+  const history = useHistory();
+
+  // Function to toggle the disabled state
 
   useEffect(() => {
     fetch(`http://localhost:8080/article`)
@@ -98,15 +121,18 @@ const UpdateClient: React.FC = () => {
           let orderArray: OrderLine[] = [];
           data.map((order: OrderLine) => orderArray.push(order));
           setOrder(orderArray);
-          // Extracting tour names from the data
-          /*
-          let tourMapClean: Tournee[] = [];
-          data.map((tour: Tournee) => tourMapClean.push(tour));
-          setTours(tourMapClean);
-           */
         })
         .catch((error) => {
           console.error("Erreur de chargement des tournées", error);
+        });
+    fetch(`http://localhost:8080/order/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if(data == null) setHasCommand(false);
+          else setHasCommand(true);
+        })
+        .catch((error) => {
+          console.error("Erreur de chargement de la commande", error);
         });
   }, [id]);
 
@@ -114,24 +140,40 @@ const UpdateClient: React.FC = () => {
     fetch(`http://localhost:8080/order/remove/${order_id}/${article_id}`,{method:"DELETE"})
         .then((response) => response.json())
         .then((data) => {
-          let output = order.filter(order => order.orderId != order_id);
-          setOrder(output)
+          let output = order.filter(order => order.articleId != article_id);
+          setOrder(output);
         });
   }
   const updateQuantity = (type: string) => {
+    let arrCons =[];
     const inputs = document.querySelectorAll('input[name^="modify-"]');
-    let arrayOfOrderLines = [];
-    inputs.forEach((input) => {
-      arrayOfOrderLines.push({id:input.name.split("-")[1], value:input.value})
-    })
-    if(type == "consistent"){
-      arrayOfOrderLines.forEach((elem) =>{
-        fetch(`http://localhost:8080/order/${id}/addArticle/${elem.id}/${elem.value}`,{method:"POST"});
-      })
-    }else{
-      arrayOfOrderLines.forEach((elem) =>{
-        fetch(`http://localhost:8080/order/${id}/modify/${elem.id}/${elem.value}`,{method:"POST"});
-      })
+    if(type == "c"){
+      inputs.forEach((input) => {
+        let object = {id: input.name.split("-")[1], value:input.value};
+        arrCons.push(object);
+      });
+    }else if(type == "e"){
+      inputs.forEach((input) => {
+        let object = {id: input.name.split("-")[1], value:input.value - parseInt(input.placeholder)};
+        arrCons.push(object);
+      });
+    }
+    if(type == "c"){
+      arrCons.forEach((elem) =>{
+        fetch(`http://localhost:8080/order/${id}/addArticle/${elem.id}/${elem.value}`,{method:"POST"})
+            .then((response) => response.json())
+            .then((data) => {
+              window.location.reload();
+            });
+      });
+    }else if (type == "e"){
+      arrCons.forEach((elem) =>{
+        fetch(`http://localhost:8080/order/${id}/modify/${elem.id}/${elem.value}`,{method:"POST"})
+            .then((response) => response.json())
+            .then((data) => {
+              window.location.reload();
+            });
+      });
     }
   }
   const handleAjouterClick = () => {
@@ -164,7 +206,6 @@ const UpdateClient: React.FC = () => {
           return response.text();
         })
         .then((data) => {
-          console.log("Client a été modifié avec succès:", data);
           // Reset form error state
           setFormError(null);
           window.location.href = "/clients";
@@ -175,12 +216,81 @@ const UpdateClient: React.FC = () => {
         });
     }
   };
+  const handleOrderModification = async () => {
+    const inputs = document.querySelectorAll('input[name^="add-"]');
+    let arrCons = [];
+    inputs.forEach((input) => {
+      if(input.value > 0){
+        let object = {id: input.name.split("-")[1], value: input.value};
+        arrCons.push(object);
+      }
+    });
+    for (const elem of arrCons) {
+      console.log(elem);
+      fetch(`http://localhost:8080/order/${id}/addArticle/${elem.id}/${elem.value}`,{method:"POST"})
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+          });
+    }
+    openModal();
+    history.replace(`/client/update/${id}`);
+  }
+
+  const createOrder = () => {
+    fetch(`http://localhost:8080/order/${id}`,{method:"POST"})
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        });
+    setHasCommand(true);
+    history.replace(`/client/update/${id}`);
+  }
+
   let state = checkUserState();
   if(state == "user"){
     return <Redirect to="/tournees" />
   }else if(state == "admin"){
     return (
         <IonContent>
+          <IonModal isOpen={showModal} trigger="open-modal">
+            <IonHeader>
+              <IonToolbar>
+                <IonTitle>Ajout pour : {nom}</IonTitle>
+                <IonButtons slot="end">
+                  <IonButton onClick={() => modal.current?.dismiss()}>Annuler</IonButton>
+                </IonButtons>
+              </IonToolbar>
+            </IonHeader>
+            <IonContent className="ion-padding">
+              <table className="ion-margin-bottom">
+                <thead>
+                <tr>
+                  <th>Article</th>
+                  <th>Quantité à livrer</th>
+                </tr>
+                </thead>
+                <tbody>
+                {articles.filter((elem) => !order.some(o => o.articleId== elem.id)).map((elem) => {
+                    return <tr>
+                      <td>
+                        <IonLabel data-value={elem.id} className="ion-padding-start">{elem.name}</IonLabel>
+                      </td>
+                      <td>
+                        <IonInput
+                            name={"add-" + elem.id.toString()}
+                            type="number"
+                            value="0"
+                            required
+                        />
+                      </td>
+                    </tr>
+                })}
+                </tbody>
+              </table>
+              <IonButton onClick={handleOrderModification} color="success" shape="round" size="small">Valider les modifications</IonButton>
+            </IonContent>
+          </IonModal>
           <IonGrid>
             <IonRow className="ion-justify-content-center">
               <IonCol className="ion-bg" size="9">
@@ -261,12 +371,13 @@ const UpdateClient: React.FC = () => {
                 <IonLabel>
                   <h2 className="ion-padding">Commande de :  <b>{nom}</b></h2>
                 </IonLabel>
+                {!hasCommand ? null : (<>
                 <table className="ion-margin-bottom">
                   <thead>
                   <tr>
                     <th>Nom</th>
-                    <th>Quantité prévue</th>
-                    <th>Nouvelle quantité</th>
+                    <th>Quantité totale à livrer</th>
+                    <th>Dont ajout pour la prochaine livraison</th>
                     <th></th>
                   </tr>
                   </thead>
@@ -274,31 +385,36 @@ const UpdateClient: React.FC = () => {
                   {order.map((order) => (
                       <tr>
                         <td>{articles.find((article) => article.id === order.articleId)?.name}</td>
-                        <td>{order.plannedQuantity}</td>
                         <td>
                           <IonInput
+                              placeholder={order.plannedQuantity}
                               name={"modify-" + articles.find((article) => article.id === order.articleId)?.id}
                               type="number"
-                              value={0}
+                              value={order.plannedQuantity}
                               required
                           />
+                        </td>
+                        <td>
+                          <IonLabel color="primary">({order.changedQuantity})</IonLabel>
                         </td>
                         <td><IonButton size="small" color="light" onClick={() => removeArticle(order.orderId, order.articleId)}><IonIcon color="danger" icon={trashOutline}></IonIcon></IonButton></td>
                       </tr>
                   ))}
                   </tbody>
-                </table>
+                </table></>)}
                 <IonRow>
                   <IonCol size="auto">
-                    <IonButton className="ion-margin-end" size="small" shape="round" color="secondary" onClick={() => updateQuantity("ephemeral")}>
-                      Modification ponctuelle
-                    </IonButton>
-                    <IonButton className="ion-margin-end" size="small" shape="round" color="warning" onClick={() => updateQuantity("consistent")}>
-                      Modification long terme
-                    </IonButton>
-                    <IonButton size="small" shape="round" color="success" onClick={() => updateQuantity("consistent")}>
+                    {!hasCommand ? (<IonButton size="small" shape="round" color="success" onClick={createOrder}>
+                      Créer une commande
+                    </IonButton>) : (<><IonButton size="small" shape="round" color="success" onClick={openModal}>
                       Ajouter un article
                     </IonButton>
+                      <IonButton size="small" shape="round" color="primary" onClick={() => updateQuantity("e")}>
+                    Modification ponctuelle
+                  </IonButton>
+                  <IonButton size="small" shape="round" color="danger" onClick={() => updateQuantity("c")}>
+                    Modification définitive
+                  </IonButton></>) }
                   </IonCol>
                 </IonRow>
               </IonCol>
