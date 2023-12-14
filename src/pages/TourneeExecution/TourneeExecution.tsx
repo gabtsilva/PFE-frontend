@@ -80,18 +80,17 @@ const TourneeExecution: React.FC = () => {
             <table>
               <thead>
                 <tr>
-                  <th>Article Name</th>
-                  <th>Article ID</th>
-                  <th>Qty Base</th>
-                  <th>Qty Livre</th>
-                  <th>Qty Surplus Restant</th>
+                  <th>Nom de l'article</th>
+                  <th>Quantité de base</th>
+                  <th>Quantité livrée</th>
+                  <th>Quantité surplus Restant</th>
                 </tr>
               </thead>
               <tbody>
                 {data.map((item: ArticlesTourneeExec) => (
                   <tr key={item.articleId}>
                     <td>{item.articleName}</td>
-                    <td>{item.articleId}</td>
+
                     <td>{item.qtyBase}</td>
                     <td>{item.qtyLivre}</td>
                     <td>{item.qtySurplusRestant}</td>
@@ -111,19 +110,15 @@ const TourneeExecution: React.FC = () => {
               <table>
                 <thead>
                   <tr>
-                    <th>Article Name</th>
-                    <th>Article ID</th>
-                    <th>Planned Quantity</th>
-                    <th>Delivered Quantity</th>
-                    <th>Changed Quantity</th>
+                    <th>Nom de l'article</th>
+                    <th>Quantité délivrée</th>
+                    <th>Quantité prévue</th>
                   </tr>
                 </thead>
                 <tbody>
                   {client.articles.map((article) => (
                     <tr key={article.articleId}>
                       <td>{article.articleName}</td>
-                      <td>{article.articleId}</td>
-                      <td>{article.plannedQuantity}</td>
                       <td>{article.deliveredQuantity}</td>
                       <td>{article.changedQuantity}</td>
                     </tr>
