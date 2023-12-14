@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   IonContent,
+  IonPage,
   IonLabel,
   IonInput,
   IonButton,
@@ -10,66 +11,41 @@ import {
   IonItem,
 } from "@ionic/react";
 
-import {Redirect, useParams} from "react-router-dom";
-
 import checkUserState from "../../utils/checkUserState";
+import {Redirect} from "react-router-dom";
 
-const UpdateLivreur: React.FC = () => {
-  const [nom, setNom] = useState<string>("");
-  const [prenom, setPrenom] = useState<string>("");
-  const [telephone, setTelephone] = useState<string>("");
-  const [estAdmin, setEstAdmin] = useState<boolean>(false);
+const AddLivreur: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [firstname, setFirstName] = useState<string>("");
+  const [lastname, setLastName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [formError, setFormError] = useState<string | null>(null);
-  const { email } = useParams<{ email: string }>();
-
-  useEffect(() => {
-    fetch(`http://localhost:8080/user/${email}`)
-      .then((response) => response.json())
-      .then((data) => {
-        // Update the state with the retrieved data
-        setNom(data.lastname || "");
-        setPrenom(data.firstname || "");
-        setTelephone(data.phoneNumber || "");
-        setEstAdmin(data.isAdmin);
-        setPassword(data.password || "");
-        
-      })
-      .catch((error) => {
-        console.error(
-          "Erreur lors de la récupération des données du livreur:",
-          error
-        );
-      });
-  }, [email]);
 
   const handleAjouterClick = () => {
-    if (!nom || !prenom || !telephone ) {
+    if (!email || !firstname || !lastname || !password ||!phoneNumber) {
       setFormError("Veuillez remplir tous les champs.");
       return;
     } else {
       setFormError(null);
-
+ 
       // Prepare data in the required format
-      const livreurData = {
+      const userData = {
         email: email,
-        firstname: prenom,
-        lastname: nom,
-        phoneNumber: telephone,
-        isAdmin: estAdmin,
+        firstname: firstname,
+        lastname: lastname,
+        phoneNumber: phoneNumber,
+        isAdmin: false,
         password: password
       };
-
-      console.log({livreurData})
-
+      console.log(JSON.stringify(userData));
       // Send a POST request to the API
-      fetch(`http://localhost:8080/user/${email}`, {
-        method: "PUT",
+      fetch("http://localhost:8080/user", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(livreurData),
+        body: JSON.stringify(userData),
       })
         .then((response) => {
           if (!response.ok) {
@@ -78,67 +54,83 @@ const UpdateLivreur: React.FC = () => {
           return response.text();
         })
         .then((data) => {
-          console.log("Livreur a été modifié avec succès:", data);
+          console.log("Livreur ajouté avec succès:", data);
           // Reset form error state
           setFormError(null);
           window.location.href = "/livreurs";
         })
         .catch((error) => {
-          console.error("Erreur lors de la modification du livreur:", error);
+          console.error("Erreur lors de l'ajout du livreur:", error);
           setFormError(
-            "Une erreur s'est produite lors de la modification du livreur."
+            "Une erreur s'est produite lors de l'ajout du livreur."
           );
         });
     }
   };
   let state = checkUserState();
   if(state == "user"){
-    return <Redirect to="/" />
-  }else if(state == "admin"){
+    return <Redirect to="/tournees" />
+  }else if(state == "admin") {
     return (
         <IonContent>
           <IonGrid>
-            <h1 className="titre-ajout">Modifier un livreur : {email}</h1>
+            <h1 className="titre-ajout">Ajouter un livreur</h1>
             <IonRow>
               <IonCol size="12" size-md="6">
+                <IonItem>
+                  <IonLabel position="floating">Email </IonLabel>
+                  <IonInput
+                      type="text"
+                      value={email}
+                      required
+                      onIonChange={(e) => setEmail(e.detail.value!)}
+                  />
+                </IonItem>
                 <IonItem>
                   <IonLabel position="floating">Nom</IonLabel>
                   <IonInput
                       type="text"
-                      value={nom}
+                      value={lastname}
                       required
-                      onIonChange={(e) => setNom(e.detail.value!)}
+                      onIonChange={(e) => setLastName(e.detail.value!)}
                   />
                 </IonItem>
                 <IonItem>
                   <IonLabel position="floating">Prénom</IonLabel>
                   <IonInput
                       type="text"
-                      value={prenom}
+                      value={firstname}
                       required
-                      onIonChange={(e) => setPrenom(e.detail.value!)}
+                      onIonChange={(e) => setFirstName(e.detail.value!)}
                   />
                 </IonItem>
               </IonCol>
               <IonCol size="12" size-md="6">
                 <IonItem>
-                 <IonLabel position="floating">
-                    Téléphone
-                  </IonLabel>
+                <IonLabel position="floating">Téléphone</IonLabel>
                   <IonInput
                       type="text"
-                      value={telephone}
+                      value={phoneNumber}
                       required
-                      onIonChange={(e) => setTelephone(e.detail.value!)}
+                      onIonChange={(e) => setPhoneNumber(e.detail.value!)}
                   />
-                  
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="floating">Password</IonLabel>
+                  <IonInput
+                      type="text"
+                      value={password}
+                      required
+                      onIonChange={(e) => setPassword(e.detail.value!)}
+                  />
+
                 </IonItem>
               </IonCol>
             </IonRow>
             <IonRow className="ion-justify-content-center button-send">
               <IonCol size="12">
                 <IonButton onClick={handleAjouterClick}>
-                  Modifier le livreur
+                  Ajouter un livreur
                 </IonButton>
                 <p>{formError}</p>
               </IonCol>
@@ -146,9 +138,7 @@ const UpdateLivreur: React.FC = () => {
           </IonGrid>
         </IonContent>
     );
-  }else{
-    return <Redirect to="/login" />
   }
 };
 
-export default UpdateLivreur;
+export default AddLivreur;

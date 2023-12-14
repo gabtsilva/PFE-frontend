@@ -46,6 +46,7 @@ import UpdateTournee from "./pages/UpdateTournee/UpdateTournee";
 import TourneeLivreur from "./pages/TourneeLivreur/TourneeLivreur";
 import Livreur from "./pages/Livreur/Livreur";
 import UpdateLivreur from "./pages/UpdateLivreur/UpdateLivreur";
+import AddLivreur from "./pages/AddLivreur/AddLivreur";
 
 setupIonicReact({
   mode: "ios",
@@ -125,6 +126,7 @@ const App: React.FC = () => (
             path="/livreur/update/:email"
             render={() => <UpdateLivreur />}
           />
+          <Route exact path="/livreur/add" render={() => <AddLivreur />} />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonPage>

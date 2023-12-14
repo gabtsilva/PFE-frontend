@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IonContent, IonGrid, IonRow, IonCol, IonIcon, IonButton, IonSearchbar } from "@ionic/react";
-import { personAddOutline, createOutline } from "ionicons/icons";
+import {  createOutline, footsteps } from "ionicons/icons";
 import { Redirect } from "react-router-dom";
 import AddElement from "../../components/AddElement/AddElement";
 import checkUserState from "../../utils/checkUserState";
@@ -42,6 +42,7 @@ const Livreur: React.FC = () => {
       <>
         <IonContent>
           <IonGrid>
+          <AddElement nom="livreur" icone={footsteps} />
             <IonRow>
               <IonCol size="10" size-md="7">
                 <IonSearchbar placeholder="Chercher un livreur" value={search} onIonInput={handleSearchChange} />
