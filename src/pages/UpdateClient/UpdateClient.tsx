@@ -146,15 +146,16 @@ const UpdateClient: React.FC = () => {
   }
   const updateQuantity = (type: string) => {
     let arrCons =[];
-    const inputs = document.querySelectorAll('input[name^="modify-"]');
     if(type == "c"){
+      const inputs = document.querySelectorAll('input[name^="modify-c-"]');
       inputs.forEach((input) => {
-        let object = {id: input.name.split("-")[1], value:input.value};
+        let object = {id: input.name.split("-")[2], value:input.value};
         arrCons.push(object);
       });
     }else if(type == "e"){
+      const inputs = document.querySelectorAll('input[name^="modify-e-"]');
       inputs.forEach((input) => {
-        let object = {id: input.name.split("-")[1], value:input.value - parseInt(input.placeholder)};
+        let object = {id: input.name.split("-")[2], value:input.value - parseInt(input.placeholder)};
         arrCons.push(object);
       });
     }
@@ -376,8 +377,8 @@ const UpdateClient: React.FC = () => {
                   <thead>
                   <tr>
                     <th>Nom</th>
-                    <th>Quantité totale à livrer</th>
-                    <th>Dont ajout pour la prochaine livraison</th>
+                    <th>Quantité de base à livrer</th>
+                    <th>Quantité totale pour la prochaine livraison</th>
                     <th></th>
                   </tr>
                   </thead>
@@ -388,14 +389,20 @@ const UpdateClient: React.FC = () => {
                         <td>
                           <IonInput
                               placeholder={order.plannedQuantity}
-                              name={"modify-" + articles.find((article) => article.id === order.articleId)?.id}
+                              name={"modify-c-" + articles.find((article) => article.id === order.articleId)?.id}
                               type="number"
                               value={order.plannedQuantity}
                               required
                           />
                         </td>
                         <td>
-                          <IonLabel color="primary">({order.changedQuantity})</IonLabel>
+                          <IonInput
+                              placeholder={order.plannedQuantity}
+                              name={"modify-e-" + articles.find((article) => article.id === order.articleId)?.id}
+                              type="number"
+                              value={order.changedQuantity + order.plannedQuantity}
+                              required
+                          />
                         </td>
                         <td><IonButton size="small" color="light" onClick={() => removeArticle(order.orderId, order.articleId)}><IonIcon color="danger" icon={trashOutline}></IonIcon></IonButton></td>
                       </tr>
