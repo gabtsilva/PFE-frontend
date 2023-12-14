@@ -279,7 +279,7 @@ const TourneeHome: React.FC = () => {
   };
   return (
     <>
-      <IonGrid>
+      <IonGrid className="grid-card">
         <h2>Tournées du jour</h2>
         <IonRow>
           {tourneesExecUser.length !== 0 ? (
@@ -332,9 +332,8 @@ const TourneeHome: React.FC = () => {
                                 {clientsDetails[ordrePassage.clientId]?.name}
                               </td>
                               <td>
-                                <IonButton
+                                <a
                                   className="button-map"
-                                  fill="clear"
                                   onClick={() =>
                                     redirectToGoogleMaps(
                                       clientsDetails[ordrePassage.clientId]
@@ -346,7 +345,7 @@ const TourneeHome: React.FC = () => {
                                     clientsDetails[ordrePassage.clientId]
                                       ?.address
                                   }
-                                </IonButton>
+                                </a>
                               </td>
                             </tr>
                           ))}
@@ -389,9 +388,7 @@ const TourneeHome: React.FC = () => {
                             <tr className={passage.delivred ? "active-tr" : ""}>
                               <td>{passage.name}</td>
                               <td>
-                                {passage.delivred
-                                  ? "a été livré"
-                                  : "n'a pas encore été livré"}{" "}
+                                {passage.delivred ? "livré" : "non livré"}{" "}
                               </td>
                             </tr>
                           )
