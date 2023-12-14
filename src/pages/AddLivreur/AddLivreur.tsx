@@ -40,7 +40,7 @@ const AddLivreur: React.FC = () => {
       };
       console.log(JSON.stringify(userData));
       // Send a POST request to the API
-      fetch("http://localhost:8080/user", {
+      fetch("https://bf9b-193-190-75-175.ngrok-free.app/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

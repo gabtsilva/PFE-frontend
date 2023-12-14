@@ -31,7 +31,7 @@ const Vehicule: React.FC = () => {
 
   useEffect(() => {
     // Effect hook to retrieve client data from the API
-    fetch("http://localhost:8080/vehicle")
+    fetch("https://bf9b-193-190-75-175.ngrok-free.app/vehicle")
       .then((response) => response.json())
       .then((data) => {
         setVehicules(data);

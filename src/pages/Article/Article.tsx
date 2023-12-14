@@ -29,7 +29,7 @@ const Article: React.FC = () => {
 
   useEffect(() => {
     // Effect hook to retrieve client data from the API
-    fetch("http://localhost:8080/article")
+    fetch("https://bf9b-193-190-75-175.ngrok-free.app/article")
       .then((response) => response.json())
       .then((data) => {
         setArticles(data);

@@ -68,14 +68,14 @@ const UpdateTournee: React.FC = () => {
 
   useEffect(() => {
     // Effect hook to retrieve client data from the API
-    fetch(`http://localhost:8080/tour/${id}`)
+    fetch(`https://bf9b-193-190-75-175.ngrok-free.app/tour/${id}`)
       .then((response) => response.json())
       .then((data) => {
         // Update the state with the retrieved data
         setNom(data.name || "");
       });
 
-    fetch("http://localhost:8080/client")
+    fetch("https://bf9b-193-190-75-175.ngrok-free.app/client")
       .then((response) => response.json())
       .then((data) => {
         setClients(data);
@@ -85,7 +85,7 @@ const UpdateTournee: React.FC = () => {
       )
       .then(() => {});
 
-    fetch(`http://localhost:8080/tour/${id}/getTourOrder`)
+    fetch(`https://bf9b-193-190-75-175.ngrok-free.app/tour/${id}/getTourOrder`)
       .then((response) => response.json())
       .then((data) => {
         setOrderTournee(data || []);
@@ -133,7 +133,7 @@ const UpdateTournee: React.FC = () => {
       console.log(JSON.stringify(tourneeData));
       // Ajouter la nouvelle tournée
       const responseTournee = await fetch(
-        `http://localhost:8080/tour/${idInInteger}`,
+        `https://bf9b-193-190-75-175.ngrok-free.app/tour/${idInInteger}`,
         {
           method: "PUT",
           headers: {
@@ -168,7 +168,7 @@ const UpdateTournee: React.FC = () => {
           tour: idInInteger,
         };
         const responseUpdateClient = await fetch(
-          `http://localhost:8080/client/${listIdClientSelected[indexGood].id}`,
+          `https://bf9b-193-190-75-175.ngrok-free.app/client/${listIdClientSelected[indexGood].id}`,
           {
             method: "PUT",
             headers: {
@@ -211,7 +211,7 @@ const UpdateTournee: React.FC = () => {
 
         // Ajoutez la promesse à votre tableau
         const response = await fetch(
-          `http://localhost:8080/tour/${idInInteger}/modifyTourOrder`,
+          `https://bf9b-193-190-75-175.ngrok-free.app/tour/${idInInteger}/modifyTourOrder`,
           {
             method: "PUT",
             headers: {

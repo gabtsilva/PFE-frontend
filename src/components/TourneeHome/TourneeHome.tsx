@@ -91,13 +91,13 @@ const TourneeHome: React.FC = () => {
     useState<boolean>(false);
 
   useEffect(() => {
-    fetch("http://localhost:8080/tour/tourExecution")
+    fetch("https://bf9b-193-190-75-175.ngrok-free.app/tour/tourExecution")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
         if (data.length === 0) {
           console.log("RIEN ");
-          fetch("http://localhost:8080/tourExecution/today/state/prevue")
+          fetch("https://bf9b-193-190-75-175.ngrok-free.app/tourExecution/today/state/prevue")
             .then((response) => response.json())
             .then((data) => {
               setTourneesExecUser(data);
@@ -120,7 +120,7 @@ const TourneeHome: React.FC = () => {
       // Fetch other data only if tourneesExecUser has data
       const fetchTournees = tourneesExecUser.map((tourneeExecUser) =>
         fetch(
-          `http://localhost:8080/tourExecution/${tourneeExecUser.id}/getClientDeliveredBool`
+          `https://bf9b-193-190-75-175.ngrok-free.app/tourExecution/${tourneeExecUser.id}/getClientDeliveredBool`
         )
           .then((response) => response.json())
           .then((data) => {
@@ -132,7 +132,7 @@ const TourneeHome: React.FC = () => {
       );
 
       const infoPassage = tourneesExecUser.map((tourneeExecUser) =>
-        fetch(`http://localhost:8080/tour/${tourneeExecUser.tourId}`)
+        fetch(`https://bf9b-193-190-75-175.ngrok-free.app/tour/${tourneeExecUser.tourId}`)
           .then((response) => response.json())
           .then((data) => {
             setTournees((prevTournees) => [...prevTournees, data]);
@@ -142,7 +142,7 @@ const TourneeHome: React.FC = () => {
       // Dans votre useEffect pour récupérer l'ordre de passage pour chaque tournée
       const fetchOrdrePassage = tourneesExecUser.map((tourneeExecUser) =>
         fetch(
-          `http://localhost:8080/tour/${tourneeExecUser.tourId}/getTourOrder`
+          `https://bf9b-193-190-75-175.ngrok-free.app/tour/${tourneeExecUser.tourId}/getTourOrder`
         )
           .then((response) => response.json())
           .then((ordrePassage) => {
@@ -156,7 +156,7 @@ const TourneeHome: React.FC = () => {
       // Dans votre useEffect pour récupérer l'ordre de passage pour chaque tournée
       const fetchOrdrePassageByName = tourneesExecUser.map((tourneeExecUser) =>
         fetch(
-          `http://localhost:8080/tour/${tourneeExecUser.tourId}/getTourOrder`
+          `https://bf9b-193-190-75-175.ngrok-free.app/tour/${tourneeExecUser.tourId}/getTourOrder`
         )
           .then((response) => response.json())
           .then((ordrePassage) => {
@@ -174,7 +174,7 @@ const TourneeHome: React.FC = () => {
                 JSON.stringify(ordrePassageTournee)
             );
             sortedOrdrePassage.map((item: { clientId: any }) =>
-              fetch(`http://localhost:8080/client/${item.clientId}`)
+              fetch(`https://bf9b-193-190-75-175.ngrok-free.app/client/${item.clientId}`)
                 .then((response) => response.json())
                 .then((clientDetails) => {
                   setClientsDetails((prevClientsDetails) => ({
@@ -194,7 +194,7 @@ const TourneeHome: React.FC = () => {
 
       const fetchCommandes = tourneesExecUser.map((tourneeExecUser) =>
         fetch(
-          `http://localhost:8080/tour/${tourneeExecUser.id}/tourExecution/allArticles`
+          `https://bf9b-193-190-75-175.ngrok-free.app/tour/${tourneeExecUser.id}/tourExecution/allArticles`
         )
           .then((response) => response.json())
           .then((commandes) => {
@@ -229,7 +229,7 @@ const TourneeHome: React.FC = () => {
       return;
     }
 
-    fetch(`http://localhost:8080/user/${deliveryPerson}`)
+    fetch(`https://bf9b-193-190-75-175.ngrok-free.app/user/${deliveryPerson}`)
       .then((response) => response.json())
       .then((data) => {
         console.log("info user = " + JSON.stringify(data));

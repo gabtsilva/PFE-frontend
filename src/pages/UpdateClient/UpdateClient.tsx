@@ -73,7 +73,7 @@ const UpdateClient: React.FC = () => {
   // Function to toggle the disabled state
 
   useEffect(() => {
-    fetch(`http://localhost:8080/article`)
+    fetch(`https://bf9b-193-190-75-175.ngrok-free.app/article`)
         .then((response) => response.json())
         .then((data) => {
           let articlesArray: Articles[] = [];
@@ -87,7 +87,7 @@ const UpdateClient: React.FC = () => {
           );
         })
 
-    fetch(`http://localhost:8080/client/${id}`)
+    fetch(`https://bf9b-193-190-75-175.ngrok-free.app/client/${id}`)
       .then((response) => response.json())
       .then((data) => {
         // Update the state with the retrieved data
@@ -104,7 +104,7 @@ const UpdateClient: React.FC = () => {
         );
       });
     // Fetch tour data from the API
-    fetch("http://localhost:8080/tour")
+    fetch("https://bf9b-193-190-75-175.ngrok-free.app/tour")
         .then((response) => response.json())
         .then((data) => {
           // Extracting tour names from the data
@@ -115,7 +115,7 @@ const UpdateClient: React.FC = () => {
         .catch((error) => {
           console.error("Erreur de chargement des tournées", error);
         });
-    fetch(`http://localhost:8080/order/${id}/article`)
+    fetch(`https://bf9b-193-190-75-175.ngrok-free.app/order/${id}/article`)
         .then((response) => response.json())
         .then((data) => {
           let orderArray: OrderLine[] = [];
@@ -125,7 +125,7 @@ const UpdateClient: React.FC = () => {
         .catch((error) => {
           console.error("Erreur de chargement des tournées", error);
         });
-    fetch(`http://localhost:8080/order/${id}`)
+    fetch(`https://bf9b-193-190-75-175.ngrok-free.app/order/${id}`)
         .then((response) => response.json())
         .then((data) => {
           if(data == null) setHasCommand(false);
@@ -137,7 +137,7 @@ const UpdateClient: React.FC = () => {
   }, [id]);
 
   const removeArticle = (order_id: number, article_id : number) =>{
-    fetch(`http://localhost:8080/order/remove/${order_id}/${article_id}`,{method:"DELETE"})
+    fetch(`https://bf9b-193-190-75-175.ngrok-free.app/order/remove/${order_id}/${article_id}`,{method:"DELETE"})
         .then((response) => response.json())
         .then((data) => {
           let output = order.filter(order => order.articleId != article_id);
@@ -160,7 +160,7 @@ const UpdateClient: React.FC = () => {
     }
     if(type == "c"){
       arrCons.forEach((elem) =>{
-        fetch(`http://localhost:8080/order/${id}/addArticle/${elem.id}/${elem.value}`,{method:"POST"})
+        fetch(`https://bf9b-193-190-75-175.ngrok-free.app/order/${id}/addArticle/${elem.id}/${elem.value}`,{method:"POST"})
             .then((response) => response.json())
             .then((data) => {
               window.location.reload();
@@ -168,7 +168,7 @@ const UpdateClient: React.FC = () => {
       });
     }else if (type == "e"){
       arrCons.forEach((elem) =>{
-        fetch(`http://localhost:8080/order/${id}/modify/${elem.id}/${elem.value}`,{method:"POST"})
+        fetch(`https://bf9b-193-190-75-175.ngrok-free.app/order/${id}/modify/${elem.id}/${elem.value}`,{method:"POST"})
             .then((response) => response.json())
             .then((data) => {
               window.location.reload();
@@ -192,7 +192,7 @@ const UpdateClient: React.FC = () => {
         tour: trouneeChoisie,
       };
       // Send a POST request to the API
-      fetch(`http://localhost:8080/client/${id}`, {
+      fetch(`https://bf9b-193-190-75-175.ngrok-free.app/client/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -227,7 +227,7 @@ const UpdateClient: React.FC = () => {
     });
     for (const elem of arrCons) {
       console.log(elem);
-      fetch(`http://localhost:8080/order/${id}/addArticle/${elem.id}/${elem.value}`,{method:"POST"})
+      fetch(`https://bf9b-193-190-75-175.ngrok-free.app/order/${id}/addArticle/${elem.id}/${elem.value}`,{method:"POST"})
           .then((response) => response.json())
           .then((data) => {
             console.log(data);
@@ -238,7 +238,7 @@ const UpdateClient: React.FC = () => {
   }
 
   const createOrder = () => {
-    fetch(`http://localhost:8080/order/${id}`,{method:"POST"})
+    fetch(`https://bf9b-193-190-75-175.ngrok-free.app/order/${id}`,{method:"POST"})
         .then((response) => response.json())
         .then((data) => {
           console.log(data);

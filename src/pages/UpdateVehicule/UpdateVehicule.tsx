@@ -24,7 +24,7 @@ const UpdateUpdate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    fetch(`http://localhost:8080/vehicle/${id}`)
+    fetch(`https://bf9b-193-190-75-175.ngrok-free.app/vehicle/${id}`)
       .then((response) => response.json())
       .then((data) => {
         // Update the state with the retrieved data
@@ -59,7 +59,7 @@ const UpdateUpdate: React.FC = () => {
       };
       console.log(JSON.stringify(vehiculeData));
       // Send a POST request to the API
-      fetch(`http://localhost:8080/vehicle/${id}`, {
+      fetch(`https://bf9b-193-190-75-175.ngrok-free.app/vehicle/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

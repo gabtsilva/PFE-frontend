@@ -38,7 +38,7 @@ const AddVehicule: React.FC = () => {
       };
       console.log(JSON.stringify(vehiculeData));
       // Send a POST request to the API
-      fetch("http://localhost:8080/vehicle", {
+      fetch("https://bf9b-193-190-75-175.ngrok-free.app/vehicle", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
