@@ -175,7 +175,6 @@ const UpdateClient: React.FC = () => {
             });
       });
     }
-
   }
   const handleAjouterClick = () => {
     if (!nom || !nombreEnfants || !trouneeChoisie || !adress || !phone) {
