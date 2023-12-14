@@ -46,9 +46,6 @@ const UpdateUpdate: React.FC = () => {
       return;
     } else {
       setFormError(null);
-      console.log("Nom:", nom);
-      console.log("plate:", plate);
-      console.log("maxQuantity:", maxQuantity);
 
       // Prepare data in the required format
       const vehiculeData = {
@@ -57,7 +54,6 @@ const UpdateUpdate: React.FC = () => {
         plate: plate,
         maxQuantity: maxQuantity,
       };
-      console.log(JSON.stringify(vehiculeData));
       // Send a POST request to the API
       fetch(`http://localhost:8080/vehicle/${id}`, {
         method: "PUT",
@@ -73,7 +69,6 @@ const UpdateUpdate: React.FC = () => {
           return response.text();
         })
         .then((data) => {
-          console.log("Vehicule a été modifié avec succès:", data);
           // Reset form error state
           setFormError(null);
           window.location.href = "/vehicules";

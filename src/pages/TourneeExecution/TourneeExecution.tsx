@@ -44,7 +44,6 @@ const TourneeExecution: React.FC = () => {
           `http://localhost:8080/tour/tourExecution/${id}/remainigAllArticles`
         );
         const jsonData = await response.json();
-        console.log(jsonData);
         setData(jsonData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -61,7 +60,6 @@ const TourneeExecution: React.FC = () => {
           `http://localhost:8080/tour/tourExecution/${id}/client/delivredArticles`
         );
         const jsonData = await response.json();
-        console.log(jsonData);
         setData2(jsonData);
       } catch (error) {
         console.error("Error fetching data:", error);

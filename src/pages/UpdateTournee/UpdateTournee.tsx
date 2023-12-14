@@ -59,8 +59,6 @@ const UpdateTournee: React.FC = () => {
 
   function handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
     const newClientsOrder = event.detail.complete(clientsSelected);
-
-    console.log("Nouvel ordre :", newClientsOrder);
     setClientOrder(newClientsOrder);
 
     event.detail.complete();
@@ -90,10 +88,7 @@ const UpdateTournee: React.FC = () => {
       .then((data) => {
         setOrderTournee(data || []);
         let listIdClientSelected: number[] = [];
-        console.log("order de la AVANT DB = " + JSON.stringify(data));
-
         data.forEach((element: OrderClient) => {
-          console.log(element.clientId);
           listIdClientSelected.push(element.clientId);
         });
 
@@ -107,10 +102,6 @@ const UpdateTournee: React.FC = () => {
               ?.order || 0;
           return orderA - orderB;
         });
-
-        console.log(
-          "order de la APRES DB = " + JSON.stringify(listIdClientSelected)
-        );
         setClientOrder(listIdClientSelected);
         setClientsSelected(listIdClientSelected);
       });
@@ -129,8 +120,6 @@ const UpdateTournee: React.FC = () => {
         id: idInInteger,
         name: nom,
       };
-
-      console.log(JSON.stringify(tourneeData));
       // Ajouter la nouvelle tournée
       const responseTournee = await fetch(
         `http://localhost:8080/tour/${idInInteger}`,
@@ -146,9 +135,6 @@ const UpdateTournee: React.FC = () => {
       if (!responseTournee.ok) {
         throw new Error(`HTTP error! Status: ${responseTournee.status}`);
       }
-
-      console.log("Tournée update avec succès");
-
       let listIdClientSelected = clients;
 
       listIdClientSelected.sort((a, b) => {
@@ -157,37 +143,6 @@ const UpdateTournee: React.FC = () => {
 
       // Mettre à jour la tournée pour chaque client sélectionné
       const updateClientsPromises = clientOrder.map(async (index) => {
-        /*let indexGood = index - 1;
-        console.log("for client id : ", listIdClientSelected[indexGood].id);
-        const clientData = {
-          id: listIdClientSelected[indexGood].id,
-          address: listIdClientSelected[indexGood].address,
-          name: listIdClientSelected[indexGood].name,
-          phoneNumber: listIdClientSelected[indexGood].phoneNumber,
-          childrenQuantity: listIdClientSelected[indexGood].childrenQuantity,
-          tour: idInInteger,
-        };
-        const responseUpdateClient = await fetch(
-          `http://localhost:8080/client/${listIdClientSelected[indexGood].id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(clientData),
-          }
-        );
-
-        if (!responseUpdateClient.ok) {
-          console.error(
-            `Erreur lors de la mise à jour du client ${listIdClientSelected[indexGood].id}`
-          );
-        } else {
-          console.log(
-            `Client ${listIdClientSelected[indexGood].id} mis à jour avec succès.`
-          );
-        }
-        console.log("update client fini");*/
       });
 
       await Promise.all(updateClientsPromises);
@@ -195,7 +150,6 @@ const UpdateTournee: React.FC = () => {
       // Mettre à jour ordre de la tournée
       const updateOrderClientsPromises = async () => {
         // Créez un tableau pour stocker les promesses
-        console.log("Tournee  => " + idInInteger);
         const promises: Promise<void>[] = [];
         let arrayPassage: OrdrePassage[] = [];
         for (const [index, element] of clientOrder.entries()) {
@@ -207,7 +161,6 @@ const UpdateTournee: React.FC = () => {
           };
           arrayPassage.push(passage);
         }
-        console.log("à l'API " + JSON.stringify(arrayPassage));
 
         // Ajoutez la promesse à votre tableau
         const response = await fetch(

@@ -60,9 +60,6 @@ const UpdateLivreur: React.FC = () => {
         isAdmin: estAdmin,
         password: password
       };
-
-      console.log({livreurData})
-
       // Send a POST request to the API
       fetch(`http://localhost:8080/user/${email}`, {
         method: "PUT",
@@ -78,7 +75,6 @@ const UpdateLivreur: React.FC = () => {
           return response.text();
         })
         .then((data) => {
-          console.log("Livreur a été modifié avec succès:", data);
           // Reset form error state
           setFormError(null);
           window.location.href = "/livreurs";

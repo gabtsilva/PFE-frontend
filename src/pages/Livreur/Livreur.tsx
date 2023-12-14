@@ -34,7 +34,6 @@ const Livreur: React.FC = () => {
 
   let state = checkUserState();
 
-  console.log({livreurs});
   if (state === "user") {
     return <Redirect to="/tournees" />;
   } else if (state === "admin") {
