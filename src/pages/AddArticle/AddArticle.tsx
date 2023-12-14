@@ -34,7 +34,7 @@ const AddArticle: React.FC = () => {
       };
       console.log(JSON.stringify(articleData));
       // Send a POST request to the API
-      fetch("https://bf9b-193-190-75-175.ngrok-free.app/article", {
+      fetch("http://20.126.131.212:8080/article", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

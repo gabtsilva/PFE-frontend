@@ -78,7 +78,7 @@ const AddTournee: React.FC = () => {
 
   useEffect(() => {
     // Effect hook to retrieve client data from the API
-    fetch("https://bf9b-193-190-75-175.ngrok-free.app/client")
+    fetch("http://20.126.131.212:8080/client")
       .then((response) => response.json())
       .then((data) => {
         setClients(data);
@@ -90,7 +90,7 @@ const AddTournee: React.FC = () => {
 
   useEffect(() => {
     // Effect hook to retrieve client data from the API
-    fetch("https://bf9b-193-190-75-175.ngrok-free.app/vehicle")
+    fetch("http://20.126.131.212:8080/vehicle")
       .then((response) => response.json())
       .then((data) => {
         setlistVehicule(data);
@@ -111,7 +111,7 @@ const AddTournee: React.FC = () => {
       setFormError(null);
 
       // Ajouter la nouvelle tournée
-      const responseTournee = await fetch("https://bf9b-193-190-75-175.ngrok-free.app/tour", {
+      const responseTournee = await fetch("http://20.126.131.212:8080/tour", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -150,7 +150,7 @@ const AddTournee: React.FC = () => {
 
         // Ajoutez la promesse à votre tableau
         const response = await fetch(
-          `https://bf9b-193-190-75-175.ngrok-free.app/tour/${newTournee.id}/createTourOrder`,
+          `http://20.126.131.212:8080/tour/${newTournee.id}/createTourOrder`,
           {
             method: "POST",
             headers: {
@@ -191,7 +191,7 @@ const AddTournee: React.FC = () => {
 
         // Ajoutez la promesse à votre tableau
         const response = await fetch(
-          `https://bf9b-193-190-75-175.ngrok-free.app/tour/${newTournee.id}/tourExecution`,
+          `http://20.126.131.212:8080/tour/${newTournee.id}/tourExecution`,
           {
             method: "POST",
             headers: {

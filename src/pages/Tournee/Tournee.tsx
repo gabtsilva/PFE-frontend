@@ -52,14 +52,14 @@ const Tournee: React.FC = () => {
   const [tourneesExecUser, setTourneesExecUser] = useState<TourneeExec[]>([]);
 
   useEffect(() => {
-    fetch("https://bf9b-193-190-75-175.ngrok-free.app/tour")
+    fetch("http://20.126.131.212:8080/tour")
       .then((response) => response.json())
       .then((data) => {
         setTournees(data);
 
         // Fetch clients for each tournee
         const fetchClients = data.map((tournee: Tournee) =>
-          fetch(`https://bf9b-193-190-75-175.ngrok-free.app/client/tour/${tournee.id}`)
+          fetch(`http://20.126.131.212:8080/client/tour/${tournee.id}`)
             .then((response) => response.json())
             .then((clients) => {
               setClientsByTournee((prevClients) => ({

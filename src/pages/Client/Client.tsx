@@ -45,7 +45,7 @@ const Client: React.FC = () => {
   const [search, setSearch] = useState("");
   useEffect(() => {
     // Effect hook to retrieve client data from the API
-    fetch("https://bf9b-193-190-75-175.ngrok-free.app/client")
+    fetch("http://20.126.131.212:8080/client")
       .then((response) => response.json())
       .then((data) => {
         setClients(data);
@@ -61,7 +61,7 @@ const Client: React.FC = () => {
   const fetchTournes = (tourIds: number[]) => {
     // Fetch tour data for each tour ID
     const promises = tourIds.map((id) => {
-      return fetch(`https://bf9b-193-190-75-175.ngrok-free.app/tour/${id}`)
+      return fetch(`http://20.126.131.212:8080/tour/${id}`)
         .then((response) => response.json())
         .then((data) => {
           return data; // Assuming data is a string, modify this based on your API response

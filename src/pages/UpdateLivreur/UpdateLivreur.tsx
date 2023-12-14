@@ -25,7 +25,7 @@ const UpdateLivreur: React.FC = () => {
   const { email } = useParams<{ email: string }>();
 
   useEffect(() => {
-    fetch(`https://bf9b-193-190-75-175.ngrok-free.app/user/${email}`)
+    fetch(`http://20.126.131.212:8080/user/${email}`)
       .then((response) => response.json())
       .then((data) => {
         // Update the state with the retrieved data
@@ -64,7 +64,7 @@ const UpdateLivreur: React.FC = () => {
       console.log({livreurData})
 
       // Send a POST request to the API
-      fetch(`https://bf9b-193-190-75-175.ngrok-free.app/user/${email}`, {
+      fetch(`http://20.126.131.212:8080/user/${email}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

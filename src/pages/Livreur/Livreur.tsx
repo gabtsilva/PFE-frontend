@@ -20,7 +20,7 @@ const Livreur: React.FC = () => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch("https://bf9b-193-190-75-175.ngrok-free.app/user/delivery")
+    fetch("http://20.126.131.212:8080/user/delivery")
       .then((response) => response.json())
       .then((data) => {
         setLivreurs(data);

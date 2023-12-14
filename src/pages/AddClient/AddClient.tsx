@@ -32,7 +32,7 @@ const AddClient: React.FC = () => {
 
   useEffect(() => {
     // Fetch tour data from the API
-    fetch("https://bf9b-193-190-75-175.ngrok-free.app/tour")
+    fetch("http://20.126.131.212:8080/tour")
       .then((response) => response.json())
       .then((data) => {
         // Extracting tour names from the data
@@ -68,10 +68,10 @@ const AddClient: React.FC = () => {
         childrenQuantity: nombreEnfants,
         tour: trouneeChoisie,
       };
-      console.log("https://bf9b-193-190-75-175.ngrok-free.app/client");
+      console.log("http://20.126.131.212:8080/client");
       console.log(JSON.stringify(clientData));
       // Send a POST request to the API
-      fetch("https://bf9b-193-190-75-175.ngrok-free.app/client", {
+      fetch("http://20.126.131.212:8080/client", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

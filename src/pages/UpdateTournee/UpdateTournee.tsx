@@ -68,14 +68,14 @@ const UpdateTournee: React.FC = () => {
 
   useEffect(() => {
     // Effect hook to retrieve client data from the API
-    fetch(`https://bf9b-193-190-75-175.ngrok-free.app/tour/${id}`)
+    fetch(`http://20.126.131.212:8080/tour/${id}`)
       .then((response) => response.json())
       .then((data) => {
         // Update the state with the retrieved data
         setNom(data.name || "");
       });
 
-    fetch("https://bf9b-193-190-75-175.ngrok-free.app/client")
+    fetch("http://20.126.131.212:8080/client")
       .then((response) => response.json())
       .then((data) => {
         setClients(data);
@@ -85,7 +85,7 @@ const UpdateTournee: React.FC = () => {
       )
       .then(() => {});
 
-    fetch(`https://bf9b-193-190-75-175.ngrok-free.app/tour/${id}/getTourOrder`)
+    fetch(`http://20.126.131.212:8080/tour/${id}/getTourOrder`)
       .then((response) => response.json())
       .then((data) => {
         setOrderTournee(data || []);
@@ -133,7 +133,7 @@ const UpdateTournee: React.FC = () => {
       console.log(JSON.stringify(tourneeData));
       // Ajouter la nouvelle tournée
       const responseTournee = await fetch(
-        `https://bf9b-193-190-75-175.ngrok-free.app/tour/${idInInteger}`,
+        `http://20.126.131.212:8080/tour/${idInInteger}`,
         {
           method: "PUT",
           headers: {
@@ -168,7 +168,7 @@ const UpdateTournee: React.FC = () => {
           tour: idInInteger,
         };
         const responseUpdateClient = await fetch(
-          `https://bf9b-193-190-75-175.ngrok-free.app/client/${listIdClientSelected[indexGood].id}`,
+          `http://20.126.131.212:8080/client/${listIdClientSelected[indexGood].id}`,
           {
             method: "PUT",
             headers: {
@@ -211,7 +211,7 @@ const UpdateTournee: React.FC = () => {
 
         // Ajoutez la promesse à votre tableau
         const response = await fetch(
-          `https://bf9b-193-190-75-175.ngrok-free.app/tour/${idInInteger}/modifyTourOrder`,
+          `http://20.126.131.212:8080/tour/${idInInteger}/modifyTourOrder`,
           {
             method: "PUT",
             headers: {
