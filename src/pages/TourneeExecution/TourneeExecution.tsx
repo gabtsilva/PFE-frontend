@@ -83,7 +83,7 @@ const TourneeExecution: React.FC = () => {
                   <th>Nom de l'article</th>
                   <th>Quantité de base</th>
                   <th>Quantité livrée</th>
-                  <th>Quantité surplus Restant</th>
+                  <th>Quantité de stock restant</th>
                 </tr>
               </thead>
               <tbody>
