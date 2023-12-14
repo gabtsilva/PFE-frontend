@@ -82,7 +82,7 @@ const UpdateArticle: React.FC = () => {
           console.log("Article a été modifié avec succès:", data);
           // Reset form error state
           setFormError(null);
-          //window.location.href = "/articles";
+          window.location.href = "/articles";
         })
         .catch((error) => {
           console.error("Erreur lors de la modification du Article:", error);
