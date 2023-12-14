@@ -681,7 +681,12 @@ const TourneeLivreur: React.FC = () => {
                           </div>
                         ))}
                       </div>
-
+                      <IonButton
+                        routerLink={`/tourneeExecution/${maTournee.id}`}
+                        routerDirection="none"
+                      >
+                        En savoir plus
+                      </IonButton>
                       <IonButton
                         color="danger"
                         onClick={() => finirTournee(maTournee.id)}
