@@ -155,7 +155,7 @@ const UpdateClient: React.FC = () => {
     }else if(type == "e"){
       const inputs = document.querySelectorAll('input[name^="modify-e-"]');
       inputs.forEach((input) => {
-        let object = {id: input.name.split("-")[2], value:input.value - parseInt(input.placeholder)};
+        let object = {id: input.name.split("-")[2], value:input.value};
         arrCons.push(object);
       });
     }
@@ -227,15 +227,12 @@ const UpdateClient: React.FC = () => {
       }
     });
     for (const elem of arrCons) {
-      console.log(elem);
       fetch(`http://localhost:8080/order/${id}/addArticle/${elem.id}/${elem.value}`,{method:"POST"})
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
           });
     }
     openModal();
-    history.replace(`/client/update/${id}`);
   }
 
   const createOrder = () => {
@@ -397,10 +394,9 @@ const UpdateClient: React.FC = () => {
                         </td>
                         <td>
                           <IonInput
-                              placeholder={order.plannedQuantity}
                               name={"modify-e-" + articles.find((article) => article.id === order.articleId)?.id}
                               type="number"
-                              value={order.changedQuantity + order.plannedQuantity}
+                              value={order.changedQuantity}
                               required
                           />
                         </td>
@@ -409,19 +405,20 @@ const UpdateClient: React.FC = () => {
                   ))}
                   </tbody>
                 </table></>)}
-                <IonRow>
-                  <IonCol size="auto">
+                <IonRow className="ion-justify-content-between">
+                  <IonCol className="ion-justify-content-between">
                     {!hasCommand ? (<IonButton size="small" shape="round" color="success" onClick={createOrder}>
                       Créer une commande
                     </IonButton>) : (<><IonButton size="small" shape="round" color="success" onClick={openModal}>
                       Ajouter un article
                     </IonButton>
+                      <IonButton size="small" shape="round" color="danger" onClick={() => updateQuantity("c")}>
+                      Modification définitive
+                    </IonButton>
                       <IonButton size="small" shape="round" color="primary" onClick={() => updateQuantity("e")}>
                     Modification ponctuelle
                   </IonButton>
-                  <IonButton size="small" shape="round" color="danger" onClick={() => updateQuantity("c")}>
-                    Modification définitive
-                  </IonButton></>) }
+</>) }
                   </IonCol>
                 </IonRow>
               </IonCol>
