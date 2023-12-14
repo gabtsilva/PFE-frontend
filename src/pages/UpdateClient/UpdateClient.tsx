@@ -233,6 +233,7 @@ const UpdateClient: React.FC = () => {
           });
     }
     openModal();
+    window.location.reload();
   }
 
   const createOrder = () => {
