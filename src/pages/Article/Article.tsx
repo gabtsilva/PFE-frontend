@@ -16,7 +16,7 @@ import "./Article.css";
 import React, { useEffect, useState } from "react";
 import AddElement from "../../components/AddElement/AddElement";
 import checkUserState from "../../utils/checkUserState";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 interface Article {
   id: number;
@@ -39,39 +39,39 @@ const Article: React.FC = () => {
       );
   }, []);
   let state = checkUserState();
-  if(state == "user"){
-    return <Redirect to="/tournees" />
-  }else if(state == "admin") {
+  if (state == "user") {
+    return <Redirect to="/tournees" />;
+  } else if (state == "admin") {
     return (
-        <>
-          <IonContent>
-            <IonGrid>
-              <AddElement nom="article"/>
-              <IonRow>
-                {articles.map((article) => (
-                    <IonCol size="12" size-md="6" key={article.id}>
-                      <IonCard>
-                        <IonIcon icon={cube}></IonIcon>
-                        <IonButton
-                            className="edit"
-                            routerLink={`/article/update/${article.id}`}
-                            routerDirection="none"
-                        >
-                          <IonIcon icon={pencilOutline}></IonIcon>
-                        </IonButton>
-                        <IonCardHeader>
-                          <IonCardTitle>{article.name}</IonCardTitle>
-                        </IonCardHeader>
-                      </IonCard>
-                    </IonCol>
-                ))}
-              </IonRow>
-            </IonGrid>
-          </IonContent>
-        </>
+      <>
+        <IonContent>
+          <IonGrid>
+            <AddElement nom="article" icone={cube} />
+            <IonRow>
+              {articles.map((article) => (
+                <IonCol size="12" size-md="6" key={article.id}>
+                  <IonCard>
+                    <IonIcon icon={cube}></IonIcon>
+                    <IonButton
+                      className="edit"
+                      routerLink={`/article/update/${article.id}`}
+                      routerDirection="none"
+                    >
+                      <IonIcon icon={pencilOutline}></IonIcon>
+                    </IonButton>
+                    <IonCardHeader>
+                      <IonCardTitle>{article.name}</IonCardTitle>
+                    </IonCardHeader>
+                  </IonCard>
+                </IonCol>
+              ))}
+            </IonRow>
+          </IonGrid>
+        </IonContent>
+      </>
     );
-  }else{
-    return <Redirect to="/login" />
+  } else {
+    return <Redirect to="/login" />;
   }
 };
 
