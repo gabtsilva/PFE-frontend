@@ -82,7 +82,7 @@ const UpdateArticle: React.FC = () => {
           console.log("Article a été modifié avec succès:", data);
           // Reset form error state
           setFormError(null);
-          window.location.href = "/articles";
+          //window.location.href = "/articles";
         })
         .catch((error) => {
           console.error("Erreur lors de la modification du Article:", error);
@@ -120,6 +120,11 @@ const UpdateArticle: React.FC = () => {
                   onIonChange={(e) => setPourcenatge(parseInt(e.detail.value!))}
                 />
               </IonItem>
+            </IonCol>
+          </IonRow>
+
+          <IonRow className="ion-justify-content-center button-send">
+            <IonCol size="12">
               <IonButton onClick={handleAjouterClick}>
                 Modifier l'article
               </IonButton>
