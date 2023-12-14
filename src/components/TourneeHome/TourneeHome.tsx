@@ -398,6 +398,13 @@ const TourneeHome: React.FC = () => {
                         )}
                       </tbody>
                     </table>
+
+                    <IonButton
+                      routerLink={`/tourneeExecution/${tourneeExecUser.id}`}
+                      routerDirection="none"
+                    >
+                      En savoir plus
+                    </IonButton>
                   </IonCardContent>
                 </IonCard>
               </IonCol>
