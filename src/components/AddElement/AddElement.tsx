@@ -11,7 +11,7 @@ interface AddElementProps {
 const AddElement: React.FC<AddElementProps> = ({ nom, icone }) => {
   return (
     <>
-      <IonRow className="row-button">
+      <IonRow className="row-button button-add">
         <IonButton size="default" routerLink={`/${nom}/add`} routerDirection="none">
             <IonIcon className="ion-padding-end" color="white" icon={icone}/>Ajouter un {nom}
          </IonButton>
