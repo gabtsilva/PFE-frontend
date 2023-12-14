@@ -1,0 +1,9 @@
+.grid-tournee ion-row.ios {
+  align-items: flex-start;
+}
+.no-border {
+  border-bottom: 0;
+}
+.select-option-clients {
+  margin-top: 25px;
+}

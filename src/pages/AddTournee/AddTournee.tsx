@@ -15,6 +15,7 @@ import {
   IonReorderGroup,
   IonReorder,
   ItemReorderEventDetail,
+  IonDatetime,
 } from "@ionic/react";
 
 import "./AddTournee.css";
@@ -41,12 +42,21 @@ interface OrdrePassage {
   order: number;
 }
 
+interface TourneeExec {
+  state: string;
+  deliveryPerson: string | null;
+  vehicleId: number;
+  tourId: number;
+  executionDate: string | null;
+}
+
 const AddTournee: React.FC = () => {
   const [nom, setNom] = useState<string>("");
   const [clients, setClients] = useState<Client[]>([]);
   const [formError, setFormError] = useState<string | null>(null);
   const [clientsSelected, setClientsSelected] = useState<number[]>([]);
   const [clientOrder, setClientOrder] = useState<number[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string>();
 
   function handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
     const newClientsOrder = event.detail.complete(clientsSelected);
@@ -101,46 +111,6 @@ const AddTournee: React.FC = () => {
         return a.id - b.id;
       });
 
-      // Mettre à jour la tournée pour chaque client sélectionné
-      const updateClientsPromises = clientOrder.map(async (index) => {
-        /*
-        let indexGood = index - 1;
-        //console.log(JSON.stringify(clients));
-        console.log("for client id : ", clientOrder[indexGood]);
-
-        console.log(JSON.stringify(listIdClientSelected[indexGood]));
-
-        const clientData = {
-          id: listIdClientSelected[indexGood].id,
-          address: listIdClientSelected[indexGood].address,
-          name: listIdClientSelected[indexGood].name,
-          phoneNumber: listIdClientSelected[indexGood].phoneNumber,
-          childrenQuantity: listIdClientSelected[indexGood].childrenQuantity,
-          tour: newTournee.id,
-        };
-        const responseUpdateClient = await fetch(
-          `http://localhost:8080/client/${listIdClientSelected[indexGood].id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(clientData),
-          }
-        );
-
-        if (!responseUpdateClient.ok) {
-          console.error(
-            `Erreur lors de la mise à jour du client ${listIdClientSelected[indexGood].id}`
-          );
-        } else {
-          console.log(
-            `Client ${listIdClientSelected[indexGood].id} mis à jour avec succès.`
-          );
-        }
-        console.log("update client fini"); */
-      });
-
       const updateOrderClientsPromises = async () => {
         // Créez un tableau pour stocker les promesses
         console.log("Tournee  => " + newTournee.id);
@@ -180,14 +150,54 @@ const AddTournee: React.FC = () => {
         // Retournez le tableau de promesses
         return promises;
       };
+
+      const createExecution = async () => {
+        // Créez un tableau pour stocker les promesses
+        console.log("Tournee  => " + newTournee.id);
+        const promises: Promise<void>[] = [];
+        console.log(
+          "à l'API date :" + selectedDate + " " + typeof selectedDate
+        );
+        let tourneeExec: TourneeExec = {
+          executionDate: selectedDate ? selectedDate : null,
+          state: "prévue",
+          deliveryPerson: null,
+          vehicleId: 1,
+          tourId: newTournee.id,
+        };
+
+        console.log(JSON.stringify(tourneeExec));
+
+        // Ajoutez la promesse à votre tableau
+        const response = await fetch(
+          `http://localhost:8080/tour/${newTournee.id}/tourExecution`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(tourneeExec), // Notez que le body doit être un tableau
+          }
+        );
+
+        // Vérifiez la réponse et lancez une erreur si nécessaire
+        if (!response.ok) {
+          throw new Error(`Erreur lors de la requête: ${response.statusText}`);
+        }
+
+        // Ajoutez la promesse à votre tableau
+        promises.push(Promise.resolve());
+
+        // Retournez le tableau de promesses
+        return promises;
+      };
       // Utilisez directement la fonction pour obtenir le tableau de promesses
       // Attendre que toutes les mises à jour des clients soient terminées
-      await Promise.all(updateClientsPromises).then(async () => {
-        const promisesArray: Promise<void>[] =
-          await updateOrderClientsPromises();
-        // Passez le tableau de promesses à Promise.all
-        await Promise.all(promisesArray);
-      });
+
+      const promisesArray: Promise<void>[] = await updateOrderClientsPromises();
+      await createExecution();
+      // Passez le tableau de promesses à Promise.all
+      await Promise.all(promisesArray);
     } catch (error) {
       console.error("Erreur lors de l'ajout de la tournée:", error);
       setFormError("Une erreur s'est produite lors de l'ajout de la tournée.");
@@ -196,13 +206,28 @@ const AddTournee: React.FC = () => {
     //window.location.href = "/tournees";
   };
 
+  const dateChanged = (value: any) => {
+    const dateObject = new Date(value);
+
+    // Extraction des composants
+    const year = dateObject.getFullYear();
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0"); // Les mois commencent à 0
+    const day = dateObject.getDate().toString().padStart(2, "0");
+
+    // Création de la nouvelle chaîne de date au format "YYYY-MM-DD"
+    const formattedDate = `${year}-${month}-${day}`;
+
+    console.log("good : " + formattedDate);
+    setSelectedDate(formattedDate);
+  };
+
   let state = checkUserState();
   if (state == "user") {
     return <Redirect to="/tournees" />;
   } else if (state == "admin") {
     return (
       <IonContent>
-        <IonGrid>
+        <IonGrid className="grid-tournee">
           <h1 className="titre-ajout">Ajouter une tournée</h1>
           <IonRow>
             <IonCol size="12" size-md="6">
@@ -215,11 +240,27 @@ const AddTournee: React.FC = () => {
                   onIonChange={(e) => setNom(e.detail.value!)}
                 />
               </IonItem>
+              <br></br>
+              <IonItem className="no-border">
+                <IonDatetime
+                  onIonChange={(e) => dateChanged(e.detail.value)}
+                  locale="en-US"
+                  showDefaultButtons={true}
+                  min="2023"
+                  max="2024"
+                  className="calendar"
+                  presentation="date"
+                >
+                  <span slot="title">Jour de la 1er livrai</span>
+                </IonDatetime>
+              </IonItem>
+              <p>laissez vide pour le rendre actif aujourd'hui</p>
             </IonCol>
             <IonCol size="12" size-md="6">
               <IonList>
                 <IonItem>
                   <IonSelect
+                    className="select-option-clients"
                     aria-label="Client"
                     placeholder="Selectionner un/des client(s)"
                     onIonChange={(ev) =>

@@ -240,7 +240,7 @@ const UpdateTournee: React.FC = () => {
       setFormError("Une erreur s'est produite lors de l'ajout de la tournée.");
     }
 
-    //window.location.href = "/tournees";
+    window.location.href = "/tournees";
   };
 
   let state = checkUserState();
@@ -250,7 +250,7 @@ const UpdateTournee: React.FC = () => {
     return (
       <IonContent>
         <IonGrid>
-          <h1 className="titre-ajout">Ajouter une tournée</h1>
+          <h1 className="titre-ajout">Mettre à jour une tournée</h1>
           <IonRow>
             <IonCol size="12" size-md="6">
               <IonItem>
@@ -324,7 +324,7 @@ const UpdateTournee: React.FC = () => {
           <IonRow className="ion-justify-content-center button-send">
             <IonCol size="12">
               <IonButton onClick={handleAjouterClick}>
-                Ajouter une tournée
+                Mettre à jour une tournée
               </IonButton>
               <p>{formError}</p>
             </IonCol>
