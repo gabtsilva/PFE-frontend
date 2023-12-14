@@ -120,17 +120,17 @@ const TourneeHome: React.FC = () => {
       // Fetch other data only if tourneesExecUser has data
       const fetchTournees = tourneesExecUser.map((tourneeExecUser) =>
         fetch(
-          `http://localhost:8080/tourExecution/${tourneeExecUser.tourId}/getClientDeliveredBool`
+          `http://localhost:8080/tourExecution/${tourneeExecUser.id}/getClientDeliveredBool`
         )
           .then((response) => response.json())
           .then((data) => {
             setListPassageParTournee((prevOrdrePassage) => ({
               ...prevOrdrePassage,
-              [tourneeExecUser.tourId]: data,
+              [tourneeExecUser.id]: data,
             }));
           })
       );
-      
+
       const infoPassage = tourneesExecUser.map((tourneeExecUser) =>
         fetch(`http://localhost:8080/tour/${tourneeExecUser.tourId}`)
           .then((response) => response.json())
@@ -148,7 +148,7 @@ const TourneeHome: React.FC = () => {
           .then((ordrePassage) => {
             setOrdrePassageTournee((prevOrdrePassage) => ({
               ...prevOrdrePassage,
-              [tourneeExecUser.tourId]: ordrePassage,
+              [tourneeExecUser.id]: ordrePassage,
             }));
           })
       );
@@ -194,7 +194,7 @@ const TourneeHome: React.FC = () => {
 
       const fetchCommandes = tourneesExecUser.map((tourneeExecUser) =>
         fetch(
-          `http://localhost:8080/tour/${tourneeExecUser.tourId}/tourExecution/allArticles`
+          `http://localhost:8080/tour/${tourneeExecUser.id}/tourExecution/allArticles`
         )
           .then((response) => response.json())
           .then((commandes) => {
@@ -206,7 +206,7 @@ const TourneeHome: React.FC = () => {
             );
             setCommandesByTourneeExec((prevCommandes) => ({
               ...prevCommandes,
-              [tourneeExecUser.tourId]: commandes,
+              [tourneeExecUser.id]: commandes,
             }));
           })
       );
@@ -253,12 +253,6 @@ const TourneeHome: React.FC = () => {
     });
   }, [tourneesExecUser]);
 
-  const handleClick = (id: number) => {
-    // Mettez le code que vous voulez exécuter ici
-    console.log("Bouton cliqué ! " + id);
-    console.log(JSON.stringify(ordrePassageTournee[id]));
-  };
-
   // Fonction pour générer le lien vers les détails de l'utilisateur
   const generateUserLink = (deliveryPerson: string) => {
     if (!deliveryPerson) {
@@ -291,7 +285,7 @@ const TourneeHome: React.FC = () => {
                     <IonCardTitle>
                       {
                         tournees.find(
-                          (tournee) => tournee.id === tourneeExecUser.id
+                          (tournee) => tournee.id === tourneeExecUser.tourId
                         )?.name
                       }
                     </IonCardTitle>
@@ -384,10 +378,6 @@ const TourneeHome: React.FC = () => {
                         )}
                       </tbody>
                     </table>
-
-                    <IonButton onClick={() => handleClick(tourneeExecUser.id)}>
-                      En savoir plus
-                    </IonButton>
                   </IonCardContent>
                 </IonCard>
               </IonCol>

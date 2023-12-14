@@ -171,6 +171,7 @@ const TourneeLivreur: React.FC = () => {
       fetch(`http://localhost:8080/tour/${tourneeExecUser.tourId}/getTourOrder`)
         .then((response) => response.json())
         .then((ordrePassage) => {
+          console.log("LE TOUR ID ====> " + tourneeExecUser.tourId);
           const sortedOrdrePassage = ordrePassage.sort(
             (a: { order: number }, b: { order: number }) => a.order - b.order
           );
@@ -182,7 +183,7 @@ const TourneeLivreur: React.FC = () => {
             [tourneeExecUser.tourId]: sortedOrdrePassage,
           }));
 
-          sortedOrdrePassage.map((item: { clientId: any }) =>
+          ordrePassage.map((item: { clientId: any }) =>
             fetch(`http://localhost:8080/client/${item.clientId}`)
               .then((response) => response.json())
               .then((clientDetails) => {
@@ -216,21 +217,21 @@ const TourneeLivreur: React.FC = () => {
           .then((ordrePassage) => {
             setOrdrePassageTournee((prevOrdrePassage) => ({
               ...prevOrdrePassage,
-              [tourneeExecUser.tourId]: ordrePassage,
+              [tourneeExecUser.id]: ordrePassage,
             }));
           })
       );
 
       const fetchCommandes = tourneesExecUser.map((tourneeExecUser) =>
         fetch(
-          `http://localhost:8080/tour/${tourneeExecUser.tourId}/tourExecution/allArticles`
+          `http://localhost:8080/tour/${tourneeExecUser.id}/tourExecution/allArticles`
         )
           .then((response) => response.json())
           .then((commandes) => {
             console.log("All articles : ", JSON.stringify(commandes));
             setCommandesByTourneeExec((prevCommandes) => ({
               ...prevCommandes,
-              [tourneeExecUser.tourId]: commandes,
+              [tourneeExecUser.id]: commandes,
             }));
           })
       );
@@ -401,7 +402,8 @@ const TourneeLivreur: React.FC = () => {
                           <IonCardTitle>
                             {
                               tournees.find(
-                                (tournee) => tournee.id === tourneeExecUser.id
+                                (tournee) =>
+                                  tournee.id === tourneeExecUser.tourId
                               )?.name
                             }
                           </IonCardTitle>
