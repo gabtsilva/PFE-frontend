@@ -367,6 +367,12 @@ const TourneeLivreur: React.FC = () => {
     });
   };
 
+  const redirectToGoogleMaps = (address: string) => {
+    const encodedAddress = encodeURIComponent(address);
+    const googleMapsUrl = `https://www.google.com/maps/place/${encodedAddress}`;
+    window.open(googleMapsUrl, "_blank");
+  };
+
   const finirTournee = (id: number) => {
     fetch(`http://localhost:8080/tour/${id}/tourExecution/end`, {
       method: "POST",
@@ -436,10 +442,22 @@ const TourneeLivreur: React.FC = () => {
                                       }
                                     </td>
                                     <td>
-                                      {
-                                        clientsDetails[ordrePassage.clientId]
-                                          ?.address
-                                      }
+                                      <IonButton
+                                        className="button-map"
+                                        fill="clear"
+                                        onClick={() =>
+                                          redirectToGoogleMaps(
+                                            clientsDetails[
+                                              ordrePassage.clientId
+                                            ]?.address
+                                          )
+                                        }
+                                      >
+                                        {
+                                          clientsDetails[ordrePassage.clientId]
+                                            ?.address
+                                        }
+                                      </IonButton>
                                     </td>
                                   </tr>
                                 ))}
@@ -528,10 +546,21 @@ const TourneeLivreur: React.FC = () => {
                                   {clientsDetails[ordrePassage.clientId]?.name}
                                 </td>
                                 <td>
-                                  {
-                                    clientsDetails[ordrePassage.clientId]
-                                      ?.address
-                                  }
+                                  <IonButton
+                                    className="button-map"
+                                    fill="clear"
+                                    onClick={() =>
+                                      redirectToGoogleMaps(
+                                        clientsDetails[ordrePassage.clientId]
+                                          ?.address
+                                      )
+                                    }
+                                  >
+                                    {
+                                      clientsDetails[ordrePassage.clientId]
+                                        ?.address
+                                    }
+                                  </IonButton>
                                 </td>
                               </tr>
                             ))}

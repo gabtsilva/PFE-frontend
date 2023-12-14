@@ -265,35 +265,6 @@ const UpdateTournee: React.FC = () => {
             </IonCol>
             <IonCol size="12" size-md="6">
               <IonList>
-                <IonItem>
-                  <IonSelect
-                    aria-label="Food"
-                    placeholder="Selectionner un/des client(s)"
-                    onIonChange={(ev) =>
-                      console.log(
-                        "Current value:",
-                        JSON.stringify(ev.detail.value),
-                        setClientsSelected(ev.detail.value),
-                        setClientOrder(ev.detail.value)
-                      )
-                    }
-                    multiple={true}
-                    value={clientsSelected}
-                  >
-                    {clients.map((client) => (
-                      <IonSelectOption
-                        key={client.id}
-                        value={client.id}
-                        aria-selected={clientsSelected.includes(client.id)}
-                      >
-                        {client.name}
-                      </IonSelectOption>
-                    ))}
-                  </IonSelect>
-                </IonItem>
-              </IonList>
-
-              <IonList>
                 {/* The reorder gesture is disabled by default, enable it to drag and drop items */}
                 <IonLabel position="floating">Ordre de passage</IonLabel>
                 <IonReorderGroup

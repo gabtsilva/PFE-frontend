@@ -253,6 +253,12 @@ const TourneeHome: React.FC = () => {
     });
   }, [tourneesExecUser]);
 
+  const redirectToGoogleMaps = (address: string) => {
+    const encodedAddress = encodeURIComponent(address);
+    const googleMapsUrl = `https://www.google.com/maps/place/${encodedAddress}`;
+    window.open(googleMapsUrl, "_blank");
+  };
+
   // Fonction pour générer le lien vers les détails de l'utilisateur
   const generateUserLink = (deliveryPerson: string) => {
     if (!deliveryPerson) {
@@ -318,18 +324,32 @@ const TourneeHome: React.FC = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {ordrePassageTournee[tourneeExecUser.id]?.map(
-                          (ordrePassage) => (
+                        {ordrePassageTournee[tourneeExecUser.id]
+                          ?.sort((a, b) => a.order - b.order)
+                          .map((ordrePassage) => (
                             <tr key={ordrePassage.clientId}>
                               <td>
                                 {clientsDetails[ordrePassage.clientId]?.name}
                               </td>
                               <td>
-                                {clientsDetails[ordrePassage.clientId]?.address}
+                                <IonButton
+                                  className="button-map"
+                                  fill="clear"
+                                  onClick={() =>
+                                    redirectToGoogleMaps(
+                                      clientsDetails[ordrePassage.clientId]
+                                        ?.address
+                                    )
+                                  }
+                                >
+                                  {
+                                    clientsDetails[ordrePassage.clientId]
+                                      ?.address
+                                  }
+                                </IonButton>
                               </td>
                             </tr>
-                          )
-                        )}
+                          ))}
                       </tbody>
                     </table>
                     <p>Commandes dans cette tournée :</p>

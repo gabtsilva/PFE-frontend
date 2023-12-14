@@ -68,6 +68,7 @@ const AddClient: React.FC = () => {
         childrenQuantity: nombreEnfants,
         tour: trouneeChoisie,
       };
+      console.log("http://localhost:8080/client");
       console.log(JSON.stringify(clientData));
       // Send a POST request to the API
       fetch("http://localhost:8080/client", {

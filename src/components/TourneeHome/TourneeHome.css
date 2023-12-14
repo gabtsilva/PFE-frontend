@@ -17,3 +17,6 @@ ion-grid ion-icon {
 .clients-tour tbody .active-tr {
   background-color: greenyellow;
 }
+.clients-tour .button-map .button-native {
+  padding: 0;
+}

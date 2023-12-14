@@ -251,7 +251,7 @@ const AddTournee: React.FC = () => {
         <IonGrid className="grid-tournee">
           <h1 className="titre-ajout">Ajouter une tournée</h1>
           <IonRow>
-            <IonCol size="12" size-md="6">
+            <IonCol size="12" size-md="12">
               <IonItem>
                 <IonLabel position="floating">Nom de la tournée</IonLabel>
                 <IonInput
@@ -294,60 +294,6 @@ const AddTournee: React.FC = () => {
                   ))}
                 </IonSelect>
               </IonItem>
-            </IonCol>
-
-            <IonCol size="12" size-md="6">
-              <IonList>
-                <IonItem>
-                  <IonSelect
-                    className="select-option-clients"
-                    aria-label="Client"
-                    placeholder="Selectionner un/des client(s)"
-                    onIonChange={(ev) =>
-                      console.log(
-                        "Current value:",
-                        JSON.stringify(ev.detail.value),
-                        setClientsSelected(ev.detail.value),
-                        setClientOrder(ev.detail.value)
-                      )
-                    }
-                    multiple={true}
-                  >
-                    {clients.map((client) => (
-                      <IonSelectOption key={client.id} value={client.id}>
-                        {client.name}
-                      </IonSelectOption>
-                    ))}
-                  </IonSelect>
-                </IonItem>
-              </IonList>
-
-              <IonList>
-                {/* The reorder gesture is disabled by default, enable it to drag and drop items */}
-                <IonLabel position="floating">Ordre de passage</IonLabel>
-                <IonReorderGroup
-                  disabled={false}
-                  onIonItemReorder={handleReorder}
-                >
-                  {clientsSelected.map((selectedClientId) => {
-                    const client = clients.find(
-                      (c) => c.id === selectedClientId
-                    );
-
-                    return (
-                      <IonItem key={client?.id}>
-                        <IonButton
-                          routerLink={`/client/update/${client?.id}`}
-                          routerDirection="none"
-                        >
-                          <IonLabel>{client?.name}</IonLabel>
-                        </IonButton>
-                        <IonReorder slot="end"></IonReorder>
-                      </IonItem>
-                    );
-                  })}
-                </IonReorderGroup>
-              </IonList>
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center button-send">
