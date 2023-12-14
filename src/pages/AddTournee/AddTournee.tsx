@@ -50,6 +50,13 @@ interface TourneeExec {
   executionDate: string | null;
 }
 
+interface Vehicule {
+  id: number;
+  name: string;
+  plate: string;
+  maxQuantity: number;
+}
+
 const AddTournee: React.FC = () => {
   const [nom, setNom] = useState<string>("");
   const [clients, setClients] = useState<Client[]>([]);
@@ -57,6 +64,8 @@ const AddTournee: React.FC = () => {
   const [clientsSelected, setClientsSelected] = useState<number[]>([]);
   const [clientOrder, setClientOrder] = useState<number[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>();
+  const [selectedVehicule, setselectedVehicule] = useState<number>();
+  const [listVehicule, setlistVehicule] = useState<Vehicule[]>([]);
 
   function handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
     const newClientsOrder = event.detail.complete(clientsSelected);
@@ -79,9 +88,21 @@ const AddTournee: React.FC = () => {
       );
   }, []);
 
+  useEffect(() => {
+    // Effect hook to retrieve client data from the API
+    fetch("http://localhost:8080/vehicle")
+      .then((response) => response.json())
+      .then((data) => {
+        setlistVehicule(data);
+      })
+      .catch((error) =>
+        console.error("Erreur de chargement des données", error)
+      );
+  }, []);
+
   function secondRequest() {}
   const handleAjouterClick = async () => {
-    if (!nom) {
+    if (!nom || !selectedVehicule) {
       setFormError("Veuillez remplir tous les champs.");
       return;
     }
@@ -162,7 +183,7 @@ const AddTournee: React.FC = () => {
           executionDate: selectedDate ? selectedDate : null,
           state: "prévue",
           deliveryPerson: null,
-          vehicleId: 1,
+          vehicleId: selectedVehicule,
           tourId: newTournee.id,
         };
 
@@ -203,7 +224,7 @@ const AddTournee: React.FC = () => {
       setFormError("Une erreur s'est produite lors de l'ajout de la tournée.");
     }
 
-    //window.location.href = "/tournees";
+    window.location.href = "/tournees";
   };
 
   const dateChanged = (value: any) => {
@@ -255,7 +276,26 @@ const AddTournee: React.FC = () => {
                 </IonDatetime>
               </IonItem>
               <p>laissez vide pour le rendre actif aujourd'hui</p>
+              <br></br>
+              <IonItem>
+                <IonSelect
+                  className="select-option"
+                  aria-label="Vehicule"
+                  placeholder="Selectionner un véhicule"
+                  onIonChange={(ev) => {
+                    console.log("Current value CAR:", ev.detail.value);
+                    setselectedVehicule(ev.detail.value);
+                  }}
+                >
+                  {listVehicule.map((vehicle) => (
+                    <IonSelectOption key={vehicle.id} value={vehicle.id}>
+                      {vehicle.name}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              </IonItem>
             </IonCol>
+
             <IonCol size="12" size-md="6">
               <IonList>
                 <IonItem>
