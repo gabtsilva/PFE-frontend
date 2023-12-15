@@ -105,7 +105,6 @@ const TourneeHome: React.FC = () => {
           setTourneesExecUser(data);
           setSontUniquementDesPrevues(false);
         }
-
       })
       .catch((error) =>
         console.error("Erreur de chargement des données tournées", error)
@@ -172,7 +171,6 @@ const TourneeHome: React.FC = () => {
                     ...prevClientsDetails,
                     [item.clientId]: clientDetails,
                   }));
-
                 })
             );
           })
@@ -311,9 +309,8 @@ const TourneeHome: React.FC = () => {
                                 {clientsDetails[ordrePassage.clientId]?.name}
                               </td>
                               <td>
-                                <IonButton
+                                <a
                                   className="button-map"
-                                  fill="clear"
                                   onClick={() =>
                                     redirectToGoogleMaps(
                                       clientsDetails[ordrePassage.clientId]
@@ -325,7 +322,7 @@ const TourneeHome: React.FC = () => {
                                     clientsDetails[ordrePassage.clientId]
                                       ?.address
                                   }
-                                </IonButton>
+                                </a>
                               </td>
                             </tr>
                           ))}
@@ -368,9 +365,7 @@ const TourneeHome: React.FC = () => {
                             <tr className={passage.delivred ? "active-tr" : ""}>
                               <td>{passage.name}</td>
                               <td>
-                                {passage.delivred
-                                  ? "Livré"
-                                  : "En attente"}{" "}
+                                {passage.delivred ? "Livré" : "En attente"}{" "}
                               </td>
                             </tr>
                           )
