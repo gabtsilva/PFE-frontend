@@ -10,6 +10,7 @@ import {
   IonIcon,
   IonButton,
   IonCardSubtitle,
+  useIonToast,
 } from "@ionic/react";
 import { walk, pencilOutline } from "ionicons/icons";
 import "./TourneeLivreur.css";
@@ -94,6 +95,7 @@ const TourneeLivreur: React.FC = () => {
     Record<number, commandesByClient[]>
   >({}); // copy de commandesByClient à renvoyer
   const [clickedClientId, setClickedClientId] = useState<number | null>(null);
+  const [present] = useIonToast();
 
   const [inputValues, setInputValues] = useState<{ [key: number]: number[] }>(
     {}
@@ -132,7 +134,6 @@ const TourneeLivreur: React.FC = () => {
         if (data.length > 0) {
           if (data[data.length - 1].state != "finie") {
             setMaTournee(data[data.length - 1]);
-
           } else {
             setTourneeDeUser([]);
           }
@@ -144,8 +145,7 @@ const TourneeLivreur: React.FC = () => {
 
     // Wait for both fetch operations to complete
     Promise.all([fetchUserData, fetchUserTourneeData])
-      .then(() => {
-      })
+      .then(() => {})
       .catch((error) => console.error("Error during fetch operations", error));
   }, [userConnected]);
 
@@ -178,7 +178,6 @@ const TourneeLivreur: React.FC = () => {
             fetch(`http://localhost:8080/client/${item.clientId}`)
               .then((response) => response.json())
               .then((clientDetails) => {
-
                 setClientsDetails((prevClientsDetails) => ({
                   ...prevClientsDetails,
                   [item.clientId]: clientDetails,
@@ -331,6 +330,12 @@ const TourneeLivreur: React.FC = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       return response.text();
+    });
+    present({
+      message: "Livraison validée !",
+      duration: 2500,
+      position: "bottom",
+      color:"success"
     });
   };
 

@@ -164,7 +164,14 @@ const UpdateClient: React.FC = () => {
         fetch(`http://localhost:8080/order/${id}/addArticle/${elem.id}/${elem.value}`,{method:"POST"})
             .then((response) => response.json())
             .then((data) => {
+
               window.location.reload();
+            });
+            present({
+              message: "La quantité définitive a été mise à jour !",
+              duration: 2500,
+              position: "bottom",
+              color:"success"
             });
       });
     }else if (type == "e"){
@@ -172,7 +179,14 @@ const UpdateClient: React.FC = () => {
         fetch(`http://localhost:8080/order/${id}/modify/${elem.id}/${elem.value}`,{method:"POST"})
             .then((response) => response.json())
             .then((data) => {
+
               window.location.reload();
+            });
+            present({
+              message: "La quantité pour la prochaine livraison a été mise à jour !",
+              duration: 2500,
+              position: "bottom",
+              color:"success"
             });
       });
     }

@@ -58,7 +58,7 @@ const AddLivreur: React.FC = () => {
         .then((data) => {
           // Reset form error state
           setFormError(null);
-          //window.location.href = "/livreurs";
+          window.location.href = "/livreurs";
         })
         .catch((error) => {
           console.error("Erreur lors de l'ajout du livreur:", error);
@@ -127,17 +127,17 @@ const AddLivreur: React.FC = () => {
                 <IonSelect
                   className="select-option"
                   aria-label="isAdmin"
-                  placeholder="Est admin ?"
+                  placeholder="Type d'utilisateur"
                   onIonChange={(ev) => {
                     console.log("Current value admin:", ev.detail.value);
                     setEstAdmin(ev.detail.value);
                   }}
                 >
                   <IonSelectOption key={0} value={false}>
-                    Non
+                    Livreur
                   </IonSelectOption>
                   <IonSelectOption key={1} value={true}>
-                    Oui
+                    Admin
                   </IonSelectOption>
                 </IonSelect>
               </IonItem>
