@@ -25,14 +25,11 @@ const AddArticle: React.FC = () => {
       return;
     } else {
       setFormError(null);
-      console.log("Nom:", nom);
-      console.log("Pourcentage:", pourcentage);
       // Prepare data in the required format
       const articleData = {
         name: nom,
         pourcentage: pourcentage / 100,
       };
-      console.log(JSON.stringify(articleData));
       // Send a POST request to the API
       fetch("http://20.126.131.212:8080/article", {
         method: "POST",
@@ -48,7 +45,6 @@ const AddArticle: React.FC = () => {
           return response.text();
         })
         .then((data) => {
-          console.log("Article ajouté avec succès:", data);
           // Reset form error state
           setFormError(null);
           window.location.href = "/articles";

@@ -32,7 +32,7 @@ const AddClient: React.FC = () => {
 
   useEffect(() => {
     // Fetch tour data from the API
-    fetch("http://20.126.131.212:8080/tour")
+    fetch("http://localhost:8080/tour")
       .then((response) => response.json())
       .then((data) => {
         // Extracting tour names from the data
@@ -50,16 +50,9 @@ const AddClient: React.FC = () => {
       return;
     } else {
       setFormError(null);
-      console.log("Nom:", nom);
-      console.log("Adress:", adress);
-      console.log("Phone:", phone);
-      console.log("Nombre d'enfants:", nombreEnfants);
       if (trouneeChoisie === undefined) {
         setTourneeChoisie(null);
       }
-
-      console.log("numéro de tournée:", trouneeChoisie);
-
       // Prepare data in the required format
       const clientData = {
         address: adress,
@@ -68,10 +61,8 @@ const AddClient: React.FC = () => {
         childrenQuantity: nombreEnfants,
         tour: trouneeChoisie,
       };
-      console.log("http://20.126.131.212:8080/client");
-      console.log(JSON.stringify(clientData));
       // Send a POST request to the API
-      fetch("http://20.126.131.212:8080/client", {
+      fetch("http://localhost:8080/client", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +76,6 @@ const AddClient: React.FC = () => {
           return response.text();
         })
         .then((data) => {
-          console.log("Client ajouté avec succès:", data);
           // Reset form error state
           setFormError(null);
           window.location.href = "/clients";

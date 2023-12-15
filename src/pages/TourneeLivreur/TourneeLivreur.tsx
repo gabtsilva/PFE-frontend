@@ -10,6 +10,7 @@ import {
   IonIcon,
   IonButton,
   IonCardSubtitle,
+  useIonToast,
 } from "@ionic/react";
 import { walk, pencilOutline } from "ionicons/icons";
 import "./TourneeLivreur.css";
@@ -94,6 +95,7 @@ const TourneeLivreur: React.FC = () => {
     Record<number, commandesByClient[]>
   >({}); // copy de commandesByClient à renvoyer
   const [clickedClientId, setClickedClientId] = useState<number | null>(null);
+  const [present] = useIonToast();
 
   const [inputValues, setInputValues] = useState<{ [key: number]: number[] }>(
     {}
@@ -104,7 +106,7 @@ const TourneeLivreur: React.FC = () => {
     let userData;
 
     // Fetching user data
-    const fetchUserData = fetch(`http://20.126.131.212:8080/auth/verify`, {
+    const fetchUserData = fetch(`http://localhost:8080/auth/verify`, {
       method: "POST",
       headers: {
         "Content-Type": "text/plain",
@@ -119,13 +121,12 @@ const TourneeLivreur: React.FC = () => {
       })
       .then((data) => {
         setUserConneted(data);
-        console.log("info user : " + data);
         userData = data;
       });
 
     // Fetching user tournee data
     const fetchUserTourneeData = fetch(
-      `http://20.126.131.212:8080/tourExecution/today/deliveryPerson/${userConnected}`
+      `http://localhost:8080/tourExecution/today/deliveryPerson/${userConnected}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -133,9 +134,6 @@ const TourneeLivreur: React.FC = () => {
         if (data.length > 0) {
           if (data[data.length - 1].state != "finie") {
             setMaTournee(data[data.length - 1]);
-            console.log(
-              "LA TOURNEES DE L'USER : " + JSON.stringify(data[data.length - 1])
-            );
           } else {
             setTourneeDeUser([]);
           }
@@ -147,17 +145,14 @@ const TourneeLivreur: React.FC = () => {
 
     // Wait for both fetch operations to complete
     Promise.all([fetchUserData, fetchUserTourneeData])
-      .then(() => {
-        console.log("Both fetch operations are completed");
-      })
+      .then(() => {})
       .catch((error) => console.error("Error during fetch operations", error));
   }, [userConnected]);
 
   useEffect(() => {
-    fetch("http://20.126.131.212:8080/tourExecution/today/state/prevue")
+    fetch("http://localhost:8080/tourExecution/today/state/prevue")
       .then((response) => response.json())
       .then((data) => {
-        console.log("MA DATA HEHEHEH " + JSON.stringify(data));
         setTourneesExecUser(data);
       })
       .catch((error) =>
@@ -168,28 +163,21 @@ const TourneeLivreur: React.FC = () => {
   useEffect(() => {
     // Dans votre useEffect pour récupérer l'ordre de passage pour chaque tournée
     const fetchOrdrePassageByName = tourneesExecUser.map((tourneeExecUser) =>
-      fetch(`http://20.126.131.212:8080/tour/${tourneeExecUser.tourId}/getTourOrder`)
+      fetch(`http://localhost:8080/tour/${tourneeExecUser.tourId}/getTourOrder`)
         .then((response) => response.json())
         .then((ordrePassage) => {
-          console.log("LE TOUR ID ====> " + tourneeExecUser.tourId);
           const sortedOrdrePassage = ordrePassage.sort(
             (a: { order: number }, b: { order: number }) => a.order - b.order
           );
-
-          console.log("Ordre passage : " + JSON.stringify(sortedOrdrePassage));
-
           setOrdrePassageTournee((prevOrdrePassage) => ({
             ...prevOrdrePassage,
             [tourneeExecUser.tourId]: sortedOrdrePassage,
           }));
 
           ordrePassage.map((item: { clientId: any }) =>
-            fetch(`http://20.126.131.212:8080/client/${item.clientId}`)
+            fetch(`http://localhost:8080/client/${item.clientId}`)
               .then((response) => response.json())
               .then((clientDetails) => {
-                console.log(
-                  "clients details : " + JSON.stringify(clientDetails)
-                );
                 setClientsDetails((prevClientsDetails) => ({
                   ...prevClientsDetails,
                   [item.clientId]: clientDetails,
@@ -201,7 +189,7 @@ const TourneeLivreur: React.FC = () => {
     if (tourneesExecUser.length > 0) {
       // Fetch other data only if tourneesExecUser has data
       const fetchTournees = tourneesExecUser.map((tourneeExecUser) =>
-        fetch(`http://20.126.131.212:8080/tour/${tourneeExecUser.tourId}`)
+        fetch(`http://localhost:8080/tour/${tourneeExecUser.tourId}`)
           .then((response) => response.json())
           .then((data) => {
             setTournees((prevTournees) => [...prevTournees, data]);
@@ -211,7 +199,7 @@ const TourneeLivreur: React.FC = () => {
       // Dans votre useEffect pour récupérer l'ordre de passage pour chaque tournée
       const fetchOrdrePassage = tourneesExecUser.map((tourneeExecUser) =>
         fetch(
-          `http://20.126.131.212:8080/tour/${tourneeExecUser.tourId}/getTourOrder`
+          `http://localhost:8080/tour/${tourneeExecUser.tourId}/getTourOrder`
         )
           .then((response) => response.json())
           .then((ordrePassage) => {
@@ -224,11 +212,10 @@ const TourneeLivreur: React.FC = () => {
 
       const fetchCommandes = tourneesExecUser.map((tourneeExecUser) =>
         fetch(
-          `http://20.126.131.212:8080/tour/${tourneeExecUser.id}/tourExecution/allArticles`
+          `http://localhost:8080/tour/${tourneeExecUser.id}/tourExecution/allArticles`
         )
           .then((response) => response.json())
           .then((commandes) => {
-            console.log("All articles : ", JSON.stringify(commandes));
             setCommandesByTourneeExec((prevCommandes) => ({
               ...prevCommandes,
               [tourneeExecUser.id]: commandes,
@@ -249,14 +236,12 @@ const TourneeLivreur: React.FC = () => {
   }, [tourneesExecUser]);
 
   useEffect(() => {
-    console.log("info ma tournée :::: " + JSON.stringify(maTournee));
     if (maTournee !== undefined) {
-      console.log("MA TOURNEE A MOI " + maTournee.id);
       // Dans votre useEffect pour récupérer l'ordre de passage pour chaque tournée
       const fetchInfoTourneeUser = ordrePassageTournee[maTournee.id]?.map(
         (ordrePassage) =>
           fetch(
-            `http://20.126.131.212:8080/tour/${maTournee.id}/tourExecution/allArticles/client/${ordrePassage.clientId}`
+            `http://localhost:8080/tour/${maTournee.id}/tourExecution/allArticles/client/${ordrePassage.clientId}`
           )
             .then((response) => response.json())
             .then((dataAllCommande) => {
@@ -277,13 +262,9 @@ const TourneeLivreur: React.FC = () => {
 
   const handleClick = (id: number) => {
     // Mettez le code que vous voulez exécuter ici
-    console.log("Bouton cliqué ! " + id);
-    console.log(JSON.stringify(ordrePassageTournee));
-
-    fetch(`http://20.126.131.212:8080/user/${userConnected}`)
+    fetch(`http://localhost:8080/user/${userConnected}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("all info user : " + JSON.stringify(data));
         let userComplet: User = {
           email: data.email,
           firstname: data.firstname,
@@ -291,8 +272,7 @@ const TourneeLivreur: React.FC = () => {
           phoneNumber: data.phoneNumber,
           isAdmin: data.admin,
         };
-        console.log(JSON.stringify(userComplet));
-        fetch(`http://20.126.131.212:8080/tour/${id}/tourExecution/deliveryPerson`, {
+        fetch(`http://localhost:8080/tour/${id}/tourExecution/deliveryPerson`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -306,8 +286,6 @@ const TourneeLivreur: React.FC = () => {
             return response.text();
           })
           .then((data) => {
-            console.log(data);
-            console.log("TOUT est ok");
             window.location.reload();
           });
       })
@@ -318,7 +296,6 @@ const TourneeLivreur: React.FC = () => {
 
   const marquerPasser = (id: number) => {
     setClickedClientId(id);
-    console.log(JSON.stringify(commandesByClientAfterLiv[id]));
   };
 
   const clientSoumission = (clientId: number, index: number, value: number) => {
@@ -336,22 +313,11 @@ const TourneeLivreur: React.FC = () => {
 
   const envoyerLivraisons = (clientId: number, idTournee: number) => {
     const livraisons = inputValues[clientId] || [];
-
-    console.log(
-      "ceci 1 before : " + JSON.stringify(commandesByClientAfterLiv[clientId])
-    );
-
     livraisons.forEach((livraison, index) => {
-      console.log("Article " + index + " : " + livraison);
       commandesByClientAfterLiv[clientId][index].deliveredQuantity = livraison;
     });
-
-    console.log(
-      "ceci 2 after : " + JSON.stringify(commandesByClientAfterLiv[clientId])
-    );
-
     fetch(
-      `http://20.126.131.212:8080/tour/${idTournee}/tourExecution/distributeArticle/client/${clientId}`,
+      `http://localhost:8080/tour/${idTournee}/tourExecution/distributeArticle/client/${clientId}`,
       {
         method: "POST",
         headers: {
@@ -365,6 +331,12 @@ const TourneeLivreur: React.FC = () => {
       }
       return response.text();
     });
+    present({
+      message: "Livraison validée !",
+      duration: 2500,
+      position: "bottom",
+      color:"success"
+    });
   };
 
   const redirectToGoogleMaps = (address: string) => {
@@ -374,7 +346,7 @@ const TourneeLivreur: React.FC = () => {
   };
 
   const finirTournee = (id: number) => {
-    fetch(`http://20.126.131.212:8080/tour/${id}/tourExecution/end`, {
+    fetch(`http://localhost:8080/tour/${id}/tourExecution/end`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

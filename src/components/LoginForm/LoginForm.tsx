@@ -36,9 +36,7 @@ const LoginForm: React.FC = () => {
       // Vérifier la réponse
       if (response.ok) {
         const data = await response.json();
-        console.log(data.token);
         // La requête a réussi, vous pouvez traiter la réponse ici
-        console.log("Connexion réussie !");
 
         // Stocker le token dans le localStorage
         localStorage.setItem("token", data.token);

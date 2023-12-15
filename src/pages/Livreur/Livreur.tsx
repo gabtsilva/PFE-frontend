@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { IonContent, IonGrid, IonRow, IonCol, IonIcon, IonButton, IonSearchbar } from "@ionic/react";
-import {  createOutline, footsteps } from "ionicons/icons";
+import {
+  IonContent,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonIcon,
+  IonButton,
+  IonSearchbar,
+} from "@ionic/react";
+import { createOutline, footsteps } from "ionicons/icons";
 import { Redirect } from "react-router-dom";
 import AddElement from "../../components/AddElement/AddElement";
 import checkUserState from "../../utils/checkUserState";
@@ -20,12 +28,14 @@ const Livreur: React.FC = () => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch("http://20.126.131.212:8080/user/delivery")
+    fetch("http://localhost:8080/user")
       .then((response) => response.json())
       .then((data) => {
         setLivreurs(data);
       })
-      .catch((error) => console.error("Erreur de chargement des données", error));
+      .catch((error) =>
+        console.error("Erreur de chargement des données", error)
+      );
   }, []);
 
   const handleSearchChange = (event: any) => {
@@ -34,7 +44,7 @@ const Livreur: React.FC = () => {
 
   let state = checkUserState();
 
-  console.log({livreurs});
+  console.log({ livreurs });
   if (state === "user") {
     return <Redirect to="/tournees" />;
   } else if (state === "admin") {
@@ -42,13 +52,16 @@ const Livreur: React.FC = () => {
       <>
         <IonContent>
           <IonGrid>
-          <AddElement nom="livreur" icone={footsteps} />
+            <AddElement nom="utilisateur" icone={footsteps} />
             <IonRow>
               <IonCol size="10" size-md="7">
-                <IonSearchbar placeholder="Chercher un livreur" value={search} onIonInput={handleSearchChange} />
+                <IonSearchbar
+                  placeholder="Chercher un utilisateur"
+                  value={search}
+                  onIonInput={handleSearchChange}
+                />
               </IonCol>
-              <IonCol size="auto" size-md="auto">
-              </IonCol>
+              <IonCol size="auto" size-md="auto"></IonCol>
             </IonRow>
             <IonRow>
               <IonCol size="12">

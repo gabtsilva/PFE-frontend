@@ -69,10 +69,7 @@ const AddTournee: React.FC = () => {
 
   function handleReorder(event: CustomEvent<ItemReorderEventDetail>) {
     const newClientsOrder = event.detail.complete(clientsSelected);
-
-    console.log("Nouvel ordre :", newClientsOrder);
     setClientOrder(newClientsOrder);
-
     event.detail.complete();
   }
 
@@ -122,19 +119,13 @@ const AddTournee: React.FC = () => {
       if (!responseTournee.ok) {
         throw new Error(`HTTP error! Status: ${responseTournee.status}`);
       }
-
       const newTournee = await responseTournee.json();
-      console.log("Tournée ajoutée avec succès:", newTournee);
-
       let listIdClientSelected = clients;
-
       listIdClientSelected.sort((a, b) => {
         return a.id - b.id;
       });
-
       const updateOrderClientsPromises = async () => {
         // Créez un tableau pour stocker les promesses
-        console.log("Tournee  => " + newTournee.id);
         const promises: Promise<void>[] = [];
         let arrayPassage: OrdrePassage[] = [];
         for (const [index, element] of clientOrder.entries()) {
@@ -146,8 +137,6 @@ const AddTournee: React.FC = () => {
           };
           arrayPassage.push(passage);
         }
-        console.log("à l'API " + JSON.stringify(arrayPassage));
-
         // Ajoutez la promesse à votre tableau
         const response = await fetch(
           `http://20.126.131.212:8080/tour/${newTournee.id}/createTourOrder`,
@@ -174,11 +163,7 @@ const AddTournee: React.FC = () => {
 
       const createExecution = async () => {
         // Créez un tableau pour stocker les promesses
-        console.log("Tournee  => " + newTournee.id);
         const promises: Promise<void>[] = [];
-        console.log(
-          "à l'API date :" + selectedDate + " " + typeof selectedDate
-        );
         let tourneeExec: TourneeExec = {
           executionDate: selectedDate ? selectedDate : null,
           state: "prévue",
@@ -186,9 +171,6 @@ const AddTournee: React.FC = () => {
           vehicleId: selectedVehicule,
           tourId: newTournee.id,
         };
-
-        console.log(JSON.stringify(tourneeExec));
-
         // Ajoutez la promesse à votre tableau
         const response = await fetch(
           `http://20.126.131.212:8080/tour/${newTournee.id}/tourExecution`,
@@ -237,8 +219,6 @@ const AddTournee: React.FC = () => {
 
     // Création de la nouvelle chaîne de date au format "YYYY-MM-DD"
     const formattedDate = `${year}-${month}-${day}`;
-
-    console.log("good : " + formattedDate);
     setSelectedDate(formattedDate);
   };
 
@@ -283,7 +263,6 @@ const AddTournee: React.FC = () => {
                   aria-label="Vehicule"
                   placeholder="Selectionner un véhicule"
                   onIonChange={(ev) => {
-                    console.log("Current value CAR:", ev.detail.value);
                     setselectedVehicule(ev.detail.value);
                   }}
                 >

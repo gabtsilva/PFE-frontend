@@ -27,16 +27,12 @@ const AddVehicule: React.FC = () => {
       return;
     } else {
       setFormError(null);
-      console.log("Nom:", nom);
-      console.log("plate:", plate);
-      console.log("maxQuantity:", maxQuantity);
       // Prepare data in the required format
       const vehiculeData = {
         name: nom,
         plate: plate,
         maxQuantity: maxQuantity,
       };
-      console.log(JSON.stringify(vehiculeData));
       // Send a POST request to the API
       fetch("http://20.126.131.212:8080/vehicle", {
         method: "POST",
@@ -52,7 +48,6 @@ const AddVehicule: React.FC = () => {
           return response.text();
         })
         .then((data) => {
-          console.log("Vehicule ajouté avec succès:", data);
           // Reset form error state
           setFormError(null);
           window.location.href = "/vehicules";
