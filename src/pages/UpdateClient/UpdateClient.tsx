@@ -240,7 +240,6 @@ const UpdateClient: React.FC = () => {
     fetch(`http://localhost:8080/order/${id}`,{method:"POST"})
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
         });
     setHasCommand(true);
     history.replace(`/client/update/${id}`);

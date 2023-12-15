@@ -94,9 +94,7 @@ const TourneeHome: React.FC = () => {
     fetch("http://localhost:8080/tour/tourExecution")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.length === 0) {
-          console.log("RIEN ");
           fetch("http://localhost:8080/tourExecution/today/state/prevue")
             .then((response) => response.json())
             .then((data) => {
@@ -108,7 +106,6 @@ const TourneeHome: React.FC = () => {
           setSontUniquementDesPrevues(false);
         }
 
-        console.log("tourneeExecUser : " + JSON.stringify(tourneesExecUser));
       })
       .catch((error) =>
         console.error("Erreur de chargement des données tournées", error)
@@ -167,12 +164,6 @@ const TourneeHome: React.FC = () => {
               ...prevOrdrePassage,
               [tourneeExecUser.tourId]: sortedOrdrePassage,
             }));
-            console.log(
-              "pour le tour : " +
-                tourneeExecUser.tourId +
-                " les données :" +
-                JSON.stringify(ordrePassageTournee)
-            );
             sortedOrdrePassage.map((item: { clientId: any }) =>
               fetch(`http://localhost:8080/client/${item.clientId}`)
                 .then((response) => response.json())
@@ -181,12 +172,7 @@ const TourneeHome: React.FC = () => {
                     ...prevClientsDetails,
                     [item.clientId]: clientDetails,
                   }));
-                  console.log(
-                    "pour le tour : " +
-                      tourneeExecUser.tourId +
-                      " les clients :" +
-                      JSON.stringify(clientsDetails)
-                  );
+
                 })
             );
           })
@@ -198,12 +184,6 @@ const TourneeHome: React.FC = () => {
         )
           .then((response) => response.json())
           .then((commandes) => {
-            console.log(
-              "TOUTES LES COMMANDES : " +
-                JSON.stringify(commandes) +
-                " pour = " +
-                tourneeExecUser.id
-            );
             setCommandesByTourneeExec((prevCommandes) => ({
               ...prevCommandes,
               [tourneeExecUser.id]: commandes,
@@ -232,7 +212,6 @@ const TourneeHome: React.FC = () => {
     fetch(`http://localhost:8080/user/${deliveryPerson}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("info user = " + JSON.stringify(data));
         setUsersDetails((prevUsersDetails) => ({
           ...prevUsersDetails,
           [data.email]: data, // Utilisez l'e-mail comme clé
@@ -279,7 +258,7 @@ const TourneeHome: React.FC = () => {
   };
   return (
     <>
-      <IonGrid className="grid-card">
+      <IonGrid>
         <h2>Tournées du jour</h2>
         <IonRow>
           {tourneesExecUser.length !== 0 ? (
@@ -332,8 +311,9 @@ const TourneeHome: React.FC = () => {
                                 {clientsDetails[ordrePassage.clientId]?.name}
                               </td>
                               <td>
-                                <a
+                                <IonButton
                                   className="button-map"
+                                  fill="clear"
                                   onClick={() =>
                                     redirectToGoogleMaps(
                                       clientsDetails[ordrePassage.clientId]
@@ -345,7 +325,7 @@ const TourneeHome: React.FC = () => {
                                     clientsDetails[ordrePassage.clientId]
                                       ?.address
                                   }
-                                </a>
+                                </IonButton>
                               </td>
                             </tr>
                           ))}
@@ -388,7 +368,9 @@ const TourneeHome: React.FC = () => {
                             <tr className={passage.delivred ? "active-tr" : ""}>
                               <td>{passage.name}</td>
                               <td>
-                                {passage.delivred ? "livré" : "non livré"}{" "}
+                                {passage.delivred
+                                  ? "Livré"
+                                  : "En attente"}{" "}
                               </td>
                             </tr>
                           )

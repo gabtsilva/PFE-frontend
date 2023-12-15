@@ -41,7 +41,6 @@ const AddLivreur: React.FC = () => {
         admin: estAdmin,
         password: password,
       };
-      console.log(JSON.stringify(userData));
       // Send a POST request to the API
       fetch("http://localhost:8080/user", {
         method: "POST",
@@ -57,7 +56,6 @@ const AddLivreur: React.FC = () => {
           return response.text();
         })
         .then((data) => {
-          console.log("Livreur ajouté avec succès:", data);
           // Reset form error state
           setFormError(null);
           //window.location.href = "/livreurs";

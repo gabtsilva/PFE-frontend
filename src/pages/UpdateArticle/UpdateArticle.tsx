@@ -32,7 +32,6 @@ const UpdateArticle: React.FC = () => {
     fetch(`http://localhost:8080/article/${id}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(JSON.stringify(data));
         // Update the state with the retrieved data
         setNom(data.name || "");
         if (data.pourcentage) {
@@ -54,8 +53,6 @@ const UpdateArticle: React.FC = () => {
       return;
     } else {
       setFormError(null);
-      console.log("Nom:", nom);
-      console.log("Pourcentage:", pourcentage);
       let pourcentageGood = pourcentage / 100;
       // Prepare data in the required format
       const articleData = {
@@ -63,7 +60,6 @@ const UpdateArticle: React.FC = () => {
         name: nom,
         pourcentage: pourcentageGood,
       };
-      console.log(JSON.stringify(articleData));
       // Send a POST request to the API
       fetch(`http://localhost:8080/article/${id}`, {
         method: "PUT",
@@ -79,7 +75,6 @@ const UpdateArticle: React.FC = () => {
           return response.text();
         })
         .then((data) => {
-          console.log("Article a été modifié avec succès:", data);
           // Reset form error state
           setFormError(null);
           window.location.href = "/articles";
