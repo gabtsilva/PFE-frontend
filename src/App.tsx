@@ -127,7 +127,7 @@ const App: React.FC = () => (
             path="/livreur/update/:email"
             render={() => <UpdateLivreur />}
           />
-          <Route exact path="/livreur/add" render={() => <AddLivreur />} />
+          <Route exact path="/utilisateur/add" render={() => <AddLivreur />} />
 
           <Route
             exact

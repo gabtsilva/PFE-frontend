@@ -8,9 +8,11 @@ import {
   IonRow,
   IonCol,
   IonItem,
+  IonSelect,
+  IonSelectOption,
 } from "@ionic/react";
 
-import {Redirect, useParams} from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 
 import checkUserState from "../../utils/checkUserState";
 
@@ -32,9 +34,8 @@ const UpdateLivreur: React.FC = () => {
         setNom(data.lastname || "");
         setPrenom(data.firstname || "");
         setTelephone(data.phoneNumber || "");
-        setEstAdmin(data.isAdmin);
+        setEstAdmin(data.admin);
         setPassword(data.password || "");
-        
       })
       .catch((error) => {
         console.error(
@@ -45,7 +46,7 @@ const UpdateLivreur: React.FC = () => {
   }, [email]);
 
   const handleAjouterClick = () => {
-    if (!nom || !prenom || !telephone ) {
+    if (!nom || !prenom || !telephone) {
       setFormError("Veuillez remplir tous les champs.");
       return;
     } else {
@@ -58,10 +59,10 @@ const UpdateLivreur: React.FC = () => {
         lastname: nom,
         phoneNumber: telephone,
         isAdmin: estAdmin,
-        password: password
+        password: password,
       };
 
-      console.log({livreurData})
+      console.log({ livreurData });
 
       // Send a POST request to the API
       fetch(`http://localhost:8080/user/${email}`, {
@@ -78,7 +79,7 @@ const UpdateLivreur: React.FC = () => {
           return response.text();
         })
         .then((data) => {
-          console.log("Livreur a été modifié avec succès:", data);
+          console.log("utilisateur a été modifié avec succès:", data);
           // Reset form error state
           setFormError(null);
           window.location.href = "/livreurs";
@@ -92,62 +93,79 @@ const UpdateLivreur: React.FC = () => {
     }
   };
   let state = checkUserState();
-  if(state == "user"){
-    return <Redirect to="/" />
-  }else if(state == "admin"){
+  if (state == "user") {
+    return <Redirect to="/" />;
+  } else if (state == "admin") {
     return (
-        <IonContent>
-          <IonGrid>
-            <h1 className="titre-ajout">Modifier un livreur : {email}</h1>
-            <IonRow>
-              <IonCol size="12" size-md="6">
-                <IonItem>
-                  <IonLabel position="floating">Nom</IonLabel>
-                  <IonInput
-                      type="text"
-                      value={nom}
-                      required
-                      onIonChange={(e) => setNom(e.detail.value!)}
-                  />
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">Prénom</IonLabel>
-                  <IonInput
-                      type="text"
-                      value={prenom}
-                      required
-                      onIonChange={(e) => setPrenom(e.detail.value!)}
-                  />
-                </IonItem>
-              </IonCol>
-              <IonCol size="12" size-md="6">
-                <IonItem>
-                 <IonLabel position="floating">
-                    Téléphone
-                  </IonLabel>
-                  <IonInput
-                      type="text"
-                      value={telephone}
-                      required
-                      onIonChange={(e) => setTelephone(e.detail.value!)}
-                  />
-                  
-                </IonItem>
-              </IonCol>
-            </IonRow>
-            <IonRow className="ion-justify-content-center button-send">
-              <IonCol size="12">
-                <IonButton onClick={handleAjouterClick}>
-                  Modifier le livreur
-                </IonButton>
-                <p>{formError}</p>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-        </IonContent>
+      <IonContent>
+        <IonGrid>
+          <h1 className="titre-ajout">Modifier un utilisateur : {email}</h1>
+          <IonRow>
+            <IonCol size="12" size-md="6">
+              <IonItem>
+                <IonLabel position="floating">Nom</IonLabel>
+                <IonInput
+                  type="text"
+                  value={nom}
+                  required
+                  onIonChange={(e) => setNom(e.detail.value!)}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="floating">Prénom</IonLabel>
+                <IonInput
+                  type="text"
+                  value={prenom}
+                  required
+                  onIonChange={(e) => setPrenom(e.detail.value!)}
+                />
+              </IonItem>
+            </IonCol>
+            <IonCol size="12" size-md="6">
+              <IonItem>
+                <IonLabel position="floating">Téléphone</IonLabel>
+                <IonInput
+                  type="text"
+                  value={telephone}
+                  required
+                  onIonChange={(e) => setTelephone(e.detail.value!)}
+                />
+              </IonItem>
+
+              <IonItem>
+                <IonSelect
+                  className="select-option"
+                  aria-label="isAdmin"
+                  placeholder="Est admin ?"
+                  value={estAdmin}
+                  onIonChange={(ev) => {
+                    console.log("Current value admin:", ev.detail.value);
+                    setEstAdmin(ev.detail.value);
+                  }}
+                >
+                  <IonSelectOption key={0} value={false}>
+                    Non
+                  </IonSelectOption>
+                  <IonSelectOption key={1} value={true}>
+                    Oui
+                  </IonSelectOption>
+                </IonSelect>
+              </IonItem>
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-justify-content-center button-send">
+            <IonCol size="12">
+              <IonButton onClick={handleAjouterClick}>
+                Modifier l'utilisateur
+              </IonButton>
+              <p>{formError}</p>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonContent>
     );
-  }else{
-    return <Redirect to="/login" />
+  } else {
+    return <Redirect to="/login" />;
   }
 };
 

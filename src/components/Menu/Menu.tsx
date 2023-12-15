@@ -66,7 +66,7 @@ const Menu: React.FC = () => {
                 <IonMenuToggle>
                   <IonItem routerLink="/livreurs" routerDirection="none">
                     <IonIcon icon={footsteps}></IonIcon>
-                    <IonLabel>Livreurs</IonLabel>
+                    <IonLabel>Utilisateurs</IonLabel>
                   </IonItem>
                 </IonMenuToggle>
                 <IonMenuToggle>
