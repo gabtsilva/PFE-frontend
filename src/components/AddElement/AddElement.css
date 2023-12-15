@@ -1,7 +1,13 @@
 .row-button {
   justify-content: flex-end;
 }
-ion-button ion-icon{
-  height:20px!important;
-  width:20px!important;
+ion-button ion-icon {
+  height: 20px !important;
+  width: 20px !important;
+}
+
+@media screen and (max-width: 800px) {
+  .row-button {
+    justify-content: center;
+  }
 }

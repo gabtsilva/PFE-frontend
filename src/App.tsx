@@ -47,6 +47,7 @@ import TourneeLivreur from "./pages/TourneeLivreur/TourneeLivreur";
 import Livreur from "./pages/Livreur/Livreur";
 import UpdateLivreur from "./pages/UpdateLivreur/UpdateLivreur";
 import AddLivreur from "./pages/AddLivreur/AddLivreur";
+import TourneeExecution from "./pages/TourneeExecution/TourneeExecution";
 
 setupIonicReact({
   mode: "ios",
@@ -127,6 +128,12 @@ const App: React.FC = () => (
             render={() => <UpdateLivreur />}
           />
           <Route exact path="/livreur/add" render={() => <AddLivreur />} />
+
+          <Route
+            exact
+            path="/tourneeExecution/:id"
+            render={() => <TourneeExecution />}
+          />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonPage>
