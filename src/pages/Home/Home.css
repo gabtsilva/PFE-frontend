@@ -1,3 +1,14 @@
 ion-page {
   color: black;
 }
+table td,
+table td a {
+  word-wrap: break-word !important;
+}
+table td a:hover {
+  cursor: pointer;
+}
+.grid-card ion-card {
+  margin-right: 0;
+  margin-left: 0;
+}

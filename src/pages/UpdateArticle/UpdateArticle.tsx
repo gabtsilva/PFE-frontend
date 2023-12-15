@@ -115,6 +115,11 @@ const UpdateArticle: React.FC = () => {
                   onIonChange={(e) => setPourcenatge(parseInt(e.detail.value!))}
                 />
               </IonItem>
+            </IonCol>
+          </IonRow>
+
+          <IonRow className="ion-justify-content-center button-send">
+            <IonCol size="12">
               <IonButton onClick={handleAjouterClick}>
                 Modifier l'article
               </IonButton>

@@ -360,7 +360,7 @@ const TourneeLivreur: React.FC = () => {
       return (
         <>
           <IonContent>
-            <IonGrid>
+            <IonGrid className="grid-card">
               <h2>Tournées disponibles</h2>
               <IonRow>
                 {tourneesExecUser
@@ -409,9 +409,8 @@ const TourneeLivreur: React.FC = () => {
                                       }
                                     </td>
                                     <td>
-                                      <IonButton
+                                      <a
                                         className="button-map"
-                                        fill="clear"
                                         onClick={() =>
                                           redirectToGoogleMaps(
                                             clientsDetails[
@@ -424,7 +423,7 @@ const TourneeLivreur: React.FC = () => {
                                           clientsDetails[ordrePassage.clientId]
                                             ?.address
                                         }
-                                      </IonButton>
+                                      </a>
                                     </td>
                                   </tr>
                                 ))}
@@ -473,7 +472,7 @@ const TourneeLivreur: React.FC = () => {
         return (
           <>
             <IonContent>
-              <IonGrid>
+              <IonGrid className="grid-card">
                 <h2>Votre tournée</h2>
 
                 <IonCol size="8" key={maTournee.id}>
@@ -513,9 +512,8 @@ const TourneeLivreur: React.FC = () => {
                                   {clientsDetails[ordrePassage.clientId]?.name}
                                 </td>
                                 <td>
-                                  <IonButton
+                                  <a
                                     className="button-map"
-                                    fill="clear"
                                     onClick={() =>
                                       redirectToGoogleMaps(
                                         clientsDetails[ordrePassage.clientId]
@@ -527,7 +525,7 @@ const TourneeLivreur: React.FC = () => {
                                       clientsDetails[ordrePassage.clientId]
                                         ?.address
                                     }
-                                  </IonButton>
+                                  </a>
                                 </td>
                               </tr>
                             ))}
@@ -604,7 +602,10 @@ const TourneeLivreur: React.FC = () => {
                                     commande: commandesByClient,
                                     index: number
                                   ) => (
-                                    <div key={index}>
+                                    <div
+                                      key={index}
+                                      className="info-liv input-article-livre"
+                                    >
                                       <label htmlFor="">
                                         Quantité livrée pour l'article{" "}
                                         {commande.articleName} :
@@ -623,7 +624,7 @@ const TourneeLivreur: React.FC = () => {
                                             +e.target.value
                                           )
                                         }
-                                        placeholder="Nombres articles livrés"
+                                        placeholder="Nombres"
                                       />
                                     </div>
                                   )
@@ -648,6 +649,7 @@ const TourneeLivreur: React.FC = () => {
                           </div>
                         ))}
                       </div>
+                      <br></br>
                       <IonButton
                         routerLink={`/tourneeExecution/${maTournee.id}`}
                         routerDirection="none"

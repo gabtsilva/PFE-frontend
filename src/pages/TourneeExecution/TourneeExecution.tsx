@@ -75,27 +75,29 @@ const TourneeExecution: React.FC = () => {
         <IonRow className="info-table-tournee">
           <IonCol size="12" size-md="10">
             <h2>Concernant la tournée</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Nom de l'article</th>
-                  <th>Quantité de base</th>
-                  <th>Quantité livrée</th>
-                  <th>Quantité de stock restant</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item: ArticlesTourneeExec) => (
-                  <tr key={item.articleId}>
-                    <td>{item.articleName}</td>
-
-                    <td>{item.qtyBase}</td>
-                    <td>{item.qtyLivre}</td>
-                    <td>{item.qtySurplusRestant}</td>
+            <div className="overFlow">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nom de l'article</th>
+                    <th>Quantité de base</th>
+                    <th>Quantité livrée</th>
+                    <th>Quantité de stock restant</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data.map((item: ArticlesTourneeExec) => (
+                    <tr key={item.articleId}>
+                      <td>{item.articleName}</td>
+
+                      <td>{item.qtyBase}</td>
+                      <td>{item.qtyLivre}</td>
+                      <td>{item.qtySurplusRestant}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </IonCol>
         </IonRow>
 
@@ -105,30 +107,31 @@ const TourneeExecution: React.FC = () => {
               <br></br>
               <br></br>
               <h2>{`Concernant le client ${client.clientName}`}</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Nom de l'article</th>
-                    <th>Quantité délivrée</th>
-                    <th>Quantité prévue</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {client.articles.map((article) => (
-                    <tr key={article.articleId}>
-                      <td>{article.articleName}</td>
-                      <td>{article.deliveredQuantity}</td>
-                      <td>{article.changedQuantity}</td>
+              <div className="overFlow">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Nom de l'article</th>
+                      <th>Quantité délivrée</th>
+                      <th>Quantité prévue</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {client.articles.map((article) => (
+                      <tr key={article.articleId}>
+                        <td>{article.articleName}</td>
+                        <td>{article.deliveredQuantity}</td>
+                        <td>{article.changedQuantity}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </IonCol>
           </IonRow>
         ))}
-
-        <IonRow>
-          <IonCol size="12" size-md="10">
+        <IonRow className="ion-justify-content-center button-send">
+          <IonCol size="12">
             <IonButton routerLink={`/`} routerDirection="none">
               Retour
             </IonButton>

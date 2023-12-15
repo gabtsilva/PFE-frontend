@@ -1,3 +1,15 @@
 .info-table-tournee {
   justify-content: center;
 }
+
+table td,
+table td a {
+  word-wrap: break-word !important;
+}
+
+.overFlow {
+  overflow-x: auto;
+}
+table {
+  border: 0;
+}
